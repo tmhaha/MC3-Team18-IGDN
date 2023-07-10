@@ -105,5 +105,6 @@ extension AstronautNode {
         let vector = CGVector(dx: dx * distance, dy: dy * distance)
         return vector
     }
+    
 }
 
