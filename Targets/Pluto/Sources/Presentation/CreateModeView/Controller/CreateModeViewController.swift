@@ -90,7 +90,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
-            print(viewModel.mapList.count)
+            print(">> viewModel.mapList.count: \(viewModel.mapList.count)")
             return viewModel.mapList.count
         } else {
             return 1

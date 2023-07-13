@@ -15,17 +15,26 @@ final class CreateMapView: UIView {
     
     lazy var scrollView = UIScrollView()
     lazy var contentView = UIView()
+    
+    var width: CGFloat = 0
+    var height: CGFloat = 0
     let gridSize: CGFloat = 20.0
     let gridContainerView = UIView()
     var isGridDrawn = false // 그리드가 이미 그려졌는지 확인하기 위한 플래그
     
     init() {
         super.init(frame: .zero)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+
+        width = (self.bounds.width - 16 * 2) / 3
+        height = width / 116 * 120
         
         addSubviews()
         setUpConstraints()
         setUpViews()
-        
     }
     
     required init?(coder: NSCoder) {
@@ -61,19 +70,19 @@ final class CreateMapView: UIView {
     private func setUpConstraints() {
         
         // MARK: safeAreaHight = 54
-        // MARK: ToolViewHeight = 116
+        // MARK: ToolViewHeight = 116 -> (bound.width - 16*2)/120*116
         // MARK: 나머지는 mapView 영역
         
         NSLayoutConstraint.activate([
             topToolView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             topToolView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             topToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            topToolView.heightAnchor.constraint(equalToConstant: 116),
+            topToolView.heightAnchor.constraint(equalToConstant: height),
             
             bottomToolView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
             bottomToolView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             bottomToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            bottomToolView.heightAnchor.constraint(equalToConstant: 116),
+            bottomToolView.heightAnchor.constraint(equalToConstant: height),
             
             scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
