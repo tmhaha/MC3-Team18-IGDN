@@ -14,27 +14,35 @@ final class CreateModeViewModel {
     enum Input {
         case selectButtonDidTap
         case createMapButtonDidTap
+        case saveButtonDidTap
     }
 
     enum Output {
         case presentSelectMapView
         case presentCreateMapView
+        case saveMap
     }
 
     private let output = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    var mapList: [CreativeMapModel] = []
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
             case .selectButtonDidTap:
-                self?.output.send(.presentSelectMapView)
                 // TODO: 비즈니스 로직
                 print(">>> selectButton DidTap in transform")
+                self?.mapList.removeFirst()
+                self?.output.send(.presentSelectMapView)
             case .createMapButtonDidTap:
-                self?.output.send(.presentCreateMapView)
                 // TODO: 비즈니스 로직
                 print(">>> createMapButton DidTap in transform")
+                self?.output.send(.presentCreateMapView)
+            case .saveButtonDidTap:
+                print(">>> saveButtonDidTap DidTap in transform")
+                self?.mapList.append(CreativeMapModel(titleLabel: "Test"))
+                self?.output.send(.saveMap)
             }
         }
         .store(in: &subscriptions)

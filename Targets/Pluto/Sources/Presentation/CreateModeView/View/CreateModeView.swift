@@ -9,8 +9,19 @@
 import UIKit
 
 final class CreateModeView: UIView {
-    lazy var selectMapButton = UIButton()
-    lazy var createMapButton = UIButton()
+    lazy var backButton = UIButton()
+    lazy var titleLabel = UILabel()
+    
+    private let collectionViewFlowLayout: UICollectionViewFlowLayout = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .vertical
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
+        layout.sectionInset = UIEdgeInsets(top: 0, left: 0, bottom: 15, right: 0)
+        return layout
+    }()
+    lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewFlowLayout)
+    
     
     init() {
         super.init(frame: .zero)
@@ -24,18 +35,8 @@ final class CreateModeView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func startLoading() {
-        isUserInteractionEnabled = false
-        
-    }
-    
-    func finishLoading() {
-        isUserInteractionEnabled = true
-        
-    }
-    
     private func addSubviews() {
-        [selectMapButton, createMapButton]
+        [collectionView, backButton, titleLabel]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -44,26 +45,41 @@ final class CreateModeView: UIView {
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([
-            selectMapButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            selectMapButton.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: -30.0),
-            selectMapButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 40.0),
-            selectMapButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40.0),
-            selectMapButton.heightAnchor.constraint(equalToConstant: 30.0),
+            backButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 42),
+            backButton.widthAnchor.constraint(equalToConstant: 32),
+            backButton.heightAnchor.constraint(equalToConstant: 20),
             
-            createMapButton.topAnchor.constraint(equalTo: selectMapButton.bottomAnchor, constant: 10.0),
-            createMapButton.centerXAnchor.constraint(equalTo: selectMapButton.centerXAnchor),
-            createMapButton.widthAnchor.constraint(equalTo: selectMapButton.widthAnchor, multiplier: 1.0),
-            createMapButton.heightAnchor.constraint(equalTo: selectMapButton.heightAnchor),
+            titleLabel.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor),
+            
+            collectionView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            collectionView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 37),
+            collectionView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
+
         ])
     }
     
     private func setUpViews() {
-        self.backgroundColor = .systemBackground
         
-        selectMapButton.setTitle("Select Map", for: .normal)
-        selectMapButton.setTitleColor(.black, for: .normal)
+        backButton.setImage(UIImage(named: "L_arrow_white"), for: .normal)
         
-        createMapButton.setTitle("Create Map", for: .normal)
-        createMapButton.setTitleColor(.black, for: .normal)
+        titleLabel.text = "creative"
+        titleLabel.font = UIFont(name: "TASAExplorer-Black", size: 30)
+        titleLabel.textColor = .white
+
+        collectionView.collectionViewLayout = collectionViewFlowLayout
+        collectionView.isScrollEnabled = true
+        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
+        collectionView.clipsToBounds = true
+        collectionView.backgroundColor = UIColor(hex: 0x002EFE)
+        
+        collectionView.register(CreateModeSelectCollectionViewCell.self, forCellWithReuseIdentifier: CreateModeSelectCollectionViewCell.identifier)
+        
     }
+    
 }
+
+
