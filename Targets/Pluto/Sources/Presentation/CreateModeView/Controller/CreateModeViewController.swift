@@ -23,7 +23,7 @@ class CreateModeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: 0x002EFE)
+        view.backgroundColor = UIColor(hex: 0x2244FF)
         
         viewModel = CreateModeViewModel()
         setUpTargets()
@@ -90,10 +90,10 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if section == 0 {
+            return 1
+        } else {
             print(">> viewModel.mapList.count: \(viewModel.mapList.count)")
             return viewModel.mapList.count
-        } else {
-            return 1
         }
     }
     
@@ -101,25 +101,25 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateModeSelectCollectionViewCell.identifier, for: indexPath) as? CreateModeSelectCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if indexPath.section == 0 {
-            cell.configure(item: [])
-        } else {
-            // TODO: '+' 버튼이 있는 두 번째 섹션에서 event 처리
-        }
-        
+        cell.configure(item: [], section: indexPath.section)
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: collectionView.layer.frame.width - 70, height: 160)
+        if indexPath.section == 0 {
+            return CGSize(width: collectionView.layer.frame.width - 80, height: 100)
+        } else {
+            return CGSize(width: collectionView.layer.frame.width - 80, height: 150)
+        }
+        
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 15
+        return 20
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 1 {
+        if indexPath.section == 0 {
             input.send(.createMapButtonDidTap)
         } else {
             print(">>> 선택한 게임뷰로 넘어갑니다.")
