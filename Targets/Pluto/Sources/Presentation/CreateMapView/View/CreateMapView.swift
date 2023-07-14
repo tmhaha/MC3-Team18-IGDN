@@ -127,7 +127,7 @@ final class CreateMapView: UIView {
         topToolView.backgroundColor = .clear
         bottomToolView.backgroundColor = .clear
         
-        scrollView.backgroundColor = UIColor(hex: 0x02244FF)
+        scrollView.backgroundColor = UIColor(hex: 0x2244FF)
         scrollView.isPagingEnabled = false
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = false // 세로 스크롤 비활성화
