@@ -30,13 +30,8 @@ final class CreateMapViewModel {
     }
     
     // MARK: Properties
-    let objectWidth = 50.0
-    let objectHeight = 50.0
-    var objectViews: [UIView] = []
-    
-    private var objectColorIndex = 0
-    private var objectSizeIndex = 0
-    private var objectIndex = 0
+    private let output = PassthroughSubject<Output, Never>()
+    var subscriptions = Set<AnyCancellable>()
     
     private let objectColorList: [UIColor] = [
         UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
@@ -56,23 +51,24 @@ final class CreateMapViewModel {
         UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
     ]
     
-    // View에 표시할 데이터
+    private var objectColorIndex = 0
+    private var objectSizeIndex = 0
+    private var objectIndex = 0
+    
+    let objectWidth = 50.0
+    let objectHeight = 50.0
+    var objectViews: [UIView] = []
+    
     var objectColor: UIColor {
         return objectColorList[objectColorIndex]
     }
-    
     var objectSize: UIColor {
         return objectSizeList[objectSizeIndex]
     }
-    
     var object: UIColor {
         return objectList[objectIndex]
     }
-    
-    private let output = PassthroughSubject<Output, Never>()
-    var subscriptions = Set<AnyCancellable>()
-    
-    
+
     // MARK: Functions
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
@@ -100,22 +96,41 @@ final class CreateMapViewModel {
         return output.eraseToAnyPublisher()
     }
     
-    func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> Bool {
+    func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> UIView? {
         for objectView in objectViews {
             let objectFrame = objectView.frame
             if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
-                return true
+                return objectView
             }
         }
-        return false
+        return nil
     }
     
-    func addObjectAtPoint(_ point: CGPoint, objectSize: CGSize) {
-        let objectView = UIView(frame: CGRect(origin: point, size: objectSize))
-        objectView.backgroundColor = UIColor.yellow
-        objectViews.append(objectView)
+    func addObjectAtPoint(_ point: CGPoint, _ tapLocation: CGPoint) -> Bool {
+        let objectSize = CGSize(width: objectWidth, height: objectHeight)
+        let tapCenterPoint = CGPoint(x: tapLocation.x - objectWidth/2, y: tapLocation.y - objectHeight/2)
+        
+        // 해당 위치에 겹치는 오브젝트가 있는지 확인
+        if let overlappingObjectView = isOverlapWithOtherObjects(tapCenterPoint, objectSize: objectSize) {
+            // 겹치는 오브젝트 제거
+            removeObjectView(overlappingObjectView)
+            overlappingObjectView.removeFromSuperview()
+            return false
+        } else {
+            let objectView = UIView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
+            objectView.backgroundColor = UIColor.red
+            objectViews.append(objectView)
+            return true
+        }
     }
     
+    func removeObjectView(_ objectView: UIView) {
+        if let index = objectViews.firstIndex(where: { $0 === objectView }) {
+            objectViews.remove(at: index)
+            objectView.removeFromSuperview()
+        }
+    }
+
     func updateObjectColor(isIncrease: Bool) {
         if isIncrease {
             objectColorIndex = (objectColorIndex + 1) % objectColorList.count

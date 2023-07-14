@@ -11,12 +11,14 @@ import Combine
 
 class CreateMapViewController: UIViewController {
 
-    private var contentView = CreateMapView()
-    var viewModel: CreateMapViewModel!
-    var parentViewModel: CreateModeViewModel!
     private let input = PassthroughSubject<CreateMapViewModel.Input, Never>()
     private let inputToParent = PassthroughSubject<CreateModeViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    
+    private var contentView = CreateMapView()
+    
+    var viewModel: CreateMapViewModel!
+    var parentViewModel: CreateModeViewModel!
     
     override func loadView() {
         view = contentView
@@ -31,7 +33,6 @@ class CreateMapViewController: UIViewController {
         setUpGestureRecognizer()
         
         self.contentView.scrollView.delegate = self
-        
     }
     
     private func setUpGestureRecognizer() {
@@ -39,7 +40,6 @@ class CreateMapViewController: UIViewController {
         self.contentView.scrollView.addGestureRecognizer(tapGesture)
         self.contentView.scrollView.isUserInteractionEnabled = true
     }
-    
     
     private func setUpTargets() {
         contentView.bottomToolView.objectUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
@@ -52,20 +52,17 @@ class CreateMapViewController: UIViewController {
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
     
-    
-    
     private func bind(){
+        
         let output = viewModel.transform(input: input.eraseToAnyPublisher())
         
         output.receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
                 case .objectUpButtonDidTapOutput:
-                    // TODO: 버튼1로 인한 UI 또는 상태 변경
                     print(">>> receive: objectUpButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
                 case .objectDownButtonDidTapOutput:
-                    // TODO: 버튼2로 인한 UI 또는 상태 변경
                     print(">>> receive: objectDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
                 case .objectSizeUpButtonDidTapOutput:
@@ -81,8 +78,7 @@ class CreateMapViewController: UIViewController {
                     print(">>> receive: objectColorDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
                 }
-            }
-            .store(in: &subscriptions)
+            }.store(in: &subscriptions)
         
         let outputToParent = parentViewModel.transform(input: inputToParent.eraseToAnyPublisher())
         outputToParent.receive(on: RunLoop.main)
@@ -90,7 +86,7 @@ class CreateMapViewController: UIViewController {
                 if event == .saveMap {
                     print("saveMap")
                 }
-            }
+            }.store(in: &subscriptions)
     }
     
     @objc private func buttonDidTap(_ sender: UIButton) {
@@ -135,24 +131,16 @@ extension CreateMapViewController: UIScrollViewDelegate {
         var tapLocation = sender.location(in: self.contentView.scrollView)
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
-        print("Tapped Point: \(tappedPoint)")
-        
-        let objectSize = CGSize(width: viewModel.objectWidth, height: viewModel.objectHeight)
-        tapLocation.x = tapLocation.x - viewModel.objectWidth/2
-        tapLocation.y = tapLocation.y - viewModel.objectHeight/2
-        
-        // 해당 위치에 겹치지 않는지 확인하고 오브젝트를 추가
-        if !viewModel.isOverlapWithOtherObjects(tapLocation, objectSize: objectSize) {
-            viewModel.addObjectAtPoint(tapLocation, objectSize: objectSize)
-            addObjectAtPoint(tapLocation, objectSize: objectSize)
+        if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
+            addObjectScrollView(with: viewModel.objectViews.last!)
         }
     }
     
-    func addObjectAtPoint(_ point: CGPoint, objectSize: CGSize) {
-        let objectView = UIView(frame: CGRect(origin: point, size: objectSize))
-        objectView.backgroundColor = UIColor.yellow
+    func addObjectScrollView(with objectView: UIView) {
         self.contentView.scrollView.addSubview(objectView)
-        
+//        if viewModel.objectViews.last === contentView.scrollView.subviews.last {
+//            print("true")
+//        }
     }
 
 }
