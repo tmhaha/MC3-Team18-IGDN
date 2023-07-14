@@ -34,21 +34,21 @@ final class CreateMapViewModel {
     var subscriptions = Set<AnyCancellable>()
     
     private let objectColorList: [UIColor] = [
-        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
-        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
-        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
+        UIColor(hex: 0xFF3434),
+        UIColor(hex: 0xF7CF51),
+        UIColor(hex: 0x51AC65),
     ]
     
     private let objectSizeList: [UIColor] = [
-        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
-        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
-        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
+        UIColor(hex: 0xFF3434),
+        UIColor(hex: 0xF7CF51),
+        UIColor(hex: 0x51AC65),
     ]
     
     private let objectList: [UIColor] = [
-        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
-        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
-        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
+        UIColor(hex: 0xFF3434),
+        UIColor(hex: 0xF7CF51),
+        UIColor(hex: 0x51AC65),
     ]
     
     private var objectColorIndex = 0
@@ -118,7 +118,9 @@ final class CreateMapViewModel {
             return false
         } else {
             let objectView = UIView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
-            objectView.backgroundColor = UIColor.red
+            objectView.backgroundColor = objectColor
+            objectView.layer.borderColor = UIColor.gray.cgColor
+            objectView.layer.borderWidth = 1
             objectViews.append(objectView)
             return true
         }
