@@ -26,18 +26,28 @@ class CreateMapViewController: UIViewController {
         super.viewDidLoad()
         
         viewModel = CreateMapViewModel()
-        setUpTargets()
         bind()
+        setUpTargets()
+        setUpGestureRecognizer()
+        
         self.contentView.scrollView.delegate = self
         
+    }
+    
+    private func setUpGestureRecognizer() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         self.contentView.scrollView.addGestureRecognizer(tapGesture)
         self.contentView.scrollView.isUserInteractionEnabled = true
     }
     
+    
     private func setUpTargets() {
-        contentView.bottomToolView.buttonOne.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.buttonTwo.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectColorUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectColorDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectSizeUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectSizeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
@@ -50,12 +60,20 @@ class CreateMapViewController: UIViewController {
         output.receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
-                case .buttonOneDidTapOutput:
+                case .objectUpButtonDidTapOutput:
                     // TODO: 버튼1로 인한 UI 또는 상태 변경
-                    print(">>> receive: buttonOneDidTapOutput")
-                case .buttonTwoDidTapOutput:
+                    print(">>> receive: objectUpButtonDidTapOutput")
+                case .objectDownButtonDidTapOutput:
                     // TODO: 버튼2로 인한 UI 또는 상태 변경
-                    print(">>> receive: buttonTwoDidTapOutput")
+                    print(">>> receive: objectDownButtonDidTapOutput")
+                case .objectSizeUpButtonDidTapOutput:
+                    print(">>> receive: objectSizeUpButtonDidTapOutput")
+                case .objectSizeDownButtonDidTapOutput:
+                    print(">>> receive: objectSizeDownButtonDidTapOutput")
+                case .objectColorUpButtonDidTapOutput:
+                    print(">>> receive: objectColorUpButtonDidTapOutput")
+                case .objectColorDownButtonDidTapOutput:
+                    print(">>> receive: objectColorDownButtonDidTapOutput")
                 }
             }
             .store(in: &subscriptions)
@@ -69,12 +87,24 @@ class CreateMapViewController: UIViewController {
             }
     }
     
+    
+
+
+    
     @objc private func buttonDidTap(_ sender: UIButton) {
         switch sender {
-        case self.contentView.bottomToolView.buttonOne:
-            input.send(.buttonOneDidTap)
-        case self.contentView.bottomToolView.buttonTwo:
-            input.send(.buttonTwoDidTap)
+        case self.contentView.bottomToolView.objectUpButton:
+            input.send(.objectUpButtonDidTap)
+        case self.contentView.bottomToolView.objectDownButton:
+            input.send(.objectDownButtonDidTap)
+        case self.contentView.bottomToolView.objectSizeUpButton:
+            input.send(.objectSizeUpButtonDidTap)
+        case self.contentView.bottomToolView.objectSizeDownButton:
+            input.send(.objectSizeDownButtonDidTap)
+        case self.contentView.bottomToolView.objectColorUpButton:
+            input.send(.objectColorUpButtonDidTap)
+        case self.contentView.bottomToolView.objectColorDownButton:
+            input.send(.objectColorDownButtonDidTap)
         case self.contentView.topToolView.backButton:
             self.navigationController?.popViewController(animated: true)
         case self.contentView.topToolView.saveButton:

@@ -9,27 +9,42 @@
 import UIKit
 
 final class CreateMapBottomToolView: UIView {
-
+    
     var width: CGFloat = 0
     var height: CGFloat = 0
     
-    lazy var colorScrollView = UIScrollView()
-    lazy var sizeScrollView = UIScrollView()
-    lazy var objectScrollView = UIScrollView()
     
-    lazy var colorContentView = UIView()
-    lazy var sizeContentView = UIView()
-    lazy var objectContentView = UIView()
+    lazy var objectView = UIImageView()
+    lazy var objectUpButton = UIButton()
+    lazy var objectDownButton = UIButton()
     
-    lazy var colorStackView = UIStackView()
-    lazy var sizeStackView = UIStackView()
-    lazy var objectStackView = UIStackView()
+    lazy var objectSizeView = UIImageView()
+    lazy var objectSizeUpButton = UIButton()
+    lazy var objectSizeDownButton = UIButton()
     
-    lazy var buttonOne = UIButton()
-    lazy var buttonTwo = UIButton()
+    lazy var objectColorView = UIImageView()
+    lazy var objectColorUpButton = UIButton()
+    lazy var objectColorDownButton = UIButton()
+
+    
+    var objectColorList: [UIColor] = [
+        UIColor.red,
+        UIColor.yellow,
+        UIColor.green
+    ]
+    
+    var objectSizeList: [CGFloat] = [50.0, 75,0]
+    var objectShapeList: [String] = [
+        "L_arrow_white",
+        "creative_plus"
+    ]
     
     init() {
         super.init(frame: .zero)
+        
+        addSubviews()
+        setUpConstraints()
+        setUpViews()
     }
     
     required init?(coder: NSCoder) {
@@ -37,120 +52,96 @@ final class CreateMapBottomToolView: UIView {
     }
     
     private func addSubviews() {
-        [colorScrollView, sizeScrollView, objectScrollView, buttonOne, buttonTwo]
+        [objectView,objectUpButton, objectDownButton, objectColorView, objectColorUpButton, objectColorDownButton, objectSizeView, objectSizeUpButton, objectSizeDownButton]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
             }
-        
-        colorScrollView.addSubview(colorContentView)
-        sizeScrollView.addSubview(sizeContentView)
-        objectScrollView.addSubview(objectContentView)
-        
-        [colorContentView, sizeContentView, objectContentView]
-            .forEach {
-                $0.translatesAutoresizingMaskIntoConstraints = false
-            }
-        colorContentView.addSubview(colorStackView)
-        sizeContentView.addSubview(sizeStackView)
-        objectContentView.addSubview(objectStackView)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        width = (self.bounds.width - 16 * 2) / 3
-        height = width / 116 * 120
-        
-        addSubviews()
-        setUpConstraints()
-        setUpViews()
+        self.backgroundColor = .white
     }
     
     private func setUpConstraints() {
         
         NSLayoutConstraint.activate([
-//            buttonOne.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 24),
-//            buttonOne.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -12),
-//            buttonOne.heightAnchor.constraint(equalToConstant: 50.0),
-//            buttonOne.widthAnchor.constraint(equalToConstant: 120),
-//
-//            buttonTwo.leadingAnchor.constraint(equalTo: buttonOne.trailingAnchor, constant: 24),
-//            buttonTwo.heightAnchor.constraint(equalTo: buttonOne.heightAnchor),
-//            buttonTwo.widthAnchor.constraint(equalTo: buttonOne.widthAnchor),
-//            buttonTwo.centerYAnchor.constraint(equalTo: buttonOne.centerYAnchor),
             
-            colorScrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
-            colorScrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-            colorScrollView.widthAnchor.constraint(equalToConstant: width),
-            colorScrollView.heightAnchor.constraint(equalToConstant: height),
+            objectColorUpButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
+            objectColorUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            objectColorUpButton.widthAnchor.constraint(equalToConstant: 100),
+            objectColorUpButton.heightAnchor.constraint(equalToConstant: 20),
             
-            sizeScrollView.leadingAnchor.constraint(equalTo: colorScrollView.trailingAnchor),
-            sizeScrollView.bottomAnchor.constraint(equalTo: colorScrollView.bottomAnchor),
-            sizeScrollView.widthAnchor.constraint(equalToConstant: width),
-            sizeScrollView.heightAnchor.constraint(equalToConstant: height),
+            objectColorView.leadingAnchor.constraint(equalTo: objectColorUpButton.leadingAnchor),
+            objectColorView.topAnchor.constraint(equalTo: objectColorUpButton.bottomAnchor, constant: 7),
+            objectColorView.widthAnchor.constraint(equalToConstant: 100),
+            objectColorView.bottomAnchor.constraint(equalTo: objectColorDownButton.topAnchor, constant: -7),
             
-            objectScrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
-            objectScrollView.bottomAnchor.constraint(equalTo: colorScrollView.bottomAnchor),
-            objectScrollView.widthAnchor.constraint(equalToConstant: width),
-            objectScrollView.heightAnchor.constraint(equalToConstant: height),
+            objectColorDownButton.leadingAnchor.constraint(equalTo: objectColorUpButton.leadingAnchor),
+            objectColorDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+            objectColorDownButton.widthAnchor.constraint(equalToConstant: 100),
+            objectColorDownButton.heightAnchor.constraint(equalToConstant: 20),
             
-            colorContentView.leadingAnchor.constraint(equalTo: colorScrollView.leadingAnchor),
-            colorContentView.trailingAnchor.constraint(equalTo: colorScrollView.trailingAnchor),
-            colorContentView.bottomAnchor.constraint(equalTo: colorScrollView.bottomAnchor),
-            colorContentView.topAnchor.constraint(equalTo: colorScrollView.topAnchor),
+            objectSizeUpButton.leadingAnchor.constraint(equalTo: objectColorView.trailingAnchor, constant: 19),
+            objectSizeUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            objectSizeUpButton.widthAnchor.constraint(equalToConstant: 100),
+            objectSizeUpButton.heightAnchor.constraint(equalToConstant: 20),
             
-            sizeContentView.leadingAnchor.constraint(equalTo: sizeScrollView.leadingAnchor),
-            sizeContentView.trailingAnchor.constraint(equalTo: sizeScrollView.trailingAnchor),
-            sizeContentView.bottomAnchor.constraint(equalTo: sizeScrollView.bottomAnchor),
-            sizeContentView.topAnchor.constraint(equalTo: sizeScrollView.topAnchor),
+            objectSizeView.leadingAnchor.constraint(equalTo: objectSizeUpButton.leadingAnchor),
+            objectSizeView.topAnchor.constraint(equalTo: objectSizeUpButton.bottomAnchor, constant: 7),
+            objectSizeView.widthAnchor.constraint(equalToConstant: 100),
+            objectSizeView.bottomAnchor.constraint(equalTo: objectSizeDownButton.topAnchor, constant: -7),
             
-            objectContentView.leadingAnchor.constraint(equalTo: objectScrollView.leadingAnchor),
-            objectContentView.trailingAnchor.constraint(equalTo: objectScrollView.trailingAnchor),
-            objectContentView.bottomAnchor.constraint(equalTo: objectScrollView.bottomAnchor),
-            objectContentView.topAnchor.constraint(equalTo: objectScrollView.topAnchor),
+            objectSizeDownButton.leadingAnchor.constraint(equalTo: objectSizeUpButton.leadingAnchor),
+            objectSizeDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+            objectSizeDownButton.widthAnchor.constraint(equalToConstant: 100),
+            objectSizeDownButton.heightAnchor.constraint(equalToConstant: 20),
+
             
-            colorStackView.leadingAnchor.constraint(equalTo: colorContentView.leadingAnchor),
-            colorStackView.trailingAnchor.constraint(equalTo: colorContentView.trailingAnchor),
-            colorStackView.topAnchor.constraint(equalTo: colorContentView.topAnchor),
-            colorStackView.bottomAnchor.constraint(equalTo: colorContentView.bottomAnchor),
+            objectUpButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
+            objectUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
+            objectUpButton.widthAnchor.constraint(equalToConstant: 100),
+            objectUpButton.heightAnchor.constraint(equalToConstant: 20),
             
-            sizeStackView.leadingAnchor.constraint(equalTo: sizeContentView.leadingAnchor),
-            sizeStackView.trailingAnchor.constraint(equalTo: sizeContentView.trailingAnchor),
-            sizeStackView.topAnchor.constraint(equalTo: sizeContentView.topAnchor),
-            sizeStackView.bottomAnchor.constraint(equalTo: sizeContentView.bottomAnchor),
+            objectView.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
+            objectView.topAnchor.constraint(equalTo: objectUpButton.bottomAnchor, constant: 7),
+            objectView.widthAnchor.constraint(equalToConstant: 100),
+            objectView.bottomAnchor.constraint(equalTo: objectDownButton.topAnchor, constant: -7),
             
-            objectStackView.leadingAnchor.constraint(equalTo: objectContentView.leadingAnchor),
-            objectStackView.trailingAnchor.constraint(equalTo: objectContentView.trailingAnchor),
-            objectStackView.topAnchor.constraint(equalTo: objectContentView.topAnchor),
-            objectStackView.bottomAnchor.constraint(equalTo: objectContentView.bottomAnchor),
-            
+            objectDownButton.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
+            objectDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
+            objectDownButton.widthAnchor.constraint(equalToConstant: 100),
+            objectDownButton.heightAnchor.constraint(equalToConstant: 20),
+
         ])
     }
     
     private func setUpViews() {
         
-        buttonOne.setTitle("Button 1", for: .normal)
-        buttonOne.setTitleColor(.black, for: .normal)
-        buttonOne.layer.borderWidth = 2
-        buttonOne.layer.borderColor = UIColor.blue.cgColor
-        buttonOne.layer.cornerRadius = 15
+        // Shadow
+        [objectUpButton, objectDownButton, objectSizeUpButton, objectSizeDownButton, objectColorUpButton, objectColorDownButton]
+            .forEach {
+                $0.layer.shadowColor = UIColor.black.cgColor
+                $0.layer.shadowOpacity = 0.1
+                $0.layer.borderWidth = 1
+                $0.layer.borderColor = UIColor.clear.cgColor
+                $0.layer.shadowOffset = CGSize(width: 0, height: 2)
+            }
         
-        buttonTwo.setTitle("Button 2", for: .normal)
-        buttonTwo.setTitleColor(.black, for: .normal)
-        buttonTwo.layer.borderWidth = 2
-        buttonTwo.layer.borderColor = UIColor.blue.cgColor
-        buttonTwo.layer.cornerRadius = 15
+        objectUpButton.setImage(UIImage(named: "button_up"), for: .normal)
+        objectDownButton.setImage(UIImage(named: "button_down"), for: .normal)
+        objectView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
         
-        buttonTwo.layer.opacity = 1
+        objectSizeUpButton.setImage(UIImage(named: "button_up"), for: .normal)
+        objectSizeDownButton.setImage(UIImage(named: "button_down"), for: .normal)
+        objectSizeView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
         
-        buttonOne.isHidden = true
-        buttonTwo.isHidden = true
+        objectColorUpButton.setImage(UIImage(named: "button_up"), for: .normal)
+        objectColorDownButton.setImage(UIImage(named: "button_down"), for: .normal)
+        objectColorView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
         
-        
-        colorScrollView.backgroundColor = .red
-        sizeScrollView.backgroundColor = .yellow
-        objectScrollView.backgroundColor = .green
-
     }
+    
+    
 }

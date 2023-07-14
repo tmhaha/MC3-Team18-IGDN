@@ -11,31 +11,65 @@ import Combine
 
 final class CreateMapViewModel {
     
+    // MARK: Input, Output
+    enum Input {
+        case objectUpButtonDidTap
+        case objectDownButtonDidTap
+        case objectSizeUpButtonDidTap
+        case objectSizeDownButtonDidTap
+        case objectColorUpButtonDidTap
+        case objectColorDownButtonDidTap
+    }
+    enum Output {
+        case objectUpButtonDidTapOutput
+        case objectDownButtonDidTapOutput
+        case objectSizeUpButtonDidTapOutput
+        case objectSizeDownButtonDidTapOutput
+        case objectColorUpButtonDidTapOutput
+        case objectColorDownButtonDidTapOutput
+    }
+    
+    // MARK: Properties
     let objectWidth = 50.0
     let objectHeight = 50.0
     var objectViews: [UIView] = []
-    
-    enum Input {
-        case buttonOneDidTap
-        case buttonTwoDidTap
-    }
-    enum Output {
-        case buttonOneDidTapOutput
-        case buttonTwoDidTapOutput
-    }
-    
+    var objectColorList: [UIColor] = [
+        UIColor.red,
+        UIColor.yellow,
+        UIColor.green
+    ]
+    var objectSizeList: [CGFloat] = [50.0, 75,0]
+    var objectShapeList: [String] = [
+        "L_arrow_white",
+        "creative_plus"
+    ]
+
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
+    
+    // MARK: Functions
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
-            case .buttonOneDidTap:
-                print(">>> Button One Did Tap")
-                self?.output.send(.buttonOneDidTapOutput)
-            case .buttonTwoDidTap:
-                print(">>> Button Two Did Tap")
-                self?.output.send(.buttonTwoDidTapOutput)
+            case .objectUpButtonDidTap:
+                print(">>> objectUpButton Did Tap")
+                self?.output.send(.objectUpButtonDidTapOutput)
+            case .objectDownButtonDidTap:
+                print(">>> objectDownButton Did Tap")
+                self?.output.send(.objectDownButtonDidTapOutput)
+            case .objectSizeUpButtonDidTap:
+                print(">>> objectSizeUpButton Did Tap")
+                self?.output.send(.objectSizeUpButtonDidTapOutput)
+            case .objectSizeDownButtonDidTap:
+                print(">>> objectSizeDownButton Did Tap")
+                self?.output.send(.objectSizeDownButtonDidTapOutput)
+            case .objectColorUpButtonDidTap:
+                print(">>> objectColorUpButton Did Tap")
+                self?.output.send(.objectColorUpButtonDidTapOutput)
+            case .objectColorDownButtonDidTap:
+                print(">>> objectColorDownButton Did Tap")
+                self?.output.send(.objectColorDownButtonDidTapOutput)
             }
         }.store(in: &subscriptions)
         return output.eraseToAnyPublisher()
