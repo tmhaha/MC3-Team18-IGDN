@@ -24,10 +24,19 @@ class CreateMapViewController: UIViewController {
         view = contentView
     }
     
+    init(_ createModeViewModel: CreateModeViewModel, _ viewModel: CreateMapViewModel) {
+        self.parentViewModel = createModeViewModel
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel = CreateMapViewModel()
         bind()
         setUpTargets()
         setUpGestureRecognizer()
@@ -77,16 +86,13 @@ class CreateMapViewController: UIViewController {
                 case .objectColorDownButtonDidTapOutput:
                     print(">>> receive: objectColorDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
+                case .saveButtonDidTapOutput:
+                    print(">>> receive: saveButtonDidTapOutput")
+                    self?.navigationController?.popViewController(animated: true)
+                    print("saveButton Did Tap")
                 }
             }.store(in: &subscriptions)
         
-        let outputToParent = parentViewModel.transform(input: inputToParent.eraseToAnyPublisher())
-        outputToParent.receive(on: RunLoop.main)
-            .sink { [weak self] event in
-                if event == .saveMap {
-                    print("saveMap")
-                }
-            }.store(in: &subscriptions)
     }
     
     @objc private func buttonDidTap(_ sender: UIButton) {
@@ -112,15 +118,15 @@ class CreateMapViewController: UIViewController {
         case self.contentView.topToolView.backButton:
             self.navigationController?.popViewController(animated: true)
         case self.contentView.topToolView.saveButton:
-            inputToParent.send(.saveButtonDidTap)
-            print("saveButton Did Tap")
+            input.send(.saveButtonDidTap)
         default:
             fatalError()
         }
     }
     
-    func configure(with createModeViewModel: CreateModeViewModel) {
+    func configure(_ createModeViewModel: CreateModeViewModel, _ viewModel: CreateMapViewModel) {
         self.parentViewModel = createModeViewModel
+        self.viewModel = viewModel
     }
 
 }
@@ -128,7 +134,7 @@ class CreateMapViewController: UIViewController {
 extension CreateMapViewController: UIScrollViewDelegate {
     // UITapGestureRecognizer의 액션 메서드
     @objc func handleTap(_ sender: UITapGestureRecognizer) {
-        var tapLocation = sender.location(in: self.contentView.scrollView)
+        let tapLocation = sender.location(in: self.contentView.scrollView)
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
@@ -138,9 +144,6 @@ extension CreateMapViewController: UIScrollViewDelegate {
     
     func addObjectScrollView(with objectView: UIView) {
         self.contentView.scrollView.addSubview(objectView)
-//        if viewModel.objectViews.last === contentView.scrollView.subviews.last {
-//            print("true")
-//        }
     }
 
 }

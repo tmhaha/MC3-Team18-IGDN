@@ -12,10 +12,10 @@ import Combine
 class CreateModeViewController: UIViewController {
 
     private lazy var contentView = CreateModeView()
-    var viewModel: CreateModeViewModel!
     private let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    
+    var viewModel: CreateModeViewModel!
+    var creativeMapViewModel: CreateMapViewModel!
     
     override func loadView() {
         view = contentView
@@ -25,7 +25,8 @@ class CreateModeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: 0x2244FF)
         
-        viewModel = CreateModeViewModel()
+        creativeMapViewModel = CreateMapViewModel()
+        viewModel = CreateModeViewModel(creativeMapViewModel: creativeMapViewModel)
         setUpTargets()
         setUpSettings();
         bind()
@@ -44,10 +45,9 @@ class CreateModeViewController: UIViewController {
                 switch event {
                 case .presentCreateMapView:
                     // TODO: 화면 전환
-                    let vc = CreateMapViewController()
-                    vc.configure(with: self!.viewModel)
-                    //vc.modalPresentationStyle = .fullScreen
-                    //self?.present(vc, animated: false)
+                    let mapViewModel = CreateMapViewModel()
+                    let vc = CreateMapViewController(self!.viewModel, mapViewModel)
+                    self?.viewModel.bind(with: mapViewModel)
                     self?.navigationController?.pushViewController(vc, animated: true)
                     print(">>> receive: presentCreateMapView")
                     self?.contentView.collectionView.reloadData()
@@ -55,26 +55,16 @@ class CreateModeViewController: UIViewController {
                     // TODO: 화면 전환
                     print(">>> receive: presentSelectMapView")
                     self?.contentView.collectionView.reloadData()
-                case .saveMap:
-                    // TODO: collectionView Reload
-                    print(">>> receive: saveMap")
+                case .reload:
                     self?.contentView.collectionView.reloadData()
-                    self?.navigationController?.popViewController(animated: true)
+                    print("RELOAD: \(self?.viewModel.mapList.count)")
+                    
                 }
             }
             .store(in: &subscriptions)
+        
+        
     }
-    
-//    @objc private func buttonDidTap(_ sender: UIButton) {
-//        switch sender {
-//        case self.contentView.createMapButton:
-//            input.send(.createMapButtonDidTap)
-//        case self.contentView.selectMapButton:
-//            input.send(.selectButtonDidTap)
-//        default:
-//            fatalError()
-//        }
-//    }
     
     private func setUpSettings() {
         contentView.collectionView.delegate = self

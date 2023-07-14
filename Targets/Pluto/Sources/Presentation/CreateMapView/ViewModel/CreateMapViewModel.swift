@@ -19,6 +19,7 @@ final class CreateMapViewModel {
         case objectSizeDownButtonDidTap
         case objectColorUpButtonDidTap
         case objectColorDownButtonDidTap
+        case saveButtonDidTap
     }
     enum Output {
         case objectUpButtonDidTapOutput
@@ -27,9 +28,11 @@ final class CreateMapViewModel {
         case objectSizeDownButtonDidTapOutput
         case objectColorUpButtonDidTapOutput
         case objectColorDownButtonDidTapOutput
+        case saveButtonDidTapOutput
     }
     
     // MARK: Properties
+    public let creativeObjectListSubject = PassthroughSubject<[CreativeObject], Never>()
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
@@ -94,9 +97,14 @@ final class CreateMapViewModel {
             case .objectColorDownButtonDidTap:
                 print(">>> objectColorDownButton Did Tap")
                 self?.output.send(.objectColorDownButtonDidTapOutput)
+            case .saveButtonDidTap:
+                print(">>> saveButton Did Tap")
+                self?.creativeObjectListSubject.send(self?.creativeObjectList ?? [])
+                self?.output.send(.saveButtonDidTapOutput)
             }
         }.store(in: &subscriptions)
         return output.eraseToAnyPublisher()
+
     }
     
     // MARK: Tap한 영역에 이미 해당 creativeObjectList의 element가 있는지 여부 확인
@@ -130,8 +138,8 @@ final class CreateMapViewModel {
             let creativeObject = createCreativeObject(
                 point: tapCenterPoint,
                 color: objectColor,
-                size: "Size",
-                shape: "Shape",
+                size: "\(objectSizeIndex)",
+                shape: "\(objectIndex)",
                 path: UIBezierPath(rect: CGRect(x: 0, y: 0, width: 50, height: 50)).cgPath,
                 object: objectView
             )
@@ -178,5 +186,4 @@ final class CreateMapViewModel {
         let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, path: path, object: object)
         return creativeObject
     }
-    
 }

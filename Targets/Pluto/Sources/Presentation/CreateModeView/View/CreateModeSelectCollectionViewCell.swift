@@ -128,8 +128,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         
         editTitleButton.setImage(UIImage(named: "pencil"), for: .normal)
         editTitleButton.tintColor = UIColor(hex: 0x4A6AFF)
-
-        
         
         dateDescriptionLabel.text = "last Edited:"
         dateDescriptionLabel.font = UIFont(name: "TASAExplorer-Regular", size: 12)
@@ -160,7 +158,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         chevronRight.image = UIImage(named: "chevron_right")
         chevronRight.tintColor = .white
         
-        
         let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
         editButton.setAttributedTitle(editButtonString, for: .normal)
         editButton.layer.cornerRadius = 5
@@ -171,7 +168,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(item: [CreativeMapModel], section: Int) {
-        print(section)
+        print("section: \(section)")
         if section == 0 {
             [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight]
                 .forEach {
