@@ -10,10 +10,6 @@ import UIKit
 
 final class CreateMapBottomToolView: UIView {
     
-    var width: CGFloat = 0
-    var height: CGFloat = 0
-    
-    
     lazy var objectView = UIImageView()
     lazy var objectUpButton = UIButton()
     lazy var objectDownButton = UIButton()
@@ -25,19 +21,6 @@ final class CreateMapBottomToolView: UIView {
     lazy var objectColorView = UIImageView()
     lazy var objectColorUpButton = UIButton()
     lazy var objectColorDownButton = UIButton()
-
-    
-    var objectColorList: [UIColor] = [
-        UIColor.red,
-        UIColor.yellow,
-        UIColor.green
-    ]
-    
-    var objectSizeList: [CGFloat] = [50.0, 75,0]
-    var objectShapeList: [String] = [
-        "L_arrow_white",
-        "creative_plus"
-    ]
     
     init() {
         super.init(frame: .zero)
@@ -97,7 +80,7 @@ final class CreateMapBottomToolView: UIView {
             objectSizeDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
             objectSizeDownButton.widthAnchor.constraint(equalToConstant: 100),
             objectSizeDownButton.heightAnchor.constraint(equalToConstant: 20),
-
+            
             
             objectUpButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
             objectUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
@@ -113,7 +96,7 @@ final class CreateMapBottomToolView: UIView {
             objectDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
             objectDownButton.widthAnchor.constraint(equalToConstant: 100),
             objectDownButton.heightAnchor.constraint(equalToConstant: 20),
-
+            
         ])
     }
     

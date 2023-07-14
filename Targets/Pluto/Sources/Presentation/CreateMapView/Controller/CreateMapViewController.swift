@@ -63,17 +63,23 @@ class CreateMapViewController: UIViewController {
                 case .objectUpButtonDidTapOutput:
                     // TODO: 버튼1로 인한 UI 또는 상태 변경
                     print(">>> receive: objectUpButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
                 case .objectDownButtonDidTapOutput:
                     // TODO: 버튼2로 인한 UI 또는 상태 변경
                     print(">>> receive: objectDownButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
                 case .objectSizeUpButtonDidTapOutput:
                     print(">>> receive: objectSizeUpButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectSizeView.backgroundColor = self?.viewModel.objectSize
                 case .objectSizeDownButtonDidTapOutput:
                     print(">>> receive: objectSizeDownButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectSizeView.backgroundColor = self?.viewModel.objectSize
                 case .objectColorUpButtonDidTapOutput:
                     print(">>> receive: objectColorUpButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
                 case .objectColorDownButtonDidTapOutput:
                     print(">>> receive: objectColorDownButtonDidTapOutput")
+                    self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
                 }
             }
             .store(in: &subscriptions)
@@ -87,23 +93,25 @@ class CreateMapViewController: UIViewController {
             }
     }
     
-    
-
-
-    
     @objc private func buttonDidTap(_ sender: UIButton) {
         switch sender {
         case self.contentView.bottomToolView.objectUpButton:
+            viewModel.updateObject(isIncrease: true)
             input.send(.objectUpButtonDidTap)
         case self.contentView.bottomToolView.objectDownButton:
+            viewModel.updateObject(isIncrease: false)
             input.send(.objectDownButtonDidTap)
         case self.contentView.bottomToolView.objectSizeUpButton:
+            viewModel.updateObjectSize(isIncrease: true)
             input.send(.objectSizeUpButtonDidTap)
         case self.contentView.bottomToolView.objectSizeDownButton:
+            viewModel.updateObjectSize(isIncrease: false)
             input.send(.objectSizeDownButtonDidTap)
         case self.contentView.bottomToolView.objectColorUpButton:
+            viewModel.updateObjectColor(isIncrease: true)
             input.send(.objectColorUpButtonDidTap)
         case self.contentView.bottomToolView.objectColorDownButton:
+            viewModel.updateObjectColor(isIncrease: false)
             input.send(.objectColorDownButtonDidTap)
         case self.contentView.topToolView.backButton:
             self.navigationController?.popViewController(animated: true)

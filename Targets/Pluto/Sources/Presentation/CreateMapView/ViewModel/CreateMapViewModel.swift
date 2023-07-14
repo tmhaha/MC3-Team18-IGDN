@@ -33,17 +33,42 @@ final class CreateMapViewModel {
     let objectWidth = 50.0
     let objectHeight = 50.0
     var objectViews: [UIView] = []
-    var objectColorList: [UIColor] = [
-        UIColor.red,
-        UIColor.yellow,
-        UIColor.green
+    
+    private var objectColorIndex = 0
+    private var objectSizeIndex = 0
+    private var objectIndex = 0
+    
+    private let objectColorList: [UIColor] = [
+        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
+        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
+        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
     ]
-    var objectSizeList: [CGFloat] = [50.0, 75,0]
-    var objectShapeList: [String] = [
-        "L_arrow_white",
-        "creative_plus"
+    
+    private let objectSizeList: [UIColor] = [
+        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
+        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
+        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
     ]
-
+    
+    private let objectList: [UIColor] = [
+        UIColor(hex: 0xFF3434).withAlphaComponent(0.41),
+        UIColor(hex: 0x2244FF).withAlphaComponent(0.41),
+        UIColor(hex: 0x4061F8).withAlphaComponent(0.41),
+    ]
+    
+    // View에 표시할 데이터
+    var objectColor: UIColor {
+        return objectColorList[objectColorIndex]
+    }
+    
+    var objectSize: UIColor {
+        return objectSizeList[objectSizeIndex]
+    }
+    
+    var object: UIColor {
+        return objectList[objectIndex]
+    }
+    
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
@@ -90,4 +115,29 @@ final class CreateMapViewModel {
         objectView.backgroundColor = UIColor.yellow
         objectViews.append(objectView)
     }
+    
+    func updateObjectColor(isIncrease: Bool) {
+        if isIncrease {
+            objectColorIndex = (objectColorIndex + 1) % objectColorList.count
+        } else {
+            objectColorIndex = (objectColorIndex - 1 + objectColorList.count) % objectColorList.count
+        }
+    }
+    
+    func updateObjectSize(isIncrease: Bool) {
+        if isIncrease {
+            objectSizeIndex = (objectSizeIndex + 1) % objectSizeList.count
+        } else {
+            objectSizeIndex = (objectSizeIndex - 1 + objectSizeList.count) % objectSizeList.count
+        }
+    }
+    
+    func updateObject(isIncrease: Bool) {
+        if isIncrease {
+            objectIndex = (objectIndex + 1) % objectList.count
+        } else {
+            objectIndex = (objectIndex - 1 + objectList.count) % objectList.count
+        }
+    }
+    
 }
