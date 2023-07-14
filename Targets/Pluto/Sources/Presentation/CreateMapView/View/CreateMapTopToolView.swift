@@ -34,7 +34,7 @@ final class CreateMapTopToolView: UIView {
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([            
-            backButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
+            backButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 24),
             backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 42),
             backButton.widthAnchor.constraint(equalToConstant: 32),
             backButton.heightAnchor.constraint(equalToConstant: 20),
