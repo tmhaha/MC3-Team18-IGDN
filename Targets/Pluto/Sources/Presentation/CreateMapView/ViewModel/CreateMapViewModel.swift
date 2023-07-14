@@ -59,6 +59,9 @@ final class CreateMapViewModel {
     let objectHeight = 50.0
     var objectViews: [UIView] = []
     
+    // TODO: 나중에 주입받아야함 -> creativeObject
+    var creativeObjectList: [CreativeObject] = []
+    
     var objectColor: UIColor {
         return objectColorList[objectColorIndex]
     }
@@ -68,7 +71,7 @@ final class CreateMapViewModel {
     var object: UIColor {
         return objectList[objectIndex]
     }
-
+    
     // MARK: Functions
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
@@ -96,11 +99,12 @@ final class CreateMapViewModel {
         return output.eraseToAnyPublisher()
     }
     
+    // MARK: Tap한 영역에 이미 해당 creativeObjectList의 element가 있는지 여부 확인
     func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> UIView? {
-        for objectView in objectViews {
-            let objectFrame = objectView.frame
+        for objectView in creativeObjectList {
+            let objectFrame = objectView.object.frame
             if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
-                return objectView
+                return objectView.object
             }
         }
         return nil
@@ -110,9 +114,9 @@ final class CreateMapViewModel {
         let objectSize = CGSize(width: objectWidth, height: objectHeight)
         let tapCenterPoint = CGPoint(x: tapLocation.x - objectWidth/2, y: tapLocation.y - objectHeight/2)
         
-        // 해당 위치에 겹치는 오브젝트가 있는지 확인
+        // MARK: 해당 위치에 겹치는 오브젝트가 있는지 확인
         if let overlappingObjectView = isOverlapWithOtherObjects(tapCenterPoint, objectSize: objectSize) {
-            // 겹치는 오브젝트 제거
+            // MARK: 겹치는 오브젝트 제거
             removeObjectView(overlappingObjectView)
             overlappingObjectView.removeFromSuperview()
             return false
@@ -121,18 +125,31 @@ final class CreateMapViewModel {
             objectView.backgroundColor = objectColor
             objectView.layer.borderColor = UIColor.gray.cgColor
             objectView.layer.borderWidth = 1
-            objectViews.append(objectView)
+            
+            // MARK: 1. creativeObject 생성
+            let creativeObject = createCreativeObject(
+                point: tapCenterPoint,
+                color: objectColor,
+                size: "Size",
+                shape: "Shape",
+                path: UIBezierPath(rect: CGRect(x: 0, y: 0, width: 50, height: 50)).cgPath,
+                object: objectView
+            )
+            
+            // MARK: 2. 생성한 creativeObject 추가
+            creativeObjectList.append(creativeObject)
             return true
         }
     }
     
+    // MARK: 겹쳐진 creativeObject를 creativeObjectList에서 찾아서 제거
     func removeObjectView(_ objectView: UIView) {
-        if let index = objectViews.firstIndex(where: { $0 === objectView }) {
-            objectViews.remove(at: index)
+        if let index = creativeObjectList.firstIndex(where: { $0.object === objectView }) {
+            creativeObjectList.remove(at: index)
             objectView.removeFromSuperview()
         }
     }
-
+    
     func updateObjectColor(isIncrease: Bool) {
         if isIncrease {
             objectColorIndex = (objectColorIndex + 1) % objectColorList.count
@@ -155,6 +172,11 @@ final class CreateMapViewModel {
         } else {
             objectIndex = (objectIndex - 1 + objectList.count) % objectList.count
         }
+    }
+    
+    private func createCreativeObject(point: CGPoint, color: UIColor, size: String, shape: String, path: CGPath, object: UIView) -> CreativeObject {
+        let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, path: path, object: object)
+        return creativeObject
     }
     
 }

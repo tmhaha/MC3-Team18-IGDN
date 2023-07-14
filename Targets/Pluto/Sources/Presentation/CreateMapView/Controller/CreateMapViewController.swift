@@ -132,7 +132,7 @@ extension CreateMapViewController: UIScrollViewDelegate {
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
-            addObjectScrollView(with: viewModel.objectViews.last!)
+            addObjectScrollView(with: viewModel.creativeObjectList.last!.object)
         }
     }
     
