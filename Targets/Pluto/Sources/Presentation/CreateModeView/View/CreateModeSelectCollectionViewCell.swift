@@ -13,6 +13,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: CreateModeSelectCollectionViewCell.self)
     
     let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
+    var indexPath: IndexPath!
     
     lazy var title = UILabel()
     lazy var dateDescriptionLabel = UILabel()
@@ -125,7 +126,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         descriptions.font = UIFont(name: "TASAExplorer-Bold", size: 20)
         descriptions.textColor = UIColor(hex: 0xB4C1FF)
         descriptions.text = "create your own journey!"
-
+        
         title.text = "Slot 1"
         title.font = UIFont(name: "TASAExplorer-Bold", size: 22)
         
@@ -139,7 +140,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         lastEdited.text = "07/23:14:22"
         lastEdited.font = UIFont(name: "TASAExplorer-Bold", size: 12)
         lastEdited.textColor = UIColor(hex: 0xB4C1FF)
-
+        
         solidLine.image = UIImage(named: "solid_line")
         solidLine.tintColor = UIColor(hex: 0xB4C1FF)
         
@@ -170,7 +171,8 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         
     }
     
-    func configure(item: [CreativeMapModel], section: Int) {
+    func configure(item: [CreativeMapModel], section: Int, indexPath: IndexPath) {
+        self.indexPath = indexPath
         if section == 0 {
             [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight]
                 .forEach {
@@ -189,13 +191,14 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     @objc private func buttonTapped(_ sender: UIButton) {
         switch sender {
         case playButton:
-            input.send(.playButtonDidTap)
+            input.send(.playButtonDidTap(indexPath: indexPath))
         case editButton:
-            input.send(.editButtonDidTap)
+            input.send(.editButtonDidTap(indexPath: indexPath))
         case editTitleButton:
-            input.send(.editTitleButtonDidTap)
+            input.send(.editTitleButtonDidTap(indexPath: indexPath))
         default:
             fatalError()
         }
     }
+
 }

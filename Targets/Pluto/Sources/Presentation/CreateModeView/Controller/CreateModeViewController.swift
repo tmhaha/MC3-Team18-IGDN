@@ -34,6 +34,7 @@ class CreateModeViewController: UIViewController {
         
     }
     
+    //TODO: 추후 삭제
     private func setUpTargets() {
 //        contentView.selectMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
 //        contentView.createMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
@@ -51,15 +52,13 @@ class CreateModeViewController: UIViewController {
                     let vc = CreateMapViewController(self!.viewModel, mapViewModel)
                     self?.viewModel.bind(with: mapViewModel)
                     self?.navigationController?.pushViewController(vc, animated: true)
-                    print(">>> receive: presentCreateMapView")
                     self?.contentView.collectionView.reloadData()
                 case .presentSelectMapView:
                     // TODO: 화면 전환
-                    print(">>> receive: presentSelectMapView")
                     self?.contentView.collectionView.reloadData()
                 case .reload:
                     self?.contentView.collectionView.reloadData()
-                    print("RELOAD: \(self?.viewModel.mapList.count)")
+                    print("RELOAD: \(self?.viewModel.mapList.count)") // MARK: DEBUG
                 default:
                     break
                 }
@@ -76,13 +75,13 @@ class CreateModeViewController: UIViewController {
             .sink { [weak self] event in
                 switch event {
                 case .playButtonDidTapOutput:
-                    print("'''VC에서의 playButton으로 인한 화면전환'''")
+                    print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG
                     // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결 -> 뷰 전환
                 case .editButtonDidTapOutput:
-                    print("'''VC에서의 editButton으로 인한 화면전환'''")
+                    print("'''VC에서의 editButton으로 인한 화면전환'''")// MARK: DEBUG
                     // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결 -> 뷰 전환
                 case .editTitleButtonDidTapOutput:
-                    print("'''VC에서의 editTitleButton으로 인한 화면전환'''")
+                    print("'''VC에서의 editTitleButton으로 인한 화면전환'''")// MARK: DEBUG
                     // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> title 변경하여 화면을 변경
                 default:
                     break
@@ -107,7 +106,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         if section == 0 {
             return 1
         } else {
-            print(">> viewModel.mapList.count: \(viewModel.mapList.count)")
+            print(">> viewModel.mapList.count: \(viewModel.mapList.count)")// MARK: DEBUG
             return viewModel.mapList.count
         }
     }
@@ -116,7 +115,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateModeSelectCollectionViewCell.identifier, for: indexPath) as? CreateModeSelectCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(item: [], section: indexPath.section)
+        cell.configure(item: [], section: indexPath.section, indexPath: indexPath)
         return cell
     }
     
@@ -144,8 +143,8 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         if indexPath.section == 0 {
             input.send(.createMapButtonDidTap)
         } else {
-            print(">>> 선택한 게임뷰로 넘어갑니다.")
-            input.send(.selectButtonDidTap)
+            print(">>> 선택한 게임뷰로 넘어갑니다.")// MARK: DEBUG
+            input.send(.selectButtonDidTap(indexPath: indexPath))
         }
     }
     
