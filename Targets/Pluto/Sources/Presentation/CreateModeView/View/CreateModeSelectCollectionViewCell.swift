@@ -7,9 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: CreateModeSelectCollectionViewCell.self)
+    
+    let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     
     lazy var title = UILabel()
     lazy var dateDescriptionLabel = UILabel()
@@ -168,7 +171,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(item: [CreativeMapModel], section: Int) {
-        print("section: \(section)")
         if section == 0 {
             [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight]
                 .forEach {
@@ -177,8 +179,23 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         } else {
             imageView.isHidden = true
             descriptions.isHidden = true
+            
+            playButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            editButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            editTitleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
         }
-        
     }
-
+    
+    @objc private func buttonTapped(_ sender: UIButton) {
+        switch sender {
+        case playButton:
+            input.send(.playButtonDidTap)
+        case editButton:
+            input.send(.editButtonDidTap)
+        case editTitleButton:
+            input.send(.editTitleButtonDidTap)
+        default:
+            fatalError()
+        }
+    }
 }

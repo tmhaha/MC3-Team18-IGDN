@@ -14,6 +14,7 @@ class CreateModeViewController: UIViewController {
     private lazy var contentView = CreateModeView()
     private let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    private var cellSubscriptions: [IndexPath: Set<AnyCancellable>] = [:]
     var viewModel: CreateModeViewModel!
     var creativeMapViewModel: CreateMapViewModel!
     
@@ -28,8 +29,9 @@ class CreateModeViewController: UIViewController {
         creativeMapViewModel = CreateMapViewModel()
         viewModel = CreateModeViewModel(creativeMapViewModel: creativeMapViewModel)
         setUpTargets()
-        setUpSettings();
+        setUpCollectionView();
         bind()
+        
     }
     
     private func setUpTargets() {
@@ -58,7 +60,8 @@ class CreateModeViewController: UIViewController {
                 case .reload:
                     self?.contentView.collectionView.reloadData()
                     print("RELOAD: \(self?.viewModel.mapList.count)")
-                    
+                default:
+                    break
                 }
             }
             .store(in: &subscriptions)
@@ -66,7 +69,29 @@ class CreateModeViewController: UIViewController {
         
     }
     
-    private func setUpSettings() {
+    private func bindInCell(with cellInput: PassthroughSubject<CreateModeViewModel.Input, Never>, cell: CreateModeSelectCollectionViewCell, indexPath: IndexPath) {
+        let output = viewModel.transform(input: cellInput.eraseToAnyPublisher())
+        
+        output.receive(on: RunLoop.main)
+            .sink { [weak self] event in
+                switch event {
+                case .playButtonDidTapOutput:
+                    print("'''VC에서의 playButton으로 인한 화면전환'''")
+                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결 -> 뷰 전환
+                case .editButtonDidTapOutput:
+                    print("'''VC에서의 editButton으로 인한 화면전환'''")
+                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결 -> 뷰 전환
+                case .editTitleButtonDidTapOutput:
+                    print("'''VC에서의 editTitleButton으로 인한 화면전환'''")
+                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> title 변경하여 화면을 변경
+                default:
+                    break
+                }
+            }
+            .store(in: &cellSubscriptions[indexPath, default: Set<AnyCancellable>()]) // 해당 indexPath에 대한 구독 저장
+    }
+    
+    private func setUpCollectionView() {
         contentView.collectionView.delegate = self
         contentView.collectionView.dataSource = self
     }
@@ -95,6 +120,13 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        guard let cell = cell as? CreateModeSelectCollectionViewCell else {
+            return
+        }
+        self.configureCell(cell, at: indexPath)
+    }
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if indexPath.section == 0 {
             return CGSize(width: collectionView.layer.frame.width - 80, height: 100)
@@ -116,4 +148,16 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
             input.send(.selectButtonDidTap)
         }
     }
+    
+    private func configureCell(_ cell: CreateModeSelectCollectionViewCell, at indexPath: IndexPath) {
+        // 이전에 구독한 sink 클로저를 취소
+        cellSubscriptions[indexPath]?.forEach { $0.cancel() }
+        cellSubscriptions[indexPath]?.removeAll()
+        
+        // 해당 indexPath에 대한 구독이 없을 경우에만 bindInCell 호출
+        if cellSubscriptions[indexPath] == nil {
+            bindInCell(with: cell.input, cell: cell, indexPath: indexPath)
+        }
+    }
+    
 }
