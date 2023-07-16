@@ -194,6 +194,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             input.send(.playButtonDidTap(indexPath: indexPath))
         case editButton:
             input.send(.editButtonDidTap(indexPath: indexPath))
+            print(">>> tapped indexPath: \(indexPath)") // MARK: DEBUG
         case editTitleButton:
             input.send(.editTitleButtonDidTap(indexPath: indexPath))
         default:

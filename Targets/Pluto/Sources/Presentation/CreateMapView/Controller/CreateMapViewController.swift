@@ -40,7 +40,7 @@ class CreateMapViewController: UIViewController {
         bind()
         setUpTargets()
         setUpGestureRecognizer()
-        
+        setUpEditModeView()
         self.contentView.scrollView.delegate = self
     }
     
@@ -59,6 +59,15 @@ class CreateMapViewController: UIViewController {
         contentView.bottomToolView.objectSizeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+    }
+    
+    
+    private func setUpEditModeView() {
+        if viewModel.isEditing {
+            viewModel.creativeObjectList?.forEach{
+                addObjectScrollView(with: $0.object)
+            }
+        }
     }
     
     private func bind(){
@@ -117,6 +126,8 @@ class CreateMapViewController: UIViewController {
             input.send(.objectColorDownButtonDidTap)
         case self.contentView.topToolView.backButton:
             self.navigationController?.popViewController(animated: true)
+            // TODO: 뒤로갈 때 CreateModeViewController에게 cell 개수 판단
+            
         case self.contentView.topToolView.saveButton:
             input.send(.saveButtonDidTap)
         default:
@@ -138,7 +149,7 @@ extension CreateMapViewController: UIScrollViewDelegate {
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
-            addObjectScrollView(with: viewModel.creativeObjectList.last!.object)
+            addObjectScrollView(with: (viewModel.creativeObjectList?.last!.object)!)
         }
     }
     

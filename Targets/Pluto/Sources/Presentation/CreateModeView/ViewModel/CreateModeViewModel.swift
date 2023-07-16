@@ -24,13 +24,13 @@ final class CreateModeViewModel {
         case presentCreateMapView
         case reload
         case playButtonDidTapOutput
-        case editButtonDidTapOutput
+        case editButtonDidTapOutput(IndexPath: IndexPath)
         case editTitleButtonDidTapOutput
     }
     
-    let createMapViewModel: CreateMapViewModel!
     private let output = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    let createMapViewModel: CreateMapViewModel!
     var mapList: [CreativeMapModel] = []
     var objectList: [CreativeObject] = []
     
@@ -56,7 +56,7 @@ final class CreateModeViewModel {
                 print("'''VM에서의 editButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
                 // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결
                 print(">>> \(indexPath.row)번째 Cell의 editButton")// MARK: DEBUG
-                self?.output.send(.editButtonDidTapOutput)
+                self?.output.send(.editButtonDidTapOutput(IndexPath: indexPath))
             case .editTitleButtonDidTap(let indexPath):
                 print("'''VM에서의 editTitleButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
                 // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> title 변경
@@ -71,15 +71,38 @@ final class CreateModeViewModel {
     func bind(with viewModel: CreateMapViewModel) {
         viewModel.creativeObjectListSubject
             .sink { [weak self] creativeObjectList in
+                let (objectList, isEditng, indexPath) = creativeObjectList
+                self?.objectList = objectList
+                
+                // MARK: isEditing이 true
+                if isEditng {
+                    self?.updateMap(with: objectList, indexPath: indexPath)
+                    print("indexPath: \(indexPath)")
+                }
+                // MARK: isEditing이 false
                 // creativeObjectList를 처리하는 로직을 작성합니다
-                self?.objectList = creativeObjectList
-                self?.appendMap(with: self?.objectList ?? [])
+                else {
+                    self?.appendMap(with: self?.objectList ?? [])
+                }
             }.store(in: &subscriptions)
         
     }
     
     private func appendMap(with object: [CreativeObject]) {
         mapList.append(CreativeMapModel(titleLabel: "Slot", objectList: object))
+        // MARK: 추가한 Object들 출력예시 (DEBUG)
+        mapList.forEach{  maps in
+            maps.objectList.forEach { object in
+                print(object.shape)
+            }
+            print("===")
+        }
+        objectList.removeAll()
+        output.send(.reload)
+    }
+    
+    private func updateMap(with object: [CreativeObject], indexPath: IndexPath) {
+        self.mapList[indexPath.row].objectList = objectList
         // MARK: 추가한 Object들 출력예시 (DEBUG)
         mapList.forEach{  maps in
             maps.objectList.forEach { object in

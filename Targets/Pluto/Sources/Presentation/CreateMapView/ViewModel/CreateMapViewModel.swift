@@ -32,7 +32,7 @@ final class CreateMapViewModel {
     }
     
     // MARK: Properties
-    public let creativeObjectListSubject = PassthroughSubject<[CreativeObject], Never>()
+    public let creativeObjectListSubject = PassthroughSubject<([CreativeObject], Bool, IndexPath), Never>()
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
@@ -60,10 +60,11 @@ final class CreateMapViewModel {
     
     let objectWidth = 50.0
     let objectHeight = 50.0
-    var objectViews: [UIView] = []
     
     // TODO: 나중에 주입받아야함 -> creativeObject
-    var creativeObjectList: [CreativeObject] = []
+    var creativeObjectList: [CreativeObject]?
+    var isEditing: Bool = false
+    var indexPath: IndexPath?
     
     var objectColor: UIColor {
         return objectColorList[objectColorIndex]
@@ -73,6 +74,12 @@ final class CreateMapViewModel {
     }
     var object: UIColor {
         return objectList[objectIndex]
+    }
+    
+    init(creativeObjectList: [CreativeObject]? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
+        self.creativeObjectList = creativeObjectList ?? []
+        self.isEditing = isEditing ?? false
+        self.indexPath = indexPath ?? IndexPath()
     }
     
     // MARK: Functions
@@ -99,7 +106,8 @@ final class CreateMapViewModel {
                 self?.output.send(.objectColorDownButtonDidTapOutput)
             case .saveButtonDidTap:
                 print(">>> saveButton Did Tap")
-                self?.creativeObjectListSubject.send(self?.creativeObjectList ?? [])
+                self?.creativeObjectListSubject.send((self?.creativeObjectList ?? [], self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
+                
                 self?.output.send(.saveButtonDidTapOutput)
             }
         }.store(in: &subscriptions)
@@ -109,10 +117,12 @@ final class CreateMapViewModel {
     
     // MARK: Tap한 영역에 이미 해당 creativeObjectList의 element가 있는지 여부 확인
     func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> UIView? {
-        for objectView in creativeObjectList {
-            let objectFrame = objectView.object.frame
-            if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
-                return objectView.object
+        if let creativeObjectList {
+            for objectView in creativeObjectList {
+                let objectFrame = objectView.object.frame
+                if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
+                    return objectView.object
+                }
             }
         }
         return nil
@@ -145,15 +155,15 @@ final class CreateMapViewModel {
             )
             
             // MARK: 2. 생성한 creativeObject 추가
-            creativeObjectList.append(creativeObject)
+            creativeObjectList?.append(creativeObject)
             return true
         }
     }
     
     // MARK: 겹쳐진 creativeObject를 creativeObjectList에서 찾아서 제거
     func removeObjectView(_ objectView: UIView) {
-        if let index = creativeObjectList.firstIndex(where: { $0.object === objectView }) {
-            creativeObjectList.remove(at: index)
+        if let index = creativeObjectList?.firstIndex(where: { $0.object === objectView }) {
+            creativeObjectList?.remove(at: index)
             objectView.removeFromSuperview()
         }
     }

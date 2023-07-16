@@ -10,5 +10,5 @@ import UIKit
 
 struct CreativeMapModel {
     let titleLabel: String
-    let objectList: [CreativeObject]
+    var objectList: [CreativeObject]
 }
