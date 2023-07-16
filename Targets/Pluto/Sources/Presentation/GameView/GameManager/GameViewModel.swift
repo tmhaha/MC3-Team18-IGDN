@@ -13,6 +13,7 @@ class GameManager: ObservableObject {
     // MARK: CancellableBag
     var bag = Set<AnyCancellable>()
     
+    var scene: SKScene?
     // MARK: Input
     @Published var touchesBegin: (Set<UITouch>, SKScene)
     @Published var touchesEnd: (Set<UITouch>, SKScene)
@@ -39,23 +40,40 @@ class GameManager: ObservableObject {
     
     func startGame(scene: SKScene) {
         
-        for nodes in backGround.timeLayer {
-            scene.addChilds(nodes.map { $0.node })
-        }
+        self.scene = scene
+        
         scene.addChilds(nodes.all)
         
         nodes.astronaut.startGame()
+        nodes.settingPlanets()
         nodes.positioning(size: scene.size)
         nodes.setEachPhisicalBody()
         nodes.setName()
         gameTimer.startTimer(completion: timerAction)
     }
     
+    var tempIndex = 0
     func timerAction(_ x: Int) {
-        let nodes = backGround.timeLayer[x]
         
-        for node in nodes {
-            node.node.run( SKAction.moveTo(x: -100, duration: node.duration))
+        // backGroundLayers
+        let index = x % 30
+        
+        let nodesk = backGround.timeLayer[index]
+        scene?.addChilds(nodesk.map { $0.node })
+        
+        for node in nodesk {
+            node.node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration))
+        }
+        
+        // planets
+        //nodes.planet.run(SKAction.moveTo(x: -100, duration: 15))
+        
+        if x % GameConstans.planetsDistance == 0 {
+            
+            scene?.addChild(nodes.planets[tempIndex])
+
+            nodes.planets[tempIndex].runAndRemove(SKAction.moveTo(x: -100, duration: GameConstans.planetDuration))
+            tempIndex += 1
         }
     }
     
@@ -70,16 +88,36 @@ class GameManager: ObservableObject {
                     let location = touch.location(in: scene)
                     
                     if self.nodes.rightButton.contains(location) {
-                        nodes.astronaut.StartTurnCounterClockwise()
+                        nodes.astronaut.startTurnCounterClockwise()
                     }
                     if self.nodes.leftButton.contains(location){
                         nodes.astronaut.startTurnClockwise()
                     }
                     if self.nodes.changeColorOne.contains(location) {
-                        nodes.astronaut.astronautColor.combine(.one)
+                        let newColor = nodes.astronaut.type.combine(.one)
+                        if nodes.astronaut.status == .inOribt {
+                            guard let newAstronuat = nodes.astronaut.orbitPlanet?.changedColor(to: newColor) else { return }
+                            nodes.astronaut = newAstronuat
+                            nodes.setAstronuat()
+                            scene.addChild(nodes.astronaut)
+                           
+                            nodes.astronaut.startFoward()
+                            
+                           
+                        }
                     }
                     if self.nodes.changeColorTwo.contains(location) {
-                        nodes.astronaut.astronautColor.combine(.two)
+                        let newColor = nodes.astronaut.type.combine(.two)
+                        if nodes.astronaut.status == .inOribt {
+                            guard let newAstronuat = nodes.astronaut.orbitPlanet?.changedColor(to: newColor) else { return }
+                            nodes.astronaut = newAstronuat
+                            nodes.setAstronuat()
+                            scene.addChild(nodes.astronaut)
+                            
+                            nodes.astronaut.startFoward()
+                        
+                            
+                        }
                     }
                 }
             }
@@ -94,6 +132,7 @@ class GameManager: ObservableObject {
                     let location = touch.location(in: scene)
                     
                     if self.nodes.rightButton.contains(location) {
+                        
                         nodes.astronaut.endTurnCounterClockwise()
                     }
                     if self.nodes.leftButton.contains(location){
@@ -102,18 +141,41 @@ class GameManager: ObservableObject {
                 }
             }
             .store(in: &bag)
-        
+    
         $contact
             .sink { [weak self] contact in
                 
                 guard let self = self else { return }
                 
-                let nodeA = contact.bodyA.node as? SKSpriteNode
-                let nodeB = contact.bodyB.node as? SKSpriteNode
+                let nodeA = contact.bodyA.node
+                let nodeB = contact.bodyB.node
                 
                 // 충돌 처리 로직을 추가합니다.
                 if (nodeA?.name == "astronaut" && nodeB?.name == "wall") || (nodeA?.name == "wall" && nodeB?.name == "astronaut") {
                     self.nodes.astronaut.removeAllActions()
+                }
+                else if (nodeA?.name == "astronaut" && nodeB?.name == "planet") || (nodeA?.name == "planet" && nodeB?.name == "astronaut") {
+                    if nodeA?.name == "planet", let astronaut = nodeB as? AstronautNode, let planet = nodeA as? PlanetNode {
+                        if planet.color == astronaut.type {
+                            astronaut.orbitPlanet = planet
+                            astronaut.status = .inOribt
+                            planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                astronaut.removeFromParent()
+                            }
+                        }
+                    }
+                    else if let astronaut = nodeA as? AstronautNode, let planet = nodeB as? PlanetNode {
+                        if planet.color == astronaut.type {
+                            astronaut.orbitPlanet = planet
+                            astronaut.status = .inOribt
+                            planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                astronaut.removeFromParent()
+                            }
+                        }
+                    }
+                    
                 }
             }
             .store(in: &bag)
@@ -126,9 +188,9 @@ extension GameManager {
         GameScene(gameManager: self, size: size)
     }
     
-    struct Nodes {
+    class Nodes {
         
-        let astronaut = AstronautNode(color: .red, size: CGSize(width: 30, height: 30))
+        var astronaut = AstronautNode(color: .red, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .gray, size: CGSize(width: 50, height: 50))
         let rightButton = SKSpriteNode(color: .gray, size: CGSize(width: 50, height: 50))
         let changeColorOne = SKSpriteNode(color: AstronautColor.one.color, size: CGSize(width: 50, height: 50))
@@ -137,19 +199,50 @@ extension GameManager {
         let rightWall = SKSpriteNode()
         let topWall = SKSpriteNode()
         let bottomWall = SKSpriteNode()
+        var planets: [PlanetNode] = []
+       
         
         var all: [SKNode] {
             [astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo]
         }
         
+        func settingPlanets() {
+            
+            for _ in 0 ..< 10{
+                let planet = PlanetNode(circleOfRadius: 50)
+                planets.append(planet)
+            }
+            
+            for planet in planets {
+                
+                planet.fillColor = planet.color.color
+                planet.position = CGPoint(x: 400, y: CGFloat(Int.random(in: 100 ... 700)))
+                var circlePath = PlanetNode.createCirclePath(center: .zero, radius: 50)
+                
+                planet.physicsBody = SKPhysicsBody(polygonFrom: circlePath)
+                planet.strokeColor = .clear
+                
+                planet.path = circlePath
+                
+                planet.name = "planet"
+                
+                planet.physicsBody?.categoryBitMask = 4
+                
+                planet.physicsBody?.contactTestBitMask = 1
+                planet.physicsBody?.collisionBitMask = 0
+            }
+        }
+        
         func positioning(size: CGSize) {
             
-            astronaut.position = CGPoint(x: size.width / 2, y: size.height / 2)
-            leftButton.position = CGPoint(x: size.width / 2 - 50, y: 50)
-            rightButton.position = CGPoint(x: size.width / 2 + 50, y: 50)
+            astronaut.position = CGPoint(x: 70, y: size.height / 2)
+            astronaut.zPosition = 100
             
-            changeColorOne.position = CGPoint(x: size.width / 2 - 50, y: 150)
-            changeColorTwo.position = CGPoint(x: size.width / 2 + 50, y: 150)
+            leftButton.position = CGPoint(x: size.width / 2 - 50, y: 50)
+            changeColorOne.position = CGPoint(x: size.width / 2 + 50, y: 50)
+            
+            rightButton.position = CGPoint(x: size.width / 2 - 50, y: size.height - 70)
+            changeColorTwo.position = CGPoint(x: size.width / 2 + 50, y: size.height - 70)
             
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
@@ -171,31 +264,41 @@ extension GameManager {
             bottomWall.name = "wall"
         }
         
+        func setAstronuat() {
+            astronaut.name = "astronaut"
+            astronaut.physicsBody = SKPhysicsBody(rectangleOf: astronaut.frame.size)
+            astronaut.physicsBody?.categoryBitMask = 1
+            astronaut.physicsBody?.contactTestBitMask = 4 | 2
+            astronaut.physicsBody?.collisionBitMask = 2
+        }
+        
         func setEachPhisicalBody() {
-            for node in [astronaut, leftWall, rightWall, topWall, bottomWall] {
+            for node in [leftWall, rightWall, topWall, bottomWall, astronaut] {
                 node.physicsBody = SKPhysicsBody(rectangleOf: node.frame.size)
             }
             
-            astronaut.physicsBody?.contactTestBitMask = 0x2
-            astronaut.physicsBody?.categoryBitMask = 0x1
-            astronaut.physicsBody?.collisionBitMask = 0x0
+            leftWall.physicsBody?.categoryBitMask = 2
+            rightWall.physicsBody?.categoryBitMask = 2
+            topWall.physicsBody?.categoryBitMask = 2
+            bottomWall.physicsBody?.categoryBitMask = 2
+ 
+            astronaut.physicsBody?.categoryBitMask = 1
             
+            astronaut.physicsBody?.contactTestBitMask = 4 | 2
             
-            leftWall.physicsBody?.contactTestBitMask = 0x1
-            leftWall.physicsBody?.categoryBitMask = 0x2
-            leftWall.physicsBody?.collisionBitMask = 0x0
+            leftWall.physicsBody?.contactTestBitMask = 1
+            leftWall.physicsBody?.collisionBitMask = 1
             
-            rightWall.physicsBody?.contactTestBitMask = 0x1
-            rightWall.physicsBody?.categoryBitMask = 0x2
-            rightWall.physicsBody?.collisionBitMask = 0x0
+            rightWall.physicsBody?.contactTestBitMask = 1
+            rightWall.physicsBody?.collisionBitMask = 1
             
-            topWall.physicsBody?.contactTestBitMask = 0x1
-            topWall.physicsBody?.categoryBitMask = 0x2
-            topWall.physicsBody?.collisionBitMask = 0x0
+            topWall.physicsBody?.contactTestBitMask = 1
+            topWall.physicsBody?.collisionBitMask = 1
             
-            bottomWall.physicsBody?.contactTestBitMask = 0x1
-            bottomWall.physicsBody?.categoryBitMask = 0x2
-            bottomWall.physicsBody?.collisionBitMask = 0x0
+            bottomWall.physicsBody?.contactTestBitMask = 1
+            bottomWall.physicsBody?.collisionBitMask = 1
+            
+            astronaut.physicsBody?.collisionBitMask = 2
         }
     }
 }
@@ -213,7 +316,6 @@ extension GameManager {
         
         var timeLayer: [[BackGroundNode]] = Array(repeating: [], count: 31)
         
-        
         init() {
             
             for _ in 0 ... 100 {
@@ -221,7 +323,7 @@ extension GameManager {
                 let node = BackGroundNode(node: SKSpriteNode(color: .yellow,
                                                              size: CGSize(width: 15, height: 15)),
                                           time: time,
-                                          duration: 5 )
+                                          duration: GameConstans.backgroundFirstLayerDuration )
                 
                 node.node.position = CGPoint(x: 400, y: CGFloat(Int.random(in: 0 ... 800)))
                 timeLayer[time].append(node)
@@ -232,7 +334,7 @@ extension GameManager {
                 let node = BackGroundNode(node: SKSpriteNode(color: .yellow,
                                                              size: CGSize(width: 10, height: 10)),
                                           time: time,
-                                          duration: 10)
+                                          duration: GameConstans.backgroundSecondLayerDuration)
                 
                 node.node.position = CGPoint(x: 400, y: CGFloat(Int.random(in: 0 ... 800)))
                 timeLayer[time].append(node)
@@ -243,7 +345,7 @@ extension GameManager {
                 let node = BackGroundNode(node: SKSpriteNode(color: .yellow,
                                                              size: CGSize(width: 5, height: 5)),
                                           time: time,
-                                          duration: 20)
+                                          duration: GameConstans.backgroundThirdLayerDuration)
                 
                 node.node.position = CGPoint(x: 400, y: CGFloat(Int.random(in: 0 ... 800)))
                 timeLayer[time].append(node)

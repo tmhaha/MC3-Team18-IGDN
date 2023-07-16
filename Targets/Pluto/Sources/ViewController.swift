@@ -28,7 +28,6 @@ class ViewController: UIViewController {
         if let view = self.view as? SKView, scene == nil {
             
             let gameManager = GameManager()
-            print("@LOG \(view.bounds.size)")
             let scene = gameManager.generateScene(size: view.bounds.size)
             view.presentScene(scene)
             self.scene = scene

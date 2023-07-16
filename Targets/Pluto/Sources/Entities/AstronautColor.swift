@@ -8,7 +8,7 @@
 
 import SpriteKit
 
-enum AstronautColor {
+enum AstronautColor: CaseIterable {
     
     case one
     case two
@@ -32,14 +32,16 @@ extension AstronautColor {
         }
     }
     
-    mutating func combine(_ new: AstronautColor) {
+    mutating func combine(_ new: AstronautColor) -> AstronautColor {
         switch self {
         case .one:
             switch new {
             case .one:
                 self = .none
+                return .none
             case .two:
                 self = .combine
+                return .combine
             default:
                 break
             }
@@ -47,8 +49,10 @@ extension AstronautColor {
             switch new {
             case .one:
                 self = .combine
+                return .combine
             case .two:
                 self = .none
+                return .none
             default:
                 break
             }
@@ -56,8 +60,10 @@ extension AstronautColor {
             switch new {
             case .one:
                 self = .one
+                return .one
             case .two:
                 self = .two
+                return .two
             default:
                 break
             }
@@ -65,13 +71,28 @@ extension AstronautColor {
             switch new {
             case .one:
                 self = .two
+                return .two
             case .two:
                 self = .one
+                return .one
             default:
                 break
             }
         }
+        return .none
     }
     
+    var categoryBitMask: UInt32 {
+        switch self {
+        case .one:
+            return 4
+        case .two:
+            return 4
+        case .none:
+            return 4
+        case .combine:
+            return 4
+        }
+    }
 }
 

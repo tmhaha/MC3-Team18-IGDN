@@ -25,7 +25,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view.isMultipleTouchEnabled = true
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        
+     
         gameManager.startGame(scene: self)
     }
     
@@ -38,7 +38,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func didBegin(_ contact: SKPhysicsContact) {
-        print("@LOG CRUSH")
         gameManager.contact = contact
     }
 }
