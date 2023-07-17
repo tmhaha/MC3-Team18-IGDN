@@ -35,7 +35,7 @@ final class CreateMapViewModel {
     public let creativeMapSubject = PassthroughSubject<(CreativeMapModel, Bool, IndexPath), Never>()
     
     
-    public var mapName: String = "Slot"
+    public var mapName: String!
     public var map: CreativeMapModel?
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
@@ -67,6 +67,7 @@ final class CreateMapViewModel {
     
     // TODO: 나중에 주입받아야함 -> creativeObject
     var creativeObjectList: [CreativeObject]?
+    var temporaryCreativeObjectList: [CreativeObject]?
     var isEditing: Bool = false
     var indexPath: IndexPath?
     
@@ -80,10 +81,12 @@ final class CreateMapViewModel {
         return objectList[objectIndex]
     }
     
-    init(creativeObjectList: [CreativeObject]? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
-        self.creativeObjectList = creativeObjectList ?? []
+    init(map: CreativeMapModel? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
+        self.map = map ?? CreativeMapModel(titleLabel: "", lastEdited: Date(), objectList: [])
+        self.creativeObjectList = map?.objectList ?? []
+        self.temporaryCreativeObjectList = map?.objectList ?? []
         self.isEditing = isEditing ?? false
-        self.indexPath = indexPath ?? IndexPath()
+        self.indexPath = indexPath ?? IndexPath(row: 0, section: 1)
     }
     
     // MARK: Functions
@@ -110,7 +113,7 @@ final class CreateMapViewModel {
                 self?.output.send(.objectColorDownButtonDidTapOutput)
             case .saveButtonDidTap:
                 print(">>> saveButton Did Tap")
-                self?.map = CreativeMapModel(titleLabel: self!.mapName, lastEdited: Date.now, objectList: self!.creativeObjectList!)
+                self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList!)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
                 }
@@ -201,5 +204,9 @@ final class CreateMapViewModel {
     private func createCreativeObject(point: CGPoint, color: UIColor, size: String, shape: String, path: CGPath, object: UIView) -> CreativeObject {
         let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, path: path, object: object)
         return creativeObject
+    }
+    
+    func isChangedCreativeObjectList() -> Bool {
+        return creativeObjectList == temporaryCreativeObjectList
     }
 }

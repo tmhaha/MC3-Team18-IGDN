@@ -88,8 +88,12 @@ final class CreateModeViewModel {
         
     }
     
-    private func appendMap(with object: CreativeMapModel) {
-        mapList.append(CreativeMapModel(titleLabel: object.titleLabel, lastEdited: object.lastEdited, objectList: object.objectList))
+    private func appendMap(with map: CreativeMapModel) {
+        var newMap = map
+        if newMap.titleLabel.count == 0 {
+            newMap.titleLabel = "Slot \(mapList.count + 1)"
+        }
+        mapList.append(newMap)
         // MARK: 추가한 Object들 출력예시 (DEBUG)
         mapList.forEach{  maps in
             maps.objectList.forEach { object in
@@ -101,8 +105,8 @@ final class CreateModeViewModel {
         output.send(.reload)
     }
     
-    private func updateMap(with object: CreativeMapModel, indexPath: IndexPath) {
-        self.mapList[indexPath.row] = CreativeMapModel(titleLabel: self.mapList[indexPath.row].titleLabel, lastEdited: object.lastEdited, objectList: object.objectList)
+    private func updateMap(with map: CreativeMapModel, indexPath: IndexPath) {
+        self.mapList[indexPath.row] = CreativeMapModel(titleLabel: self.mapList[indexPath.row].titleLabel, lastEdited: map.lastEdited, objectList: map.objectList)
         // MARK: 추가한 Object들 출력예시 (DEBUG)
         mapList.forEach{  maps in
             maps.objectList.forEach { object in

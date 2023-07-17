@@ -60,18 +60,10 @@ class CreateModeViewController: UIViewController {
                     self?.contentView.collectionView.reloadData()
                     print("RELOAD: \(self?.viewModel.mapList.count ?? 0) ") // MARK: DEBUG
                 case .editButtonDidTapOutput(let indexPath):
-                    print("'''VC에서의 editButton으로 인한 화면전환'''")// MARK: DEBUG
-                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결 -> 뷰 전환
-                    
-                    let mapViewModel = CreateMapViewModel(creativeObjectList: self?.viewModel.mapList[indexPath.row].objectList, isEditing: true, indexPath: indexPath)
+                    let mapViewModel = CreateMapViewModel(map: self?.viewModel.mapList[indexPath.row], isEditing: true, indexPath: indexPath)
                     let vc = CreateMapViewController(self!.viewModel, mapViewModel)
                     self?.viewModel.bind(with: mapViewModel)
                     self?.navigationController?.pushViewController(vc, animated: true)
-                    
-                    // TODO: edit 버튼 눌러서 해당 VC에 objectList를 화면에 띄우기 -> OK
-                    // TODO: 뒤로가기 버튼하면 원래 CreateModeViewController로 돌아오기
-                    // TODO: 뒤로가기 버튼 삭제시 삭제하고 VM 리스트에서 해당 데이터 지우기
-                    // TODO: 저장버튼 클릭 시 해당하는 mapList[indexPath.row].objectList를 update하기 -> OK
                     
                 case .playButtonDidTapOutput:
                     print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG

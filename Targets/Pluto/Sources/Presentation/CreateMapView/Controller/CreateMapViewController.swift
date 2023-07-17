@@ -69,12 +69,7 @@ class CreateMapViewController: UIViewController {
         contentView.nameInputView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.nameInputView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
-    
-    private func setUpGesture() {
-        
-    }
-    
-    
+
     private func setUpEditModeView() {
         if viewModel.isEditing {
             viewModel.creativeObjectList?.forEach{
@@ -138,7 +133,7 @@ class CreateMapViewController: UIViewController {
             viewModel.updateObjectColor(isIncrease: false)
             input.send(.objectColorDownButtonDidTap)
         case self.contentView.topToolView.backButton:
-            if !viewModel.isEditing && viewModel.creativeObjectList?.count != 0 {
+            if viewModel.isChangedCreativeObjectList() {
                 self.navigationController?.popViewController(animated: true)
             } else {
                 showAlertView(isShown: true)
@@ -149,32 +144,19 @@ class CreateMapViewController: UIViewController {
             } else {
                 showNameInputView(isShown: true)
             }
-            
         case self.contentView.alertView.keepEditingButton:
             showContentView(isShown: true)
         case self.contentView.alertView.discardButton:
-            // MARK: 편집모드일때
-            // TODO: object들 모두 삭제, viewmodel에 반영 후 cell도 삭제하고 popVC
-            if viewModel.isEditing{
-                    
-            }
-            // MARK: 편집모드가 아닐 때 -> OK
-            else {
-                self.navigationController?.popViewController(animated: true)
-            }
+            self.navigationController?.popViewController(animated: true)
         case self.contentView.nameInputView.backButton:
-            // TODO: back (OK)
             contentView.nameInputView.nameTextField.resignFirstResponder()
             showContentView(isShown: true)
         case self.contentView.nameInputView.saveButton:
-            // TODO: save
-            
             if self.contentView.nameInputView.nameTextField.text?.count == 0 {
-                viewModel.mapName = "Slot"
+                viewModel.map?.titleLabel  = ""
             } else {
-                viewModel.mapName = self.contentView.nameInputView.nameTextField.text!
+                viewModel.map?.titleLabel = self.contentView.nameInputView.nameTextField.text!
             }
-             
             input.send(.saveButtonDidTap)
         default:
             fatalError()
