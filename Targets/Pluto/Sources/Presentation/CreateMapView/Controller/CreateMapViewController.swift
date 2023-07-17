@@ -162,7 +162,7 @@ class CreateMapViewController: UIViewController {
             [contentView.topToolView, contentView.bottomToolView, contentView.scrollView].forEach {
                 $0.isHidden = !isShown
             }
-            [contentView.alertView].forEach {
+            [contentView.alertView, contentView.nameInputView].forEach {
                 $0.isHidden = isShown
             }
         }
@@ -173,7 +173,18 @@ class CreateMapViewController: UIViewController {
             [contentView.alertView].forEach {
                 $0.isHidden = !isShown
             }
-            [contentView.topToolView, contentView.bottomToolView, contentView.scrollView].forEach {
+            [contentView.topToolView, contentView.bottomToolView, contentView.scrollView, contentView.nameInputView].forEach {
+                $0.isHidden = isShown
+            }
+        }
+    }
+    
+    private func showNameInputView(isShown: Bool){
+        if isShown {
+            [contentView.nameInputView].forEach {
+                $0.isHidden = !isShown
+            }
+            [contentView.topToolView, contentView.bottomToolView, contentView.scrollView, contentView.alertView].forEach {
                 $0.isHidden = isShown
             }
         }

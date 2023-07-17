@@ -13,6 +13,7 @@ final class CreateMapView: UIView {
     lazy var topToolView = CreateMapTopToolView()
     lazy var bottomToolView = CreateMapBottomToolView()
     lazy var alertView = CreateMapAlertView()
+    lazy var nameInputView = CreateMapNameInputView()
     lazy var scrollView = UIScrollView()
     lazy var contentView = UIView()
     let gridSize: CGFloat = 20.0
@@ -46,7 +47,7 @@ final class CreateMapView: UIView {
     
     
     private func addSubviews() {
-        [scrollView, topToolView, bottomToolView, alertView]
+        [nameInputView, scrollView, topToolView, bottomToolView, alertView, ]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -85,6 +86,11 @@ final class CreateMapView: UIView {
             alertView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
             alertView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             alertView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
+            
+            nameInputView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            nameInputView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+            nameInputView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            nameInputView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
     }
     
@@ -124,6 +130,7 @@ final class CreateMapView: UIView {
         topToolView.backgroundColor = .clear
         bottomToolView.backgroundColor = .clear
         alertView.backgroundColor = .clear
+        nameInputView.backgroundColor = .clear
         scrollView.backgroundColor = UIColor(hex: 0x2244FF)
         
         scrollView.isPagingEnabled = false
