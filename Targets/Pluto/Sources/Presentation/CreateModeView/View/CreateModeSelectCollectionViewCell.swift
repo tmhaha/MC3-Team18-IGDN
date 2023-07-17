@@ -14,8 +14,9 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     var indexPath: IndexPath!
+    private var textFieldIsActive = false
     
-    lazy var title = UILabel()
+    lazy var title = UITextField()
     lazy var dateDescriptionLabel = UILabel()
     lazy var lastEdited = UILabel()
     lazy var editTitleButton = UIButton()
@@ -74,6 +75,8 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         ])
         
         // MARK: Section 1
+        
+        title.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: self.topAnchor, constant: 17),
             title.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 22.25),
@@ -88,6 +91,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             
             dateDescriptionLabel.bottomAnchor.constraint(equalTo: title.bottomAnchor, constant: -2),
             dateDescriptionLabel.trailingAnchor.constraint(equalTo: lastEdited.leadingAnchor, constant: -3),
+            dateDescriptionLabel.leadingAnchor.constraint(greaterThanOrEqualTo: editTitleButton.trailingAnchor, constant: 5),
             
             solidLine.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             solidLine.widthAnchor.constraint(equalToConstant: 266.41),
@@ -127,7 +131,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         descriptions.textColor = UIColor(hex: 0xB4C1FF)
         descriptions.text = "create your own journey!"
         
-        title.text = "Slot 1"
         title.font = UIFont(name: "TASAExplorer-Bold", size: 22)
         
         editTitleButton.setImage(UIImage(named: "pencil"), for: .normal)
@@ -137,7 +140,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         dateDescriptionLabel.font = UIFont(name: "TASAExplorer-Regular", size: 12)
         dateDescriptionLabel.textColor = UIColor(hex: 0xB4C1FF)
         
-        lastEdited.text = "07/23:14:22"
         lastEdited.font = UIFont(name: "TASAExplorer-Bold", size: 12)
         lastEdited.textColor = UIColor(hex: 0xB4C1FF)
         
@@ -184,9 +186,23 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             
             playButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             editButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
-            editTitleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            
+            title.text = item[indexPath.row].titleLabel
+            lastEdited.text = item[indexPath.row].lastEditedString()
         }
     }
+    
+    func configure(isTextFieldEnabled: Bool) {
+           if isTextFieldEnabled {
+               print(title.text)
+               title.isUserInteractionEnabled = true
+               title.becomeFirstResponder()
+               textFieldIsActive = true
+           } else {
+               title.isUserInteractionEnabled = false
+               textFieldIsActive = false
+           }
+       }
     
     @objc private func buttonTapped(_ sender: UIButton) {
         switch sender {
@@ -195,8 +211,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         case editButton:
             input.send(.editButtonDidTap(indexPath: indexPath))
             print(">>> tapped indexPath: \(indexPath)") // MARK: DEBUG
-        case editTitleButton:
-            input.send(.editTitleButtonDidTap(indexPath: indexPath))
         default:
             fatalError()
         }

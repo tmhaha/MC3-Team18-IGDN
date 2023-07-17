@@ -43,12 +43,16 @@ class CreateMapViewController: UIViewController {
         setUpEditModeView()
         showContentView(isShown: true)
         self.contentView.scrollView.delegate = self
+        self.contentView.nameInputView.nameTextField.delegate = self
     }
     
     private func setUpGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        self.contentView.scrollView.addGestureRecognizer(tapGesture)
+        let addObjectTapGesture = UITapGestureRecognizer(target: self, action: #selector(addObjectByTap(_:)))
+        self.contentView.scrollView.addGestureRecognizer(addObjectTapGesture)
         self.contentView.scrollView.isUserInteractionEnabled = true
+        
+        let hideKeyboardTapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboardByTap))
+        contentView.nameInputView.addGestureRecognizer(hideKeyboardTapGesture)
     }
     
     private func setUpTargets() {
@@ -62,6 +66,12 @@ class CreateMapViewController: UIViewController {
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.alertView.keepEditingButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.alertView.discardButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.nameInputView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.nameInputView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+    }
+    
+    private func setUpGesture() {
+        
     }
     
     
@@ -134,7 +144,12 @@ class CreateMapViewController: UIViewController {
                 showAlertView(isShown: true)
             }
         case self.contentView.topToolView.saveButton:
-            input.send(.saveButtonDidTap)
+            if viewModel.isEditing {
+                input.send(.saveButtonDidTap)
+            } else {
+                showNameInputView(isShown: true)
+            }
+            
         case self.contentView.alertView.keepEditingButton:
             showContentView(isShown: true)
         case self.contentView.alertView.discardButton:
@@ -147,6 +162,20 @@ class CreateMapViewController: UIViewController {
             else {
                 self.navigationController?.popViewController(animated: true)
             }
+        case self.contentView.nameInputView.backButton:
+            // TODO: back (OK)
+            contentView.nameInputView.nameTextField.resignFirstResponder()
+            showContentView(isShown: true)
+        case self.contentView.nameInputView.saveButton:
+            // TODO: save
+            
+            if self.contentView.nameInputView.nameTextField.text?.count == 0 {
+                viewModel.mapName = "Slot"
+            } else {
+                viewModel.mapName = self.contentView.nameInputView.nameTextField.text!
+            }
+             
+            input.send(.saveButtonDidTap)
         default:
             fatalError()
         }
@@ -193,7 +222,7 @@ class CreateMapViewController: UIViewController {
 
 extension CreateMapViewController: UIScrollViewDelegate {
     // UITapGestureRecognizer의 액션 메서드
-    @objc func handleTap(_ sender: UITapGestureRecognizer) {
+    @objc func addObjectByTap(_ sender: UITapGestureRecognizer) {
         let tapLocation = sender.location(in: self.contentView.scrollView)
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
@@ -206,4 +235,17 @@ extension CreateMapViewController: UIScrollViewDelegate {
         self.contentView.scrollView.addSubview(objectView)
     }
 
+}
+
+extension CreateMapViewController: UITextFieldDelegate {
+    @objc private func hideKeyboardByTap() {
+        if contentView.nameInputView.nameTextField.isFirstResponder {
+            contentView.nameInputView.nameTextField.resignFirstResponder()
+        }
+    }
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
 }

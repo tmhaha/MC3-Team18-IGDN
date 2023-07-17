@@ -32,7 +32,11 @@ final class CreateMapViewModel {
     }
     
     // MARK: Properties
-    public let creativeObjectListSubject = PassthroughSubject<([CreativeObject], Bool, IndexPath), Never>()
+    public let creativeMapSubject = PassthroughSubject<(CreativeMapModel, Bool, IndexPath), Never>()
+    
+    
+    public var mapName: String = "Slot"
+    public var map: CreativeMapModel?
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
@@ -106,8 +110,10 @@ final class CreateMapViewModel {
                 self?.output.send(.objectColorDownButtonDidTapOutput)
             case .saveButtonDidTap:
                 print(">>> saveButton Did Tap")
-                self?.creativeObjectListSubject.send((self?.creativeObjectList ?? [], self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
-                
+                self?.map = CreativeMapModel(titleLabel: self!.mapName, lastEdited: Date.now, objectList: self!.creativeObjectList!)
+                if let map = self?.map {
+                    self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
+                }
                 self?.output.send(.saveButtonDidTapOutput)
             }
         }.store(in: &subscriptions)

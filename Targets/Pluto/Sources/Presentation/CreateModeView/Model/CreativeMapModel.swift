@@ -9,6 +9,13 @@
 import UIKit
 
 struct CreativeMapModel {
-    let titleLabel: String
+    var titleLabel: String
+    var lastEdited: Date
     var objectList: [CreativeObject]
+    
+    func lastEditedString() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MM/dd:HH:mm"
+        return dateFormatter.string(from: lastEdited)
+    }
 }

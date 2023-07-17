@@ -107,6 +107,9 @@ final class CreateMapNameInputView: UIView {
         saveButton.backgroundColor = .white
         saveButton.layer.cornerRadius = 22.5
         
+        backButton.setImage(UIImage(named: "L_arrow_white"), for: .normal)
+        backButton.tintColor = .white
+        backButton.layer.cornerRadius = 15
     }
     
     private func drawGrid() {

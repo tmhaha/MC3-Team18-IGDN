@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 class CreateModeViewController: UIViewController {
-
+    
     private lazy var contentView = CreateModeView()
     private let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -36,8 +36,8 @@ class CreateModeViewController: UIViewController {
     
     //TODO: 추후 삭제
     private func setUpTargets() {
-//        contentView.selectMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-//        contentView.createMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        //        contentView.selectMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        //        contentView.createMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
     
     private func bind(){
@@ -62,7 +62,7 @@ class CreateModeViewController: UIViewController {
                 case .editButtonDidTapOutput(let indexPath):
                     print("'''VC에서의 editButton으로 인한 화면전환'''")// MARK: DEBUG
                     // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결 -> 뷰 전환
-
+                    
                     let mapViewModel = CreateMapViewModel(creativeObjectList: self?.viewModel.mapList[indexPath.row].objectList, isEditing: true, indexPath: indexPath)
                     let vc = CreateMapViewController(self!.viewModel, mapViewModel)
                     self?.viewModel.bind(with: mapViewModel)
@@ -72,13 +72,10 @@ class CreateModeViewController: UIViewController {
                     // TODO: 뒤로가기 버튼하면 원래 CreateModeViewController로 돌아오기
                     // TODO: 뒤로가기 버튼 삭제시 삭제하고 VM 리스트에서 해당 데이터 지우기
                     // TODO: 저장버튼 클릭 시 해당하는 mapList[indexPath.row].objectList를 update하기 -> OK
-
+                    
                 case .playButtonDidTapOutput:
                     print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG
                     // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결 -> 뷰 전환
-                case .editTitleButtonDidTapOutput:
-                    print("'''VC에서의 editTitleButton으로 인한 화면전환'''")// MARK: DEBUG
-                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> title 변경하여 화면을 변경
                 }
             }
             .store(in: &subscriptions)
@@ -120,7 +117,8 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateModeSelectCollectionViewCell.identifier, for: indexPath) as? CreateModeSelectCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(item: [], section: indexPath.section, indexPath: indexPath)
+        cell.configure(item: viewModel.mapList, section: indexPath.section, indexPath: indexPath)
+        cell.title.delegate = self
         return cell
     }
     
@@ -129,6 +127,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
             return
         }
         self.configureCell(cell, at: indexPath)
+        self.configureCellName(cell: cell, indexPath: indexPath)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -139,7 +138,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         }
         
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 20
     }
@@ -164,4 +163,39 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         }
     }
     
+    
+    private func configureCellName(cell: UICollectionViewCell, indexPath: IndexPath) {
+        guard let cell = cell as? CreateModeSelectCollectionViewCell else {
+            return
+        }
+        cell.title.autocapitalizationType = .none
+        cell.title.spellCheckingType = .no
+        cell.title.autocorrectionType = .no
+        cell.title.returnKeyType = .done
+        cell.title.keyboardType = UIKeyboardType.emailAddress
+        cell.editTitleButton.tag = indexPath.row
+        cell.title.tag = indexPath.row
+        cell.editTitleButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+    }
+    
+    @objc private func buttonTapped(_ sender: UIButton) {
+        // 선택한 editTitle버튼이 있는 cell의 title이라는 TextField를 활성화 시키고 싶음
+        let indexPath = IndexPath(row: sender.tag, section: 1)
+        if let cell = contentView.collectionView.cellForItem(at: indexPath) as? CreateModeSelectCollectionViewCell {
+            cell.title.becomeFirstResponder()
+        }
+    }
+
+}
+
+extension CreateModeViewController: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField.text?.count == 0 {
+            return false
+        }
+        viewModel.mapList[textField.tag].titleLabel = textField.text!
+
+        textField.resignFirstResponder()
+        return true
+    }
 }
