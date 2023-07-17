@@ -41,6 +41,7 @@ class CreateMapViewController: UIViewController {
         setUpTargets()
         setUpGestureRecognizer()
         setUpEditModeView()
+        showContentView(isShown: true)
         self.contentView.scrollView.delegate = self
     }
     
@@ -59,6 +60,8 @@ class CreateMapViewController: UIViewController {
         contentView.bottomToolView.objectSizeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.alertView.keepEditingButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.alertView.discardButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
     
     
@@ -125,11 +128,25 @@ class CreateMapViewController: UIViewController {
             viewModel.updateObjectColor(isIncrease: false)
             input.send(.objectColorDownButtonDidTap)
         case self.contentView.topToolView.backButton:
-            self.navigationController?.popViewController(animated: true)
-            // TODO: 뒤로갈 때 CreateModeViewController에게 cell 개수 판단
-            
+            if !viewModel.isEditing && viewModel.creativeObjectList?.count != 0 {
+                self.navigationController?.popViewController(animated: true)
+            } else {
+                showAlertView(isShown: true)
+            }
         case self.contentView.topToolView.saveButton:
             input.send(.saveButtonDidTap)
+        case self.contentView.alertView.keepEditingButton:
+            showContentView(isShown: true)
+        case self.contentView.alertView.discardButton:
+            // MARK: 편집모드일때
+            // TODO: object들 모두 삭제, viewmodel에 반영 후 cell도 삭제하고 popVC
+            if viewModel.isEditing{
+                    
+            }
+            // MARK: 편집모드가 아닐 때 -> OK
+            else {
+                self.navigationController?.popViewController(animated: true)
+            }
         default:
             fatalError()
         }
@@ -140,6 +157,27 @@ class CreateMapViewController: UIViewController {
         self.viewModel = viewModel
     }
 
+    private func showContentView(isShown: Bool){
+        if isShown {
+            [contentView.topToolView, contentView.bottomToolView, contentView.scrollView].forEach {
+                $0.isHidden = !isShown
+            }
+            [contentView.alertView].forEach {
+                $0.isHidden = isShown
+            }
+        }
+    }
+    
+    private func showAlertView(isShown: Bool){
+        if isShown {
+            [contentView.alertView].forEach {
+                $0.isHidden = !isShown
+            }
+            [contentView.topToolView, contentView.bottomToolView, contentView.scrollView].forEach {
+                $0.isHidden = isShown
+            }
+        }
+    }
 }
 
 extension CreateMapViewController: UIScrollViewDelegate {

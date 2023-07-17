@@ -12,7 +12,7 @@ final class CreateMapView: UIView {
     
     lazy var topToolView = CreateMapTopToolView()
     lazy var bottomToolView = CreateMapBottomToolView()
-    
+    lazy var alertView = CreateMapAlertView()
     lazy var scrollView = UIScrollView()
     lazy var contentView = UIView()
     let gridSize: CGFloat = 20.0
@@ -46,7 +46,7 @@ final class CreateMapView: UIView {
     
     
     private func addSubviews() {
-        [scrollView, topToolView, bottomToolView]
+        [scrollView, topToolView, bottomToolView, alertView]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -54,40 +54,38 @@ final class CreateMapView: UIView {
         
         scrollView.addSubview(contentView)
         contentView.translatesAutoresizingMaskIntoConstraints = false
-    
     }
     
     private func setUpConstraints() {
-        
-        // MARK: safeAreaHight = 54
-        // MARK: ToolViewHeight = 116
-        // MARK: 나머지는 mapView 영역
-        
         NSLayoutConstraint.activate([
             topToolView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             topToolView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             topToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             topToolView.heightAnchor.constraint(equalToConstant: 116),
-            
+
             bottomToolView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
             bottomToolView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             bottomToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             bottomToolView.heightAnchor.constraint(equalToConstant: 116),
-            
+
             scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
             scrollView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
-            
-            
+
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
             contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 10)
+            // TODO: contentView scroll width 임의 상수로 10배로 지정해놨음 -> 고쳐야함
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor, multiplier: 10),
+            
+            alertView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor),
+            alertView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+            alertView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
+            alertView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
         ])
-        
     }
     
     private func drawGrid() {
@@ -123,11 +121,11 @@ final class CreateMapView: UIView {
 
     private func setUpViews() {
         self.backgroundColor = UIColor(hex: 0x2244FF)
-        
         topToolView.backgroundColor = .clear
         bottomToolView.backgroundColor = .clear
-        
+        alertView.backgroundColor = .clear
         scrollView.backgroundColor = UIColor(hex: 0x2244FF)
+        
         scrollView.isPagingEnabled = false
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = false // 세로 스크롤 비활성화
@@ -135,6 +133,5 @@ final class CreateMapView: UIView {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.bounces = false
         scrollView.contentSize = CGSize(width: bounds.width * 10, height: bounds.height)
-        
     }
 }
