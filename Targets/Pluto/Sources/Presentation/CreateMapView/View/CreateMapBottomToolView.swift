@@ -10,7 +10,7 @@ import UIKit
 
 final class CreateMapBottomToolView: UIView {
     
-    lazy var objectView = UIImageView()
+    lazy var objectShapeView = UIImageView()
     lazy var objectUpButton = UIButton()
     lazy var objectDownButton = UIButton()
     
@@ -35,7 +35,7 @@ final class CreateMapBottomToolView: UIView {
     }
     
     private func addSubviews() {
-        [objectView,objectUpButton, objectDownButton, objectColorView, objectColorUpButton, objectColorDownButton, objectSizeView, objectSizeUpButton, objectSizeDownButton]
+        [objectShapeView,objectUpButton, objectDownButton, objectColorView, objectColorUpButton, objectColorDownButton, objectSizeView, objectSizeUpButton, objectSizeDownButton]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -87,10 +87,10 @@ final class CreateMapBottomToolView: UIView {
             objectUpButton.widthAnchor.constraint(equalToConstant: 100),
             objectUpButton.heightAnchor.constraint(equalToConstant: 20),
             
-            objectView.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
-            objectView.topAnchor.constraint(equalTo: objectUpButton.bottomAnchor, constant: 7),
-            objectView.widthAnchor.constraint(equalToConstant: 100),
-            objectView.bottomAnchor.constraint(equalTo: objectDownButton.topAnchor, constant: -7),
+            objectShapeView.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
+            objectShapeView.topAnchor.constraint(equalTo: objectUpButton.bottomAnchor, constant: 7),
+            objectShapeView.widthAnchor.constraint(equalToConstant: 100),
+            objectShapeView.bottomAnchor.constraint(equalTo: objectDownButton.topAnchor, constant: -7),
             
             objectDownButton.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
             objectDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
@@ -114,15 +114,15 @@ final class CreateMapBottomToolView: UIView {
         
         objectUpButton.setImage(UIImage(named: "button_up"), for: .normal)
         objectDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
+        objectShapeView.image = UIImage(systemName: "circle")
         
         objectSizeUpButton.setImage(UIImage(named: "button_up"), for: .normal)
         objectSizeDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectSizeView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
+        objectSizeView.image = UIImage(systemName: "1.circle")
         
         objectColorUpButton.setImage(UIImage(named: "button_up"), for: .normal)
         objectColorDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectColorView.backgroundColor = UIColor(hex: 0xFF3434).withAlphaComponent(0.41)
+        objectColorView.image = UIImage(systemName: "1.circle")
         
     }
     

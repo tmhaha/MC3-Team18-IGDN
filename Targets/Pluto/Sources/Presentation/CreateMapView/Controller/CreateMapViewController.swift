@@ -85,24 +85,28 @@ class CreateMapViewController: UIViewController {
         output.receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
+                    
+                    // TODO: 실제 이미지 넣을 때SystemName -> Name으로 고쳐야함
+                    
+                    
                 case .objectUpButtonDidTapOutput:
                     print(">>> receive: objectUpButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
+                    self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
                 case .objectDownButtonDidTapOutput:
                     print(">>> receive: objectDownButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectView.backgroundColor = self?.viewModel.object
+                    self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
                 case .objectSizeUpButtonDidTapOutput:
                     print(">>> receive: objectSizeUpButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectSizeView.backgroundColor = self?.viewModel.objectSize
+                    self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
                 case .objectSizeDownButtonDidTapOutput:
                     print(">>> receive: objectSizeDownButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectSizeView.backgroundColor = self?.viewModel.objectSize
+                    self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
                 case .objectColorUpButtonDidTapOutput:
                     print(">>> receive: objectColorUpButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
+                    self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
                 case .objectColorDownButtonDidTapOutput:
                     print(">>> receive: objectColorDownButtonDidTapOutput")
-                    self?.contentView.bottomToolView.objectColorView.backgroundColor = self?.viewModel.objectColor
+                    self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
                 case .saveButtonDidTapOutput:
                     print(">>> receive: saveButtonDidTapOutput")
                     self?.navigationController?.popViewController(animated: true)

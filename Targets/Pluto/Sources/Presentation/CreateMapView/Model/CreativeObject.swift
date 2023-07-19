@@ -10,7 +10,7 @@ import UIKit
 
 struct CreativeObject: Equatable {
     let point: CGPoint
-    let color: UIColor
+    let color: String
     let size: String
     let shape: String
     let path: CGPath

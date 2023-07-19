@@ -40,30 +40,27 @@ final class CreateMapViewModel {
     private let output = PassthroughSubject<Output, Never>()
     var subscriptions = Set<AnyCancellable>()
     
-    private let objectColorList: [UIColor] = [
-        UIColor(hex: 0xFF3434),
-        UIColor(hex: 0xF7CF51),
-        UIColor(hex: 0x51AC65),
+    private let objectImageList: [[[String]]] = Obstacle.image
+    
+    private let objectColorList: [String] = Obstacle.color
+    private let objectSizeList: [String] = Obstacle.size
+    private let objectShapeList: [String] = Obstacle.shape
+    
+    private let CGSizeList: [CGSize] = [
+        CGSize(width: 50.0, height: 50.0),
+        CGSize(width: 70.0, height: 70.0),
+        CGSize(width: 100.0, height: 100.0),
     ]
     
-    private let objectSizeList: [UIColor] = [
-        UIColor(hex: 0xFF3434),
-        UIColor(hex: 0xF7CF51),
-        UIColor(hex: 0x51AC65),
+    private let CGSizeList_Diamond: [CGSize] = [
+        CGSize(width: 41.86, height: 60.0),
+        CGSize(width: 58.6, height: 84.0),
+        CGSize(width: 83.72, height: 120.0),
     ]
-    
-    private let objectList: [UIColor] = [
-        UIColor(hex: 0xFF3434),
-        UIColor(hex: 0xF7CF51),
-        UIColor(hex: 0x51AC65),
-    ]
-    
+
     private var objectColorIndex = 0
     private var objectSizeIndex = 0
-    private var objectIndex = 0
-    
-    let objectWidth = 50.0
-    let objectHeight = 50.0
+    private var objectShapeIndex = 0
     
     // TODO: 나중에 주입받아야함 -> creativeObject
     var creativeObjectList: [CreativeObject]?
@@ -71,14 +68,14 @@ final class CreateMapViewModel {
     var isEditing: Bool = false
     var indexPath: IndexPath?
     
-    var objectColor: UIColor {
+    var objectColor: String {
         return objectColorList[objectColorIndex]
     }
-    var objectSize: UIColor {
+    var objectSize: String {
         return objectSizeList[objectSizeIndex]
     }
-    var object: UIColor {
-        return objectList[objectIndex]
+    var objectShape: String {
+        return objectShapeList[objectShapeIndex]
     }
     
     init(map: CreativeMapModel? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
@@ -138,8 +135,14 @@ final class CreateMapViewModel {
     }
     
     func addObjectAtPoint(_ point: CGPoint, _ tapLocation: CGPoint) -> Bool {
-        let objectSize = CGSize(width: objectWidth, height: objectHeight)
-        let tapCenterPoint = CGPoint(x: tapLocation.x - objectWidth/2, y: tapLocation.y - objectHeight/2)
+        var objectSize: CGSize
+        if objectShapeIndex == 3 {
+            objectSize = CGSizeList_Diamond[objectSizeIndex]
+        } else {
+            objectSize = CGSizeList[objectSizeIndex]
+        }
+
+        let tapCenterPoint = CGPoint(x: tapLocation.x - objectSize.width/2, y: tapLocation.y - objectSize.height/2)
         
         // MARK: 해당 위치에 겹치는 오브젝트가 있는지 확인
         if let overlappingObjectView = isOverlapWithOtherObjects(tapCenterPoint, objectSize: objectSize) {
@@ -148,17 +151,17 @@ final class CreateMapViewModel {
             overlappingObjectView.removeFromSuperview()
             return false
         } else {
-            let objectView = UIView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
-            objectView.backgroundColor = objectColor
-            objectView.layer.borderColor = UIColor.gray.cgColor
-            objectView.layer.borderWidth = 1
+            let objectView = UIImageView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
+            objectView.backgroundColor = .clear
+            objectView.image = UIImage(named: "\(objectImageList[objectColorIndex][objectSizeIndex][objectShapeIndex])")
+            
             
             // MARK: 1. creativeObject 생성
             let creativeObject = createCreativeObject(
                 point: tapCenterPoint,
-                color: objectColor,
-                size: "\(objectSizeIndex)",
-                shape: "\(objectIndex)",
+                color: self.objectColor,
+                size: self.objectSize,
+                shape: self.objectShape,
                 path: UIBezierPath(rect: CGRect(x: 0, y: 0, width: 50, height: 50)).cgPath,
                 object: objectView
             )
@@ -195,13 +198,13 @@ final class CreateMapViewModel {
     
     func updateObject(isIncrease: Bool) {
         if isIncrease {
-            objectIndex = (objectIndex + 1) % objectList.count
+            objectShapeIndex = (objectShapeIndex + 1) % objectShapeList.count
         } else {
-            objectIndex = (objectIndex - 1 + objectList.count) % objectList.count
+            objectShapeIndex = (objectShapeIndex - 1 + objectShapeList.count) % objectShapeList.count
         }
     }
     
-    private func createCreativeObject(point: CGPoint, color: UIColor, size: String, shape: String, path: CGPath, object: UIView) -> CreativeObject {
+    private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, path: CGPath, object: UIView) -> CreativeObject {
         let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, path: path, object: object)
         return creativeObject
     }
