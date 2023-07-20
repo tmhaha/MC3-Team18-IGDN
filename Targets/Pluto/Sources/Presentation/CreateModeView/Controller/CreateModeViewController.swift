@@ -16,10 +16,19 @@ class CreateModeViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     private var cellSubscriptions: [IndexPath: Set<AnyCancellable>] = [:]
     var viewModel: CreateModeViewModel!
-    var creativeMapViewModel: CreateMapViewModel!
+    var creativeMapViewModel: CreateMapViewModel = CreateMapViewModel()
     
     override func loadView() {
         view = contentView
+    }
+    
+    init(with viewModel: CreateModeViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewDidLoad() {
@@ -27,7 +36,6 @@ class CreateModeViewController: UIViewController {
         view.backgroundColor = UIColor(hex: 0x2244FF)
         
         creativeMapViewModel = CreateMapViewModel()
-        viewModel = CreateModeViewModel(creativeMapViewModel: creativeMapViewModel)
         setUpCollectionView();
         bind()
         
@@ -49,6 +57,11 @@ class CreateModeViewController: UIViewController {
                 case .presentSelectMapView:
                     // TODO: 화면 전환
                     self?.contentView.collectionView.reloadData()
+                    print("삭제")
+                    print("삭제")
+                    print("삭제")
+                    print("삭제")
+                    
                 case .reload:
                     self?.contentView.collectionView.reloadData()
                     print("RELOAD: \(self?.viewModel.mapList.count ?? 0) ") // MARK: DEBUG
@@ -179,7 +192,7 @@ extension CreateModeViewController: UITextFieldDelegate {
             return false
         }
         viewModel.mapList[textField.tag].titleLabel = textField.text!
-
+        UserDefaultsManager.saveCreativeMapsToUserDefaults(viewModel.mapList)
         textField.resignFirstResponder()
         return true
     }

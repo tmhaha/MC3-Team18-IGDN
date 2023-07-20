@@ -30,12 +30,12 @@ final class CreateModeViewModel {
     
     private let output = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    let createMapViewModel: CreateMapViewModel!
-    var mapList: [CreativeMapModel] = []
+//    let createMapViewModel: CreateMapViewModel!
+    var mapList: [CreativeMapModel]
     var objectList: [CreativeObject] = []
     
-    init(creativeMapViewModel: CreateMapViewModel) {
-        self.createMapViewModel = creativeMapViewModel
+    init(mapList: [CreativeMapModel]? = nil) {
+        self.mapList = mapList ?? []
     }
     
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -43,6 +43,9 @@ final class CreateModeViewModel {
             switch event {
             case .selectButtonDidTap(let indexPath): // TODO: TestCode임 추후 삭제 (선택한 뷰의 데이터를 삭제)(DEBUG용)
                 self?.mapList.remove(at: indexPath.row)
+                if let mapList = self?.mapList {
+                    UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
+                }
                 self?.output.send(.presentSelectMapView)
             case .createMapButtonDidTap:
                 // TODO: 비즈니스 로직
@@ -83,6 +86,9 @@ final class CreateModeViewModel {
                 // creativeObjectList를 처리하는 로직을 작성합니다
                 else {
                     self?.appendMap(with: map)
+                }
+                if let mapList = self?.mapList {
+                    UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
                 }
             }.store(in: &subscriptions)
         
