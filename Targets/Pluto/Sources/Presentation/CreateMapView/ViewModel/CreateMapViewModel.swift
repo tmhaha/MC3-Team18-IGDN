@@ -47,15 +47,15 @@ final class CreateMapViewModel {
     private let objectShapeList: [String] = Obstacle.shape
     
     private let CGSizeList: [CGSize] = [
-        CGSize(width: 50.0, height: 50.0),
-        CGSize(width: 70.0, height: 70.0),
-        CGSize(width: 100.0, height: 100.0),
+        CGSize(width: 75.0, height: 75.0),
+        CGSize(width: 105.0, height: 105.0),
+        CGSize(width: 150.0, height: 150.0),
     ]
     
     private let CGSizeList_Diamond: [CGSize] = [
-        CGSize(width: 41.86, height: 60.0),
-        CGSize(width: 58.6, height: 84.0),
-        CGSize(width: 83.72, height: 120.0),
+        CGSize(width: 62.79, height: 90.0),
+        CGSize(width: 87.91, height: 126.0),
+        CGSize(width: 125.58, height: 180.0),
     ]
 
     private var objectColorIndex = 0
@@ -91,25 +91,18 @@ final class CreateMapViewModel {
         input.sink { [weak self] event in
             switch event {
             case .objectUpButtonDidTap:
-                print(">>> objectUpButton Did Tap")
                 self?.output.send(.objectUpButtonDidTapOutput)
             case .objectDownButtonDidTap:
-                print(">>> objectDownButton Did Tap")
                 self?.output.send(.objectDownButtonDidTapOutput)
             case .objectSizeUpButtonDidTap:
-                print(">>> objectSizeUpButton Did Tap")
                 self?.output.send(.objectSizeUpButtonDidTapOutput)
             case .objectSizeDownButtonDidTap:
-                print(">>> objectSizeDownButton Did Tap")
                 self?.output.send(.objectSizeDownButtonDidTapOutput)
             case .objectColorUpButtonDidTap:
-                print(">>> objectColorUpButton Did Tap")
                 self?.output.send(.objectColorUpButtonDidTapOutput)
             case .objectColorDownButtonDidTap:
-                print(">>> objectColorDownButton Did Tap")
                 self?.output.send(.objectColorDownButtonDidTapOutput)
             case .saveButtonDidTap:
-                print(">>> saveButton Did Tap")
                 self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList!)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
@@ -155,6 +148,7 @@ final class CreateMapViewModel {
             objectView.backgroundColor = .clear
             objectView.image = UIImage(named: "\(objectImageList[objectColorIndex][objectSizeIndex][objectShapeIndex])")
             
+            let path: CGPath = getPath(size: objectSize, shapeIndex: objectShapeIndex)
             
             // MARK: 1. creativeObject 생성
             let creativeObject = createCreativeObject(
@@ -162,12 +156,14 @@ final class CreateMapViewModel {
                 color: self.objectColor,
                 size: self.objectSize,
                 shape: self.objectShape,
-                path: UIBezierPath(rect: CGRect(x: 0, y: 0, width: 50, height: 50)).cgPath,
+                // MARK: X1.5배
+                path: path,
                 object: objectView
             )
             
             // MARK: 2. 생성한 creativeObject 추가
             creativeObjectList?.append(creativeObject)
+            print(creativeObject.path)
             return true
         }
     }
@@ -211,5 +207,51 @@ final class CreateMapViewModel {
     
     func isChangedCreativeObjectList() -> Bool {
         return creativeObjectList == temporaryCreativeObjectList
+    }
+    
+    func getPath(size: CGSize, shapeIndex: Int) -> CGPath {
+        switch size {
+        case CGSizeList[0]:
+            switch shapeIndex {
+            case 0:
+                return CreatePath().createPath(size: size, shapeType: .circle)
+            case 1:
+                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 23))
+            case 2:
+                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 18))
+            default:
+                fatalError()
+            }
+        case CGSizeList[1]:
+            switch shapeIndex {
+            case 0:
+                return CreatePath().createPath(size: size, shapeType: .circle)
+            case 1:
+                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 20))
+            case 2:
+                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 25))
+            default:
+                fatalError()
+            }
+        case CGSizeList[2]:
+            switch shapeIndex {
+            case 0:
+                return CreatePath().createPath(size: size, shapeType: .circle)
+            case 1:
+                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 30))
+            case 2:
+                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 35))
+            default:
+                fatalError()
+            }
+        case CGSizeList_Diamond[0]:
+            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 13))
+        case CGSizeList_Diamond[1]:
+            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 19))
+        case CGSizeList_Diamond[2]:
+            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 28))
+        default:
+            fatalError()
+        }
     }
 }

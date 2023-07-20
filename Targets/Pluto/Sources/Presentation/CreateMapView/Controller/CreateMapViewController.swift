@@ -85,32 +85,21 @@ class CreateMapViewController: UIViewController {
         output.receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
-                    
-                    // TODO: 실제 이미지 넣을 때SystemName -> Name으로 고쳐야함
-                    
-                    
+                // TODO: 실제 이미지 넣을 때SystemName -> Name으로 고쳐야함
                 case .objectUpButtonDidTapOutput:
-                    print(">>> receive: objectUpButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
                 case .objectDownButtonDidTapOutput:
-                    print(">>> receive: objectDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
                 case .objectSizeUpButtonDidTapOutput:
-                    print(">>> receive: objectSizeUpButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
                 case .objectSizeDownButtonDidTapOutput:
-                    print(">>> receive: objectSizeDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
                 case .objectColorUpButtonDidTapOutput:
-                    print(">>> receive: objectColorUpButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
                 case .objectColorDownButtonDidTapOutput:
-                    print(">>> receive: objectColorDownButtonDidTapOutput")
                     self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
                 case .saveButtonDidTapOutput:
-                    print(">>> receive: saveButtonDidTapOutput")
                     self?.navigationController?.popViewController(animated: true)
-                    print("saveButton Did Tap")
                 }
             }.store(in: &subscriptions)
         
@@ -207,13 +196,20 @@ class CreateMapViewController: UIViewController {
 }
 
 extension CreateMapViewController: UIScrollViewDelegate {
-    // UITapGestureRecognizer의 액션 메서드
+    
     @objc func addObjectByTap(_ sender: UITapGestureRecognizer) {
         let tapLocation = sender.location(in: self.contentView.scrollView)
         let offset = self.contentView.scrollView.contentOffset
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
+        
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
-            addObjectScrollView(with: (viewModel.creativeObjectList?.last!.object)!)
+            let lastObject = viewModel.creativeObjectList?.last
+            addObjectScrollView(with: lastObject?.object ?? UIView())
+            
+            // MARK: CGPath 확인 [DEBUG]
+            if let lastObjectPath = lastObject?.path {
+                contentView.scrollView.subviews.last?.addShapeLayer(to: lastObjectPath)
+            }
         }
     }
     
@@ -221,6 +217,18 @@ extension CreateMapViewController: UIScrollViewDelegate {
         self.contentView.scrollView.addSubview(objectView)
     }
 
+    
+}
+
+extension UIView {
+    func addShapeLayer(to path: CGPath) {
+        let shapeLayer = CAShapeLayer()
+        shapeLayer.path = path
+        shapeLayer.strokeColor = UIColor.red.cgColor
+        shapeLayer.fillColor = UIColor.clear.cgColor
+        shapeLayer.lineWidth = 2.0
+        layer.addSublayer(shapeLayer)
+    }
 }
 
 extension CreateMapViewController: UITextFieldDelegate {

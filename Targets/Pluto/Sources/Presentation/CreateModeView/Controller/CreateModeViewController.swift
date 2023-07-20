@@ -28,16 +28,9 @@ class CreateModeViewController: UIViewController {
         
         creativeMapViewModel = CreateMapViewModel()
         viewModel = CreateModeViewModel(creativeMapViewModel: creativeMapViewModel)
-        setUpTargets()
         setUpCollectionView();
         bind()
         
-    }
-    
-    //TODO: 추후 삭제
-    private func setUpTargets() {
-        //        contentView.selectMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        //        contentView.createMapButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
     
     private func bind(){
