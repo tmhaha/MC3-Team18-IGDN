@@ -34,14 +34,14 @@ final class CreateMapTopToolView: UIView {
     
     private func setUpConstraints() {
         NSLayoutConstraint.activate([            
-            backButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 24),
-            backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 42),
+            backButton.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
+            backButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 43),
             backButton.widthAnchor.constraint(equalToConstant: 32),
             backButton.heightAnchor.constraint(equalToConstant: 20),
             
-            saveButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -40),
-            saveButton.heightAnchor.constraint(equalTo: backButton.heightAnchor),
-            saveButton.widthAnchor.constraint(equalTo: backButton.widthAnchor),
+            saveButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -43),
+            saveButton.heightAnchor.constraint(equalToConstant: 40),
+            saveButton.widthAnchor.constraint(equalToConstant: 40),
             saveButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
         ])
     }
@@ -53,7 +53,7 @@ final class CreateMapTopToolView: UIView {
         backButton.tintColor = .white
         backButton.layer.cornerRadius = 15
         
-        saveButton.setImage(UIImage(systemName: "square.and.arrow.down.fill"), for: .normal)
+        saveButton.setImage(UIImage(named: "save"), for: .normal)
         saveButton.tintColor = .white
         saveButton.layer.cornerRadius = 15
 
