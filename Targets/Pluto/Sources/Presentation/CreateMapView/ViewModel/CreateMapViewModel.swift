@@ -13,21 +13,15 @@ final class CreateMapViewModel {
     
     // MARK: Input, Output
     enum Input {
-        case objectUpButtonDidTap
-        case objectDownButtonDidTap
-        case objectSizeUpButtonDidTap
-        case objectSizeDownButtonDidTap
-        case objectColorUpButtonDidTap
-        case objectColorDownButtonDidTap
+        case objectColorButtonDidTap
+        case objectShapeButtonDidTap
+        case objectSizeButtonDidTap
         case saveButtonDidTap
     }
     enum Output {
-        case objectUpButtonDidTapOutput
-        case objectDownButtonDidTapOutput
-        case objectSizeUpButtonDidTapOutput
-        case objectSizeDownButtonDidTapOutput
-        case objectColorUpButtonDidTapOutput
-        case objectColorDownButtonDidTapOutput
+        case objectColorButtonDidTapOutput
+        case objectShapeButtonDidTapOutput
+        case objectSizeButtonDidTapOutput
         case saveButtonDidTapOutput
     }
     
@@ -96,18 +90,12 @@ final class CreateMapViewModel {
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
-            case .objectUpButtonDidTap:
-                self?.output.send(.objectUpButtonDidTapOutput)
-            case .objectDownButtonDidTap:
-                self?.output.send(.objectDownButtonDidTapOutput)
-            case .objectSizeUpButtonDidTap:
-                self?.output.send(.objectSizeUpButtonDidTapOutput)
-            case .objectSizeDownButtonDidTap:
-                self?.output.send(.objectSizeDownButtonDidTapOutput)
-            case .objectColorUpButtonDidTap:
-                self?.output.send(.objectColorUpButtonDidTapOutput)
-            case .objectColorDownButtonDidTap:
-                self?.output.send(.objectColorDownButtonDidTapOutput)
+            case .objectColorButtonDidTap:
+                self?.output.send(.objectColorButtonDidTapOutput)
+            case .objectShapeButtonDidTap:
+                self?.output.send(.objectShapeButtonDidTapOutput)
+            case .objectSizeButtonDidTap:
+                self?.output.send(.objectSizeButtonDidTapOutput)
             case .saveButtonDidTap:
                 self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!)
                 if let map = self?.map {
@@ -188,28 +176,16 @@ final class CreateMapViewModel {
         }
     }
     
-    func updateObjectColor(isIncrease: Bool) {
-        if isIncrease {
-            objectColorIndex = (objectColorIndex + 1) % objectColorList.count
-        } else {
-            objectColorIndex = (objectColorIndex - 1 + objectColorList.count) % objectColorList.count
-        }
+    func updateObjectColor() {
+        objectColorIndex = (objectColorIndex + 1) % objectColorList.count
     }
     
-    func updateObjectSize(isIncrease: Bool) {
-        if isIncrease {
-            objectSizeIndex = (objectSizeIndex + 1) % objectSizeList.count
-        } else {
-            objectSizeIndex = (objectSizeIndex - 1 + objectSizeList.count) % objectSizeList.count
-        }
+    func updateObjectShape() {
+        objectShapeIndex = (objectShapeIndex + 1) % objectShapeList.count
     }
     
-    func updateObject(isIncrease: Bool) {
-        if isIncrease {
-            objectShapeIndex = (objectShapeIndex + 1) % objectShapeList.count
-        } else {
-            objectShapeIndex = (objectShapeIndex - 1 + objectShapeList.count) % objectShapeList.count
-        }
+    func updateObjectSize() {
+        objectSizeIndex = (objectSizeIndex + 1) % objectSizeList.count
     }
     
     private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, pathIndex: Int, rect: CGRect, colorIndex: Int, sizeIndex: Int, shapeIndex: Int) -> CreativeObject {

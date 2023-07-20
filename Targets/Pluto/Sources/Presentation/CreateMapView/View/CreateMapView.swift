@@ -64,10 +64,10 @@ final class CreateMapView: UIView {
             topToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
             topToolView.heightAnchor.constraint(equalToConstant: 116),
 
-            bottomToolView.bottomAnchor.constraint(equalTo: self.safeAreaLayoutGuide.bottomAnchor),
+            bottomToolView.bottomAnchor.constraint(equalTo: self.bottomAnchor),
             bottomToolView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             bottomToolView.trailingAnchor.constraint(equalTo: self.trailingAnchor),
-            bottomToolView.heightAnchor.constraint(equalToConstant: 116),
+            bottomToolView.heightAnchor.constraint(equalToConstant: 170),
 
             scrollView.leadingAnchor.constraint(equalTo: self.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: self.trailingAnchor),

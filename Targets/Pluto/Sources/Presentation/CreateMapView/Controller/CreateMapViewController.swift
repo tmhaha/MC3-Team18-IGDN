@@ -56,12 +56,9 @@ class CreateMapViewController: UIViewController {
     }
     
     private func setUpTargets() {
-        contentView.bottomToolView.objectUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectColorUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectColorDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectSizeUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectSizeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectColorButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectShapeButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectSizeButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.alertView.keepEditingButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
@@ -85,19 +82,12 @@ class CreateMapViewController: UIViewController {
         output.receive(on: RunLoop.main)
             .sink { [weak self] event in
                 switch event {
-                // TODO: 실제 이미지 넣을 때SystemName -> Name으로 고쳐야함
-                case .objectUpButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
-                case .objectDownButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectShapeView.image = UIImage(systemName: self?.viewModel.objectShape ?? "")
-                case .objectSizeUpButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
-                case .objectSizeDownButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectSizeView.image = UIImage(systemName: self?.viewModel.objectSize ?? "")
-                case .objectColorUpButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
-                case .objectColorDownButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectColorView.image = UIImage(systemName: self?.viewModel.objectColor ?? "")
+                case .objectColorButtonDidTapOutput:
+                    self?.contentView.bottomToolView.objectColorButton.setImage(UIImage(named: "\(self?.viewModel.objectColor ?? "")"), for: .normal)
+                case .objectShapeButtonDidTapOutput:
+                    self?.contentView.bottomToolView.objectShapeButton.setImage(UIImage(named: "\(self?.viewModel.objectShape ?? "")"), for: .normal)
+                case .objectSizeButtonDidTapOutput:
+                    self?.contentView.bottomToolView.objectSizeButton.setImage(UIImage(named: "\(self?.viewModel.objectSize ?? "")"), for: .normal)
                 case .saveButtonDidTapOutput:
                     self?.navigationController?.popViewController(animated: true)
                 }
@@ -107,24 +97,15 @@ class CreateMapViewController: UIViewController {
     
     @objc private func buttonDidTap(_ sender: UIButton) {
         switch sender {
-        case self.contentView.bottomToolView.objectUpButton:
-            viewModel.updateObject(isIncrease: true)
-            input.send(.objectUpButtonDidTap)
-        case self.contentView.bottomToolView.objectDownButton:
-            viewModel.updateObject(isIncrease: false)
-            input.send(.objectDownButtonDidTap)
-        case self.contentView.bottomToolView.objectSizeUpButton:
-            viewModel.updateObjectSize(isIncrease: true)
-            input.send(.objectSizeUpButtonDidTap)
-        case self.contentView.bottomToolView.objectSizeDownButton:
-            viewModel.updateObjectSize(isIncrease: false)
-            input.send(.objectSizeDownButtonDidTap)
-        case self.contentView.bottomToolView.objectColorUpButton:
-            viewModel.updateObjectColor(isIncrease: true)
-            input.send(.objectColorUpButtonDidTap)
-        case self.contentView.bottomToolView.objectColorDownButton:
-            viewModel.updateObjectColor(isIncrease: false)
-            input.send(.objectColorDownButtonDidTap)
+        case self.contentView.bottomToolView.objectColorButton:
+            viewModel.updateObjectColor()
+            input.send(.objectColorButtonDidTap)
+        case self.contentView.bottomToolView.objectShapeButton:
+            viewModel.updateObjectShape()
+            input.send(.objectShapeButtonDidTap)
+        case self.contentView.bottomToolView.objectSizeButton:
+            viewModel.updateObjectSize()
+            input.send(.objectSizeButtonDidTap)
         case self.contentView.topToolView.backButton:
             if viewModel.isChangedCreativeObjectList() {
                 self.navigationController?.popViewController(animated: true)
@@ -219,7 +200,6 @@ extension CreateMapViewController: UIScrollViewDelegate {
     func addObjectScrollView(with objectView: UIImageView) {
         self.contentView.scrollView.addSubview(objectView)
     }
-
     
 }
 

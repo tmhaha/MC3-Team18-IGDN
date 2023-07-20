@@ -10,17 +10,9 @@ import UIKit
 
 final class CreateMapBottomToolView: UIView {
     
-    lazy var objectShapeView = UIImageView()
-    lazy var objectUpButton = UIButton()
-    lazy var objectDownButton = UIButton()
-    
-    lazy var objectSizeView = UIImageView()
-    lazy var objectSizeUpButton = UIButton()
-    lazy var objectSizeDownButton = UIButton()
-    
-    lazy var objectColorView = UIImageView()
-    lazy var objectColorUpButton = UIButton()
-    lazy var objectColorDownButton = UIButton()
+    lazy var objectShapeButton = UIButton()
+    lazy var objectSizeButton = UIButton()
+    lazy var objectColorButton = UIButton()
     
     init() {
         super.init(frame: .zero)
@@ -35,7 +27,7 @@ final class CreateMapBottomToolView: UIView {
     }
     
     private func addSubviews() {
-        [objectShapeView,objectUpButton, objectDownButton, objectColorView, objectColorUpButton, objectColorDownButton, objectSizeView, objectSizeUpButton, objectSizeDownButton]
+        [objectShapeButton, objectColorButton, objectSizeButton]
             .forEach {
                 addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -50,79 +42,28 @@ final class CreateMapBottomToolView: UIView {
     private func setUpConstraints() {
         
         NSLayoutConstraint.activate([
+            objectColorButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 18),
+            objectColorButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 13),
+            objectColorButton.widthAnchor.constraint(equalToConstant: 110),
+            objectColorButton.heightAnchor.constraint(equalToConstant: 100),
+
+            objectShapeButton.leadingAnchor.constraint(equalTo: objectColorButton.trailingAnchor, constant: 12),
+            objectShapeButton.topAnchor.constraint(equalTo: objectColorButton.topAnchor),
+            objectShapeButton.widthAnchor.constraint(equalToConstant: 110),
+            objectShapeButton.heightAnchor.constraint(equalToConstant: 100),
             
-            objectColorUpButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 26),
-            objectColorUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            objectColorUpButton.widthAnchor.constraint(equalToConstant: 100),
-            objectColorUpButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            objectColorView.leadingAnchor.constraint(equalTo: objectColorUpButton.leadingAnchor),
-            objectColorView.topAnchor.constraint(equalTo: objectColorUpButton.bottomAnchor, constant: 7),
-            objectColorView.widthAnchor.constraint(equalToConstant: 100),
-            objectColorView.bottomAnchor.constraint(equalTo: objectColorDownButton.topAnchor, constant: -7),
-            
-            objectColorDownButton.leadingAnchor.constraint(equalTo: objectColorUpButton.leadingAnchor),
-            objectColorDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            objectColorDownButton.widthAnchor.constraint(equalToConstant: 100),
-            objectColorDownButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            objectSizeUpButton.leadingAnchor.constraint(equalTo: objectColorView.trailingAnchor, constant: 19),
-            objectSizeUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            objectSizeUpButton.widthAnchor.constraint(equalToConstant: 100),
-            objectSizeUpButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            objectSizeView.leadingAnchor.constraint(equalTo: objectSizeUpButton.leadingAnchor),
-            objectSizeView.topAnchor.constraint(equalTo: objectSizeUpButton.bottomAnchor, constant: 7),
-            objectSizeView.widthAnchor.constraint(equalToConstant: 100),
-            objectSizeView.bottomAnchor.constraint(equalTo: objectSizeDownButton.topAnchor, constant: -7),
-            
-            objectSizeDownButton.leadingAnchor.constraint(equalTo: objectSizeUpButton.leadingAnchor),
-            objectSizeDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            objectSizeDownButton.widthAnchor.constraint(equalToConstant: 100),
-            objectSizeDownButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            
-            objectUpButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -26),
-            objectUpButton.topAnchor.constraint(equalTo: self.topAnchor, constant: 10),
-            objectUpButton.widthAnchor.constraint(equalToConstant: 100),
-            objectUpButton.heightAnchor.constraint(equalToConstant: 20),
-            
-            objectShapeView.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
-            objectShapeView.topAnchor.constraint(equalTo: objectUpButton.bottomAnchor, constant: 7),
-            objectShapeView.widthAnchor.constraint(equalToConstant: 100),
-            objectShapeView.bottomAnchor.constraint(equalTo: objectDownButton.topAnchor, constant: -7),
-            
-            objectDownButton.leadingAnchor.constraint(equalTo: objectUpButton.leadingAnchor),
-            objectDownButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10),
-            objectDownButton.widthAnchor.constraint(equalToConstant: 100),
-            objectDownButton.heightAnchor.constraint(equalToConstant: 20),
-            
+            objectSizeButton.leadingAnchor.constraint(equalTo: objectShapeButton.trailingAnchor, constant: 12),
+            objectSizeButton.topAnchor.constraint(equalTo: objectColorButton.topAnchor),
+            objectSizeButton.widthAnchor.constraint(equalToConstant: 110),
+            objectSizeButton.heightAnchor.constraint(equalToConstant: 100),
         ])
     }
     
     private func setUpViews() {
-        
-        // Shadow
-        [objectUpButton, objectDownButton, objectSizeUpButton, objectSizeDownButton, objectColorUpButton, objectColorDownButton]
-            .forEach {
-                $0.layer.shadowColor = UIColor.black.cgColor
-                $0.layer.shadowOpacity = 0.1
-                $0.layer.borderWidth = 1
-                $0.layer.borderColor = UIColor.clear.cgColor
-                $0.layer.shadowOffset = CGSize(width: 0, height: 2)
-            }
-        
-        objectUpButton.setImage(UIImage(named: "button_up"), for: .normal)
-        objectDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectShapeView.image = UIImage(systemName: "circle")
-        
-        objectSizeUpButton.setImage(UIImage(named: "button_up"), for: .normal)
-        objectSizeDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectSizeView.image = UIImage(systemName: "1.circle")
-        
-        objectColorUpButton.setImage(UIImage(named: "button_up"), for: .normal)
-        objectColorDownButton.setImage(UIImage(named: "button_down"), for: .normal)
-        objectColorView.image = UIImage(systemName: "1.circle")
+
+        objectColorButton.setImage(UIImage(named: "creative_color_white"), for: .normal)
+        objectShapeButton.setImage(UIImage(named: "creative_shape_circle"), for: .normal)
+        objectSizeButton.setImage(UIImage(named: "creative_size_1x"), for: .normal)
         
     }
     
