@@ -1,6 +1,7 @@
 {
   "images" : [
     {
+      "filename" : "triangle_50_green.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -9,7 +10,6 @@
       "scale" : "2x"
     },
     {
-      "filename" : "triangle_50_green.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
