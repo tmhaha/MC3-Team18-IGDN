@@ -72,8 +72,8 @@ class CreateMapViewController: UIViewController {
 
     private func setUpEditModeView() {
         if viewModel.isEditing {
-            viewModel.creativeObjectList?.forEach{
-                addObjectScrollView(with: $0.object)
+            viewModel.objectViewList.forEach{
+                addObjectScrollView(with: $0)
             }
         }
     }
@@ -203,17 +203,20 @@ extension CreateMapViewController: UIScrollViewDelegate {
         let tappedPoint = CGPoint(x: tapLocation.x + offset.x, y: tapLocation.y + offset.y)
         
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
-            let lastObject = viewModel.creativeObjectList?.last
-            addObjectScrollView(with: lastObject?.object ?? UIView())
-            
-            // MARK: CGPath 확인 [DEBUG]
-            if let lastObjectPath = lastObject?.path {
-                contentView.scrollView.subviews.last?.addShapeLayer(to: lastObjectPath)
+            // viewModel.creativeObjectList가 nil이 아닌 경우에만 실행
+//            if let lastObject = viewModel.creativeObjectList.last {
+//                addObjectScrollView(with: lastObject.object)
+//                // MARK: CGPath 확인 [DEBUG]
+//                let lastObjectPath = lastObject.path
+//                contentView.scrollView.subviews.last?.addShapeLayer(to: lastObjectPath)
+//            }
+            if let lastView = viewModel.objectViewList.last {
+                addObjectScrollView(with: lastView)
             }
         }
     }
     
-    func addObjectScrollView(with objectView: UIView) {
+    func addObjectScrollView(with objectView: UIImageView) {
         self.contentView.scrollView.addSubview(objectView)
     }
 

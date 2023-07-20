@@ -8,7 +8,7 @@
 
 import UIKit
 
-struct CreativeMapModel {
+struct CreativeMapModel: Codable {
     var titleLabel: String
     var lastEdited: Date
     var objectList: [CreativeObject]

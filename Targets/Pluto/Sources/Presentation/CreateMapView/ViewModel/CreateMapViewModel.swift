@@ -63,8 +63,12 @@ final class CreateMapViewModel {
     private var objectShapeIndex = 0
     
     // TODO: 나중에 주입받아야함 -> creativeObject
-    var creativeObjectList: [CreativeObject]?
-    var temporaryCreativeObjectList: [CreativeObject]?
+    var creativeObjectList: [CreativeObject] = []
+    var temporaryCreativeObjectList: [CreativeObject] = []
+    
+    var objectViewList: [UIImageView] = []
+    var temporaryObjectViewList: [UIImageView] = []
+    
     var isEditing: Bool = false
     var indexPath: IndexPath?
     
@@ -84,6 +88,8 @@ final class CreateMapViewModel {
         self.temporaryCreativeObjectList = map?.objectList ?? []
         self.isEditing = isEditing ?? false
         self.indexPath = indexPath ?? IndexPath(row: 0, section: 1)
+        self.objectViewList = map?.objectList.map { $0.object } ?? []
+        self.temporaryObjectViewList = map?.objectList.map { $0.object } ?? []
     }
     
     // MARK: Functions
@@ -103,7 +109,7 @@ final class CreateMapViewModel {
             case .objectColorDownButtonDidTap:
                 self?.output.send(.objectColorDownButtonDidTapOutput)
             case .saveButtonDidTap:
-                self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList!)!)
+                self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
                 }
@@ -115,13 +121,11 @@ final class CreateMapViewModel {
     }
     
     // MARK: Tap한 영역에 이미 해당 creativeObjectList의 element가 있는지 여부 확인
-    func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> UIView? {
-        if let creativeObjectList {
-            for objectView in creativeObjectList {
-                let objectFrame = objectView.object.frame
-                if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
-                    return objectView.object
-                }
+    func isOverlapWithOtherObjects(_ point: CGPoint, objectSize: CGSize) -> UIImageView? {
+        for objectView in objectViewList {
+            let objectFrame = objectView.frame
+            if objectFrame.intersects(CGRect(origin: point, size: objectSize)) {
+                return objectView
             }
         }
         return nil
@@ -147,8 +151,8 @@ final class CreateMapViewModel {
             let objectView = UIImageView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
             objectView.backgroundColor = .clear
             objectView.image = UIImage(named: "\(objectImageList[objectColorIndex][objectSizeIndex][objectShapeIndex])")
-            
-            let path: CGPath = getPath(size: objectSize, shapeIndex: objectShapeIndex)
+        
+            let pathIndex = getPathIndex(size: objectSize, shapeIndex: objectShapeIndex)
             
             // MARK: 1. creativeObject 생성
             let creativeObject = createCreativeObject(
@@ -157,21 +161,29 @@ final class CreateMapViewModel {
                 size: self.objectSize,
                 shape: self.objectShape,
                 // MARK: X1.5배
-                path: path,
-                object: objectView
+                pathIndex: pathIndex,
+                rect: CGRect(origin: tapCenterPoint, size: objectSize),
+                colorIndex: objectColorIndex,
+                sizeIndex: objectSizeIndex,
+                shapeIndex: objectShapeIndex
             )
             
             // MARK: 2. 생성한 creativeObject 추가
-            creativeObjectList?.append(creativeObject)
-            print(creativeObject.path)
+            creativeObjectList.append(creativeObject)
+            objectViewList.append(objectView)
             return true
         }
     }
     
     // MARK: 겹쳐진 creativeObject를 creativeObjectList에서 찾아서 제거
-    func removeObjectView(_ objectView: UIView) {
-        if let index = creativeObjectList?.firstIndex(where: { $0.object === objectView }) {
-            creativeObjectList?.remove(at: index)
+    func removeObjectView(_ objectView: UIImageView) {
+        if let index = objectViewList.firstIndex(where: { $0 == objectView }) {
+            
+            // MARK: 저장용 creativeObjectList에서 삭제, edit 전용 objectViewList에서 삭제
+            // MARK: 이렇게 하는 이유는 CreativeObject.object는 연산 프로퍼티이기 때문에 실제 scrollView의 object가 서로 다른 객체이기 때문.
+            creativeObjectList.remove(at: index)
+            objectViewList.remove(at: index)
+            
             objectView.removeFromSuperview()
         }
     }
@@ -200,8 +212,8 @@ final class CreateMapViewModel {
         }
     }
     
-    private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, path: CGPath, object: UIView) -> CreativeObject {
-        let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, path: path, object: object)
+    private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, pathIndex: Int, rect: CGRect, colorIndex: Int, sizeIndex: Int, shapeIndex: Int) -> CreativeObject {
+        let creativeObject = CreativeObject(point: point, color: color, size: size, shape: shape, pathIndex: pathIndex, rect: rect, colorIndex: colorIndex, sizeIndex: sizeIndex, shapeIndex: shapeIndex)
         return creativeObject
     }
     
@@ -209,47 +221,47 @@ final class CreateMapViewModel {
         return creativeObjectList == temporaryCreativeObjectList
     }
     
-    func getPath(size: CGSize, shapeIndex: Int) -> CGPath {
+    func getPathIndex(size: CGSize, shapeIndex: Int) -> Int {
         switch size {
         case CGSizeList[0]:
             switch shapeIndex {
             case 0:
-                return CreatePath().createPath(size: size, shapeType: .circle)
+                return 0
             case 1:
-                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 23))
+                return 3
             case 2:
-                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 18))
+                return 6
             default:
                 fatalError()
             }
         case CGSizeList[1]:
             switch shapeIndex {
             case 0:
-                return CreatePath().createPath(size: size, shapeType: .circle)
+                return 1
             case 1:
-                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 20))
+                return 4
             case 2:
-                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 25))
+                return 7
             default:
                 fatalError()
             }
         case CGSizeList[2]:
             switch shapeIndex {
             case 0:
-                return CreatePath().createPath(size: size, shapeType: .circle)
+                return 2
             case 1:
-                return CreatePath().createPath(size: size, shapeType: .rectangle(cornerRadius: 30))
+                return 5
             case 2:
-                return CreatePath().createPath(size: size, shapeType: .triangle(cornerRadius: 35))
+                return 8
             default:
                 fatalError()
             }
         case CGSizeList_Diamond[0]:
-            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 13))
+            return 9
         case CGSizeList_Diamond[1]:
-            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 19))
+            return 10
         case CGSizeList_Diamond[2]:
-            return CreatePath().createPath(size: size, shapeType: .diamond(cornerRadius: 28))
+            return 11
         default:
             fatalError()
         }

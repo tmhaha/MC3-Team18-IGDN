@@ -10,7 +10,7 @@ import CoreGraphics
 import UIKit
 
 
-struct CreatePath {
+public struct CreatePath {
     enum ShapeType {
         case rectangle(cornerRadius: CGFloat)
         case diamond(cornerRadius: CGFloat)
@@ -18,12 +18,12 @@ struct CreatePath {
         case circle
     }
     
-    func createPath(size: CGSize, shapeType: ShapeType) -> CGPath {
+    static func createPath(size: CGSize, shapeType: ShapeType) -> CGPath {
         var path = UIBezierPath()
         
         switch shapeType {
         case .rectangle(let cornerRadius):
-            path = roundedPolygonPath(square: CGRect(origin: CGPoint(x: 0, y: 0), size: size), lineWidth: 1.0, sides: 4, cornerRadius: cornerRadius)
+            path = CreatePath.roundedPolygonPath(square: CGRect(origin: CGPoint(x: 0, y: 0), size: size), lineWidth: 1.0, sides: 4, cornerRadius: cornerRadius)
             
         case .diamond(let cornerRadius):
             let width = size.width
@@ -41,7 +41,7 @@ struct CreatePath {
             path.addArc(withCenter: CGPoint(x: width / 2, y: cornerRadius), radius: cornerRadius, startAngle: .pi*2 - (.pi/2 - theta), endAngle: .pi*2 - (.pi/2 + theta), clockwise: false)
 
         case .triangle(let cornerRadius):
-            path = roundedPolygonPath(square: CGRect(origin: CGPoint(x: 0, y: 0), size: size), lineWidth: 1.0, sides: 3, cornerRadius: cornerRadius)
+            path = CreatePath.roundedPolygonPath(square: CGRect(origin: CGPoint(x: 0, y: 0), size: size), lineWidth: 1.0, sides: 3, cornerRadius: cornerRadius)
             
         case .circle:
             let center = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
@@ -53,7 +53,7 @@ struct CreatePath {
         return path.cgPath
     }
     
-    func roundedPolygonPath(square: CGRect, lineWidth: Double, sides: Int, cornerRadius:Double) -> UIBezierPath {
+    static func roundedPolygonPath(square: CGRect, lineWidth: Double, sides: Int, cornerRadius:Double) -> UIBezierPath {
         
         let path = UIBezierPath()
         
