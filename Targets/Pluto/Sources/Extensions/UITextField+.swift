@@ -43,13 +43,9 @@ extension UITextField {
         self.backgroundColor = .white
         self.layer.cornerRadius = 5
         
-        let rightView = UIView(frame: CGRectMake(-10, 0, 45, 45))
-        let clearButton = UIButton(frame: CGRect(x: 0, y: 0, width: 45, height: 45))
+        let rightView = UIView(frame: CGRectMake(0, 0, 24, 24))
+        let clearButton = UIButton(frame: CGRect(x: -8, y: 0, width: 24, height: 24))
         clearButton.setImage(image, for: .normal)
-        clearButton.tintColor = UIColor(hex: 0x2244FF)
-        clearButton.setPreferredSymbolConfiguration(UIImage.SymbolConfiguration(pointSize: 25), forImageIn: .normal)
-        clearButton.imageView?.contentMode = .scaleAspectFit
-        
         clearButton.addTarget(self, action: #selector(UITextField.clear(sender:)), for: .touchUpInside)
         self.addTarget(self, action: #selector(UITextField.displayClearButtonIfNeeded), for: .editingDidBegin)
         self.addTarget(self, action: #selector(UITextField.displayClearButtonIfNeeded), for: .editingChanged)

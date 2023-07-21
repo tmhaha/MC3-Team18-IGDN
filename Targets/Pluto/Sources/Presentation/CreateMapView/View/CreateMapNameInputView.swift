@@ -95,7 +95,7 @@ final class CreateMapNameInputView: UIView {
         nameDescription.font = UIFont(name: "TASAExplorer-Bold", size: 28)
         nameDescription.textColor = .white
         
-        nameTextField.setNameTextField(with: UIImage(systemName: "xmark.circle")!, mode: .whileEditing)
+        nameTextField.setNameTextField(with: UIImage(named: "x_mark")!, mode: .whileEditing)
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0),
