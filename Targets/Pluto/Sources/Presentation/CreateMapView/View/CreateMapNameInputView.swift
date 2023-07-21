@@ -66,7 +66,7 @@ final class CreateMapNameInputView: UIView {
             saveButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             saveButton.heightAnchor.constraint(equalToConstant: 45),
             saveButton.widthAnchor.constraint(equalToConstant: 209),
-            saveButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -313),
+            saveButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -283),
             
             nameTextField.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nameTextField.heightAnchor.constraint(equalToConstant: 45),
@@ -76,7 +76,7 @@ final class CreateMapNameInputView: UIView {
             nameDescription.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             nameDescription.bottomAnchor.constraint(equalTo: nameTextField.topAnchor, constant: -45),
             
-            imageView.bottomAnchor.constraint(equalTo: self.nameDescription.topAnchor, constant: -20),
+            imageView.bottomAnchor.constraint(equalTo: self.nameDescription.topAnchor, constant: -30),
             imageView.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             imageView.widthAnchor.constraint(equalToConstant: 100),
             imageView.heightAnchor.constraint(equalToConstant: 80),
@@ -87,7 +87,7 @@ final class CreateMapNameInputView: UIView {
     private func setUpViews() {
         self.backgroundColor = .clear
         
-        imageView.backgroundColor = .red
+        imageView.image = UIImage(named: "pencil_name_input")
         
         nameDescription.text = "Name your journey"
         nameDescription.textAlignment = .center
@@ -95,7 +95,7 @@ final class CreateMapNameInputView: UIView {
         nameDescription.font = UIFont(name: "TASAExplorer-Bold", size: 28)
         nameDescription.textColor = .white
         
-        nameTextField.setNameTextField()
+        nameTextField.setNameTextField(with: UIImage(systemName: "xmark.circle")!, mode: .whileEditing)
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0),
