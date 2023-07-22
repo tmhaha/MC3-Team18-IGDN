@@ -59,6 +59,7 @@ final class CreateMapViewModel {
     // TODO: 나중에 주입받아야함 -> creativeObject
     var creativeObjectList: [CreativeObject] = []
     var temporaryCreativeObjectList: [CreativeObject] = []
+    var previewId: String = ""
     
     var objectViewList: [UIImageView] = []
     var temporaryObjectViewList: [UIImageView] = []
@@ -77,7 +78,7 @@ final class CreateMapViewModel {
     }
     
     init(map: CreativeMapModel? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
-        self.map = map ?? CreativeMapModel(titleLabel: "", lastEdited: Date(), objectList: [])
+        self.map = map ?? CreativeMapModel(titleLabel: "", lastEdited: Date(), objectList: [], previewId: previewId)
         self.creativeObjectList = map?.objectList ?? []
         self.temporaryCreativeObjectList = map?.objectList ?? []
         self.isEditing = isEditing ?? false
@@ -97,7 +98,7 @@ final class CreateMapViewModel {
             case .objectSizeButtonDidTap:
                 self?.output.send(.objectSizeButtonDidTapOutput)
             case .saveButtonDidTap:
-                self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!)
+                self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!, previewId: (self?.previewId)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
                 }

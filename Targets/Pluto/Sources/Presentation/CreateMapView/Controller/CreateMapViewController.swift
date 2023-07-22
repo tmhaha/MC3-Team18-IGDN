@@ -10,7 +10,7 @@ import UIKit
 import Combine
 
 class CreateMapViewController: UIViewController {
-
+    
     private let input = PassthroughSubject<CreateMapViewModel.Input, Never>()
     private let inputToParent = PassthroughSubject<CreateModeViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -66,10 +66,10 @@ class CreateMapViewController: UIViewController {
         contentView.nameInputView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.nameInputView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
-
+    
     private func setUpEditModeView() {
         if viewModel.isEditing {
-            viewModel.objectViewList.forEach{
+            viewModel.objectViewList.forEach {
                 addObjectScrollView(with: $0)
             }
         }
@@ -89,7 +89,7 @@ class CreateMapViewController: UIViewController {
                 case .objectSizeButtonDidTapOutput:
                     self?.contentView.bottomToolView.objectSizeButton.setImage(UIImage(named: "\(self?.viewModel.objectSize ?? "")"), for: .normal)
                 case .saveButtonDidTapOutput:
-                    self?.navigationController?.popViewController(animated: true)
+                    self?.navigationController?.popViewController(animated: false)
                 }
             }.store(in: &subscriptions)
         
@@ -114,7 +114,28 @@ class CreateMapViewController: UIViewController {
             }
         case self.contentView.topToolView.saveButton:
             if viewModel.isEditing {
-                input.send(.saveButtonDidTap)
+                if let capturedImage = self.contentView.scrollView.screenshot() {
+                    // MARK: 이미지 리사이징 여부 확정시 사용
+    //                // 이미지 크기를 166.63*70 비율로 조정
+    //                if let resizedImage = capturedImage.resize(to: CGSize(width: 166.63, height: 70)){
+    //                    // 이미지 저장
+    //                    if let imageData = resizedImage.pngData() {
+    //                        let previewId = UUID().uuidString
+    //                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
+    //                        UserDefaults.standard.set(imageData, forKey: previewId)
+    //                        self.viewModel.previewId = previewId
+    //                        input.send(.saveButtonDidTap)
+    //                    }
+    //                }
+                    // 이미지 저장
+                    if let imageData = capturedImage.pngData() {
+                        let previewId = UUID().uuidString
+                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
+                        UserDefaults.standard.set(imageData, forKey: previewId)
+                        self.viewModel.previewId = previewId
+                        input.send(.saveButtonDidTap)
+                    }
+                }
             } else {
                 showNameInputView(isShown: true)
             }
@@ -131,7 +152,29 @@ class CreateMapViewController: UIViewController {
             } else {
                 viewModel.map?.titleLabel = self.contentView.nameInputView.nameTextField.text!
             }
-            input.send(.saveButtonDidTap)
+            showContentView(isShown: true)
+            if let capturedImage = self.contentView.scrollView.screenshot() {
+                // MARK: 이미지 리사이징 여부 확정시 사용
+//                // 이미지 크기를 166.63*70 비율로 조정
+//                if let resizedImage = capturedImage.resize(to: CGSize(width: 166.63, height: 70)){
+//                    // 이미지 저장
+//                    if let imageData = resizedImage.pngData() {
+//                        let previewId = UUID().uuidString
+//                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
+//                        UserDefaults.standard.set(imageData, forKey: previewId)
+//                        self.viewModel.previewId = previewId
+//                        input.send(.saveButtonDidTap)
+//                    }
+//                }
+                // 이미지 저장
+                if let imageData = capturedImage.pngData() {
+                    let previewId = UUID().uuidString
+                    UserDefaults.standard.set(imageData, forKey: previewId)
+                    self.viewModel.previewId = previewId
+                    input.send(.saveButtonDidTap)
+                }
+            }
+            
         default:
             fatalError()
         }
@@ -141,7 +184,7 @@ class CreateMapViewController: UIViewController {
         self.parentViewModel = createModeViewModel
         self.viewModel = viewModel
     }
-
+    
     private func showContentView(isShown: Bool){
         if isShown {
             [contentView.topToolView, contentView.bottomToolView, contentView.scrollView].forEach {
@@ -185,12 +228,12 @@ extension CreateMapViewController: UIScrollViewDelegate {
         
         if viewModel.addObjectAtPoint(tappedPoint, tapLocation) {
             // viewModel.creativeObjectList가 nil이 아닌 경우에만 실행
-//            if let lastObject = viewModel.creativeObjectList.last {
-//                addObjectScrollView(with: lastObject.object)
-//                // MARK: CGPath 확인 [DEBUG]
-//                let lastObjectPath = lastObject.path
-//                contentView.scrollView.subviews.last?.addShapeLayer(to: lastObjectPath)
-//            }
+            //            if let lastObject = viewModel.creativeObjectList.last {
+            //                addObjectScrollView(with: lastObject.object)
+            //                // MARK: CGPath 확인 [DEBUG]
+            //                let lastObjectPath = lastObject.path
+            //                contentView.scrollView.subviews.last?.addShapeLayer(to: lastObjectPath)
+            //            }
             if let lastView = viewModel.objectViewList.last {
                 addObjectScrollView(with: lastView)
             }
@@ -220,9 +263,39 @@ extension CreateMapViewController: UITextFieldDelegate {
             contentView.nameInputView.nameTextField.resignFirstResponder()
         }
     }
-
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
         return true
+    }
+}
+
+fileprivate extension UIScrollView {
+    func screenshot() -> UIImage? {
+        UIGraphicsBeginImageContext(self.contentSize)
+                
+                let savedContentOffset = self.contentOffset
+                let savedFrame = self.frame
+                
+                self.contentOffset = CGPoint.zero
+                self.layer.frame = CGRect(x: 0, y: 0, width: self.contentSize.width, height: self.contentSize.height)
+                
+                self.layer.render(in: UIGraphicsGetCurrentContext()!)
+                let image = UIGraphicsGetImageFromCurrentImageContext()
+                
+                self.contentOffset = savedContentOffset
+                self.frame = savedFrame
+                UIGraphicsEndImageContext()
+                return image
+    }
+}
+
+fileprivate extension UIImage {
+    func resize(to size: CGSize) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(size, false, self.scale)
+        self.draw(in: CGRect(origin: .zero, size: size))
+        let resizedImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return resizedImage
     }
 }

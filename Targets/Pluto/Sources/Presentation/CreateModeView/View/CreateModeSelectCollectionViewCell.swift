@@ -145,10 +145,9 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         
         solidLine.image = UIImage(named: "solid_line")
         solidLine.tintColor = UIColor(hex: 0xB4C1FF)
-        
-        preview.backgroundColor = UIColor(hex: 0xB4C1FF)
+                
         preview.layer.cornerRadius = 5
-        
+
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
         ]
@@ -189,12 +188,18 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             
             title.text = item[indexPath.row].titleLabel
             lastEdited.text = item[indexPath.row].lastEditedString()
+            
+            if let previewData = UserDefaults.standard.data(forKey: item[indexPath.row].previewId),
+               let previewImage = UIImage(data: previewData) {
+                preview.image = previewImage
+                preview.contentMode = .scaleAspectFit
+                preview.backgroundColor = UIColor(hex: 0xB4C1FF)
+            }
         }
     }
     
     func configure(isTextFieldEnabled: Bool) {
            if isTextFieldEnabled {
-               print(title.text)
                title.isUserInteractionEnabled = true
                title.becomeFirstResponder()
                textFieldIsActive = true
@@ -210,7 +215,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             input.send(.playButtonDidTap(indexPath: indexPath))
         case editButton:
             input.send(.editButtonDidTap(indexPath: indexPath))
-            print(">>> tapped indexPath: \(indexPath)") // MARK: DEBUG
         default:
             fatalError()
         }

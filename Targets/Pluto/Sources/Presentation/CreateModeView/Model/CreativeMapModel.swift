@@ -12,7 +12,7 @@ struct CreativeMapModel: Codable {
     var titleLabel: String
     var lastEdited: Date
     var objectList: [CreativeObject]
-    
+    var previewId: String
     func lastEditedString() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd:HH:mm"

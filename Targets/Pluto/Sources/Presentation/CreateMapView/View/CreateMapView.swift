@@ -131,14 +131,14 @@ final class CreateMapView: UIView {
         bottomToolView.backgroundColor = .clear
         alertView.backgroundColor = .clear
         nameInputView.backgroundColor = .clear
-        scrollView.backgroundColor = UIColor(hex: 0x2244FF)
         
+        scrollView.backgroundColor = UIColor(hex: 0x2244FF)
         scrollView.isPagingEnabled = false
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = false // 세로 스크롤 비활성화
         scrollView.alwaysBounceHorizontal = true // 가로 스크롤 활성화
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.bounces = false
-        scrollView.contentSize = CGSize(width: bounds.width * 10, height: bounds.height)
+        //scrollView.contentSize = CGSize(width: self.bounds.width * 10, height: self.bounds.height)
     }
 }

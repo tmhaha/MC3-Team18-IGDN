@@ -30,7 +30,7 @@ final class CreateModeViewModel {
     
     private let output = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
-//    let createMapViewModel: CreateMapViewModel!
+
     var mapList: [CreativeMapModel]
     var objectList: [CreativeObject] = []
     
@@ -80,7 +80,6 @@ final class CreateModeViewModel {
                 // MARK: isEditing이 true
                 if isEditng {
                     self?.updateMap(with: map, indexPath: indexPath)
-                    print("indexPath: \(indexPath)")
                 }
                 // MARK: isEditing이 false
                 // creativeObjectList를 처리하는 로직을 작성합니다
@@ -90,6 +89,7 @@ final class CreateModeViewModel {
                 if let mapList = self?.mapList {
                     UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
                 }
+                self?.output.send(.reload)
             }.store(in: &subscriptions)
         
     }
@@ -100,29 +100,12 @@ final class CreateModeViewModel {
             newMap.titleLabel = "Slot \(mapList.count + 1)"
         }
         mapList.append(newMap)
-        // MARK: 추가한 Object들 출력예시 (DEBUG)
-        mapList.forEach{  maps in
-            maps.objectList.forEach { object in
-                print(object.shape)
-            }
-            print("===")
-        }
         objectList.removeAll()
-        output.send(.reload)
     }
     
     private func updateMap(with map: CreativeMapModel, indexPath: IndexPath) {
-        self.mapList[indexPath.row] = CreativeMapModel(titleLabel: self.mapList[indexPath.row].titleLabel, lastEdited: map.lastEdited, objectList: map.objectList)
-        // MARK: 추가한 Object들 출력예시 (DEBUG)
-        mapList.forEach{  maps in
-            maps.objectList.forEach { object in
-                print(object.shape)
-            }
-            print("===")
-        }
+        self.mapList[indexPath.row] = CreativeMapModel(titleLabel: self.mapList[indexPath.row].titleLabel, lastEdited: map.lastEdited, objectList: map.objectList, previewId: map.previewId)
         objectList.removeAll()
-        output.send(.reload)
     }
-    
-    
+
 }
