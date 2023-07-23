@@ -40,17 +40,8 @@ final class CreateMapViewModel {
     private let objectSizeList: [String] = Obstacle.size
     private let objectShapeList: [String] = Obstacle.shape
     
-    private let CGSizeList: [CGSize] = [
-        CGSize(width: 75.0, height: 75.0),
-        CGSize(width: 105.0, height: 105.0),
-        CGSize(width: 150.0, height: 150.0),
-    ]
-    
-    private let CGSizeList_Diamond: [CGSize] = [
-        CGSize(width: 62.79, height: 90.0),
-        CGSize(width: 87.91, height: 126.0),
-        CGSize(width: 125.58, height: 180.0),
-    ]
+    private let CGSizeList: [CGSize] = CreativeObject.CGSizeList
+    private let CGSizeList_Diamond: [CGSize] = CreativeObject.CGSizeList_Diamond
 
     private var objectColorIndex = 0
     private var objectSizeIndex = 0

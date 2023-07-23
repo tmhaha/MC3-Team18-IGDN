@@ -16,7 +16,6 @@ class CreateModeViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     private var cellSubscriptions: [IndexPath: Set<AnyCancellable>] = [:]
     var viewModel: CreateModeViewModel!
-    var creativeMapViewModel: CreateMapViewModel = CreateMapViewModel()
     
     override func loadView() {
         view = contentView
@@ -35,7 +34,6 @@ class CreateModeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hex: 0x2244FF)
         
-        creativeMapViewModel = CreateMapViewModel()
         setUpCollectionView();
         bind()
         
@@ -71,14 +69,25 @@ class CreateModeViewController: UIViewController {
                     self?.viewModel.bind(with: mapViewModel)
                     self?.navigationController?.pushViewController(vc, animated: true)
                     
-                case .playButtonDidTapOutput:
+                // TODO: objects를 안 받을 수도 있음. 이때 게임뷰로 화면전환 해야함
+                case .playButtonDidTapOutput(let objects):
                     print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG
-                    // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결 -> 뷰 전환
+                    print(">>>>>> OBJECTS SEND <<<<<<<")
+                    print(">>>>>> OBJECTS SEND <<<<<<<")
+                    print("-                         -")
+                    print("-                         -")
+                    print("-                         -")
+                    print(objects)
+                    print("-                         -")
+                    print("-                         -")
+                    print("-                         -")
+                    print(">>>>>> OBJECTS SEND <<<<<<<")
+                    print(">>>>>> OBJECTS SEND <<<<<<<")
+                    
                 }
             }
             .store(in: &subscriptions)
-        
-        
+
     }
     
     private func bindInCell(with cellInput: PassthroughSubject<CreateModeViewModel.Input, Never>, cell: CreateModeSelectCollectionViewCell, indexPath: IndexPath) {

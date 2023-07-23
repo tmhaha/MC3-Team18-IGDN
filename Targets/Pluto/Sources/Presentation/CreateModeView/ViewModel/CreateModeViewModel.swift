@@ -23,7 +23,7 @@ final class CreateModeViewModel {
         case presentSelectMapView
         case presentCreateMapView
         case reload
-        case playButtonDidTapOutput
+        case playButtonDidTapOutput(objects: [Object])
         case editButtonDidTapOutput(IndexPath: IndexPath)
 //        case editTitleButtonDidTapOutput(IndexPath: IndexPath)
     }
@@ -33,7 +33,7 @@ final class CreateModeViewModel {
 
     var mapList: [CreativeMapModel]
     var objectList: [CreativeObject] = []
-    
+    var transferingObjects: [Object] = []
     init(mapList: [CreativeMapModel]? = nil) {
         self.mapList = mapList ?? []
     }
@@ -51,14 +51,17 @@ final class CreateModeViewModel {
                 // TODO: 비즈니스 로직
                 self?.output.send(.presentCreateMapView)
             case .playButtonDidTap(let indexPath):
-                print("'''VM에서의 playButton으로 인한 비즈니스 로직'''") // MARK: DEBUG
                 // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결
-                self?.output.send(.playButtonDidTapOutput)
-                print(">>> \(indexPath.row)번째 Cell의 playButton")// MARK: DEBUG
+                if let objects = self?.mapList[indexPath.row].objectList {
+                    if let transferObjects = self?.convertToObject(with: objects) {
+                        self?.output.send(.playButtonDidTapOutput(objects: transferObjects))
+                    }
+                }
+                print(">>> \(indexPath.row)번째 Cell의 playButton DidTap")// MARK: DEBUG
             case .editButtonDidTap(let indexPath):
                 print("'''VM에서의 editButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
                 // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결
-                print(">>> \(indexPath.row)번째 Cell의 editButton")// MARK: DEBUG
+                print(">>> \(indexPath.row)번째 Cell의 editButton DidTap")// MARK: DEBUG
                 self?.output.send(.editButtonDidTapOutput(IndexPath: indexPath))
 //            case .editTitleButtonDidTap(let indexPath):
 //                print("'''VM에서의 editTitleButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
@@ -108,4 +111,12 @@ final class CreateModeViewModel {
         objectList.removeAll()
     }
 
+    private func convertToObject(with creativeObjectList: [CreativeObject]) -> [Object]{
+        var objects: [Object] = []
+        for object in creativeObjectList {
+            let transferingObject = Object(creativeObject: object)
+            objects.append(transferingObject)
+        }
+        return objects
+    }
 }

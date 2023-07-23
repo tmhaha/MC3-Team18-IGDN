@@ -9,9 +9,32 @@
 import Foundation
 
 struct Obstacle {
-    static let color: [String] = ["creative_color_white","creative_color_red","creative_color_yellow","creative_color_green"]
-    static let size: [String] = ["creative_size_1x","creative_size_2x","creative_size_3x"]
-    static let shape: [String] = ["creative_shape_circle","creative_shape_rectangle","creative_shape_triangle","creative_shape_diamond"]
+    static let color: [String] = [
+        "creative_color_white",
+        "creative_color_red",
+        "creative_color_yellow",
+        "creative_color_green"
+    ]
+    
+    static let size: [String] = [
+        "creative_size_1x",
+        "creative_size_2x",
+        "creative_size_3x"
+    ]
+    
+    static let shape: [String] = [
+        "creative_shape_circle",
+        "creative_shape_rectangle",
+        "creative_shape_triangle",
+        "creative_shape_diamond"
+    ]
+    
+    static let isClockWise: [Bool] = [
+        true,
+        true,
+        true,
+        false
+    ]
     
     static let image: [[[String]]] = [
         [
