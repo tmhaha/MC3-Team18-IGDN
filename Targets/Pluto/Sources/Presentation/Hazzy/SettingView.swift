@@ -96,9 +96,9 @@ extension SettingView {
                                 if index > 0 {
                                     index -= 1
                                 } else {
-                                    index = allCase.count - 1
+                                    index = allThemeCases.count - 1
                                 }
-                                SettingData.shared.selectedTheme = allCase[index]
+                                SettingData.shared.selectedTheme = allThemeCases[index]
                             } label: {
                                 Image(systemName: "arrowtriangle.left.fill")
                                     .resizable()
@@ -109,12 +109,12 @@ extension SettingView {
                                 .font(.custom(tasaExplorerBold, size: 16))
                             Button {
                                 var index = SettingData.shared.selectedTheme.rawValue
-                                if index < allCase.count - 1 {
+                                if index < allThemeCases.count - 1 {
                                     index += 1
                                 } else {
                                     index = 0
                                 }
-                                SettingData.shared.selectedTheme = allCase[index]
+                                SettingData.shared.selectedTheme = allThemeCases[index]
                             } label: {
                                 Image(systemName: "arrowtriangle.right.fill")
                                     .resizable()
