@@ -1,5 +1,5 @@
 //
-//  PlanetNode.swift
+//  TempPlanetNode.swift
 //  Pluto
 //
 //  Created by changgyo seo on 2023/07/12.
@@ -8,35 +8,28 @@
 
 import SpriteKit
 
-class PlanetNode: SKSpriteNode {
+class TempPlanetNode: SKShapeNode {
     
     var id: String = UUID().uuidString
     var gameConstants = GameConstants()
     var delegate: PassRotationingAstronautPointDelegate? = nil
     var status: Status = .none
-    //var color: AstronautColor = AstronautColor.allCases.randomElement()!
+    var color: AstronautColor = AstronautColor.allCases.randomElement()!
     var astronautNode: AstronautNode? = nil
     var contactPoint: CGPoint = CGPoint()
     var contactNode: SKShapeNode = SKShapeNode()
     var astronaut = AstronautNode(color: .clear, size: CGSize(width: 30, height: 30))
     var directionNode: [SKShapeNode] = []
-    var path: CGPath = CGPath(ellipseIn: .zero, transform: nil)
-    var isClockWise = true
     
     func startDirectionNodesRotation() {
         
         for i in 0...3 {
-            let node = SKShapeNode(path: PlanetNode.createTrianglePath(width: 10, height: 10))
-            if !isClockWise {
-                node.zRotation = -CGFloat.pi / 2
-            }
-            else {
-                node.zRotation = CGFloat.pi / 2
-            }
+            let node = SKShapeNode(path: TempPlanetNode.createTrianglePath(width: 10, height: 10))
+            node.zRotation = CGFloat.pi / 2
             node.fillColor = .clear
             node.strokeColor = .clear
             self.addChild(node)
-            node.run(SKAction.follow(path, asOffset: false, orientToPath: true, duration: 0.5).forever)
+            node.run(SKAction.follow(self.path!, asOffset: false, orientToPath: true, duration: 0.5).forever)
             DispatchQueue.global().asyncAfter(deadline: .now() + (0.5 * (0.25 * Double(i)))) {
                 node.fillColor = .white
                 node.speed = 0.1
@@ -50,11 +43,11 @@ class PlanetNode: SKSpriteNode {
     
     func startRotation(at point: CGPoint, thatNodePoint: AstronautNode) {
         
-        let followAction = SKAction.follow(path, asOffset: false, orientToPath: true, duration: gameConstants.planetFindContactPointDuration)
+        let followAction = SKAction.follow(path!, asOffset: false, orientToPath: true, duration: gameConstants.planetFindContactPointDuration)
         followAction.timingFunction = timingFunc
         
         contactPoint = orginPointToNodePoint(at: point, to: thatNodePoint.position, nodeSize: self.frame.size)
-        contactNode = SKShapeNode(path: PlanetNode.createCirclePath(center: CGPoint(x: point.x - position.x, y: point.y - position.y), radius: 20))
+        contactNode = SKShapeNode(path: TempPlanetNode.createCirclePath(center: CGPoint(x: point.x - position.x, y: point.y - position.y), radius: 20))
         contactNode.fillColor = .clear
         contactNode.strokeColor = .clear
         
@@ -80,7 +73,7 @@ class PlanetNode: SKSpriteNode {
     }
 }
 
-extension PlanetNode {
+extension TempPlanetNode {
     
     private func timingFunc(_ timing: Float) -> Float {
         if astronaut.color == astronautNode!.color {
@@ -204,7 +197,7 @@ extension PlanetNode {
 }
 
 /// STATUS
-extension PlanetNode {
+extension TempPlanetNode {
     enum Status {
         case none
         case rotationing

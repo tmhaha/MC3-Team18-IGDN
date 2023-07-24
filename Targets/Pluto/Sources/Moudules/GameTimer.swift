@@ -11,22 +11,32 @@ class GameTimer {
     
     private var timer: Timer?
     private var afterStart: Int = 0
+    private var timingAction: (Int) -> () = { _ in }
     var now: Int {
         get { afterStart }
     }
     
-    func startTimer(completion: @escaping (Int) -> () ) {
-        timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] timer in
+    func startTimer(timeInterval: TimeInterval = 1.0, completion: @escaping (Int) -> ()) {
+        timingAction = completion
+        timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] timer in
             guard let self = self else {
                 timer.invalidate()
                 return
             }
-            completion(self.afterStart)
+            timingAction(self.afterStart)
             self.afterStart += 1
         }
     }
     
+    func restartTimer() {
+        startTimer(completion: timingAction)
+    }
+    
     func stopTimer() {
+        timer?.invalidate()
+    }
+    
+    func resetTimer() {
         timer?.invalidate()
         timer = nil
         afterStart = 0

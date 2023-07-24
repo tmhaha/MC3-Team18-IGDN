@@ -17,6 +17,13 @@ extension SKNode {
         }
         let sequence = SKAction.sequence([action, finishAction])
         run(sequence, withKey: withKey)
-        
+    }
+    
+    func positionFromLeftBottom(_ x: CGFloat, _ y: CGFloat) {
+        position = CGPoint(x: x + (frame.width / 2), y: y + (frame.height / 2))
+    }
+    
+    func positionFromLeftMiddle(_ x: CGFloat, _ y: CGFloat) {
+        position = CGPoint(x: x + (frame.width / 2), y: y)
     }
 }

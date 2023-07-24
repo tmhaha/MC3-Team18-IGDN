@@ -14,6 +14,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     init(gameManager: GameManager, size: CGSize) {
         self.gameManager = gameManager
         super.init(size: size)
+        self.backgroundColor = .black
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -25,8 +26,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         view.isMultipleTouchEnabled = true
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-     
-        gameManager.startGame(scene: self)
+    
+        gameManager.settingGame(scene: self)
+        gameManager.startGame()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
