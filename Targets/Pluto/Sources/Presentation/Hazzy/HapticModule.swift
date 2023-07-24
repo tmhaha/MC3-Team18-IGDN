@@ -16,6 +16,10 @@ enum HapticStyle {
 }
 
 func hapticFeedback(style: HapticStyle = .medium, duration: Double = 0.1, interval: Double = 0.1) {
+    if !SettingData.shared.isHapticOn {
+        return
+    }
+    
     let feedbackGenerator: UIImpactFeedbackGenerator
     
     switch style {

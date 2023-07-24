@@ -96,9 +96,9 @@ extension SettingView {
                                 if index > 0 {
                                     index -= 1
                                 } else {
-                                    index = allCase.count - 1
+                                    index = allThemeCases.count - 1
                                 }
-                                SettingData.shared.selectedTheme = allCase[index]
+                                SettingData.shared.selectedTheme = allThemeCases[index]
                             } label: {
                                 Image(systemName: "arrowtriangle.left.fill")
                                     .resizable()
@@ -109,12 +109,12 @@ extension SettingView {
                                 .font(.custom(tasaExplorerBold, size: 16))
                             Button {
                                 var index = SettingData.shared.selectedTheme.rawValue
-                                if index < allCase.count - 1 {
+                                if index < allThemeCases.count - 1 {
                                     index += 1
                                 } else {
                                     index = 0
                                 }
-                                SettingData.shared.selectedTheme = allCase[index]
+                                SettingData.shared.selectedTheme = allThemeCases[index]
                             } label: {
                                 Image(systemName: "arrowtriangle.right.fill")
                                     .resizable()
@@ -140,13 +140,13 @@ extension SettingView {
             Slider(value: SettingData.shared.$musicVolume, in: 0.0...1.0)
                 .padding(.bottom, 10)
                 .onChange(of: SettingData.shared.musicVolume) { newValue in
-                    SoundManager.shared.updateVolume(isBackgroundMusic: true, volume: Float(newValue))
+                    SoundManager.shared.updateVolume(isBackgroundMusic: true, isAmbience: false, volume: Float(newValue))
                 }
             
             Text("Effects volume")
             Slider(value: SettingData.shared.$effectVolume, in: 0.0...1.0)
                 .onChange(of: SettingData.shared.effectVolume) { newValue in
-                    SoundManager.shared.updateVolume(isBackgroundMusic: false, volume: Float(newValue))
+                    SoundManager.shared.updateVolume(isBackgroundMusic: false, isAmbience: false, volume: Float(newValue))
                 }
         }
         .font(.custom(tasaExplorerBold, size: 20))
@@ -162,6 +162,9 @@ extension SettingView {
                     .padding(.leading, 50)
                 
                 Toggle("Ambiance", isOn: SettingData.shared.$isAmbianceOn)
+                    .onChange(of: SettingData.shared.isAmbianceOn, perform: { newValue in
+                        SoundManager.shared.updateVolume(isBackgroundMusic: false, isAmbience: true, volume: (newValue ? 0.5 : 0))
+                    })
                     .padding(.vertical, 10)
             }
 

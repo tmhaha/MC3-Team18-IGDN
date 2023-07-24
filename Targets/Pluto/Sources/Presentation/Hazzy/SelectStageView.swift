@@ -75,7 +75,8 @@ struct PlayButton: View {
         Button {
             if (currentStage >= selectedStage) {
 //                router.push(.Story)
-                SoundManager.shared.playBackgroundMusic(.Supermario)
+                SoundManager.shared.playBackgroundMusic(allMusicCases[selectedStage])
+                SoundManager.shared.playAmbience(allAmbienceCases[selectedStage])
             } else {
                 isAnimating.toggle()
                 hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)

@@ -5,16 +5,17 @@
 //  Created by 고혜지 on 2023/07/07.
 //
 
-import AVFoundation 
+import AVFoundation
 
 class SoundManager: NSObject, AVAudioPlayerDelegate {
     static let shared: SoundManager = SoundManager()
     private override init() {
         super.init()
-        playBackgroundMusic(.Gravity)
+        playBackgroundMusic(.Lobby)
     }
     
     private var backgroundMusic: AVAudioPlayer? = nil
+    private var ambienceSound: AVAudioPlayer? = nil
     private var soundEffects: [AVAudioPlayer] = []
 
     func playBackgroundMusic(_ music: Music) {
@@ -29,6 +30,23 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             backgroundMusic = audioPlayer
+        } catch let error {
+            print("Error playing sound: \(error.localizedDescription)")
+        }
+    }
+    
+    func playAmbience(_ ambience: Ambience) {
+        guard let soundURL = Bundle.main.url(forResource: ambience.rawValue, withExtension: "mp3") else {
+            print("Sound file not found.")
+            return
+        }
+        do {
+            let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer.numberOfLoops = -1
+            audioPlayer.volume = Float(SettingData.shared.isAmbianceOn ? 0.5 : 0)
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            ambienceSound = audioPlayer
         } catch let error {
             print("Error playing sound: \(error.localizedDescription)")
         }
@@ -52,11 +70,12 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
         }
     }
     
-    func updateVolume(isBackgroundMusic: Bool, volume: Float) {
-        if isBackgroundMusic == true {
+    func updateVolume(isBackgroundMusic: Bool, isAmbience: Bool, volume: Float) { // TODO: 수정필요!
+        if isBackgroundMusic {
             backgroundMusic?.volume = volume
-        }
-        else {
+        } else if isAmbience {
+            ambienceSound?.volume = volume
+        } else {
             for audioPlayer in soundEffects {
                 audioPlayer.volume = volume
             }
@@ -82,15 +101,43 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
     }
 }
 
-enum Music: String {
-    case Test = "Test"
-    case Gravity = "Gravity"
-    case Supermario = "Supermario"
+enum Music: String, CaseIterable {
+    case Chapter1 = "chapter 1"
+    case Chapter2 = "chapter 2"
+    case Chapter3 = "chapter 3"
+    case Chapter4 = "chapter 4"
+    case Chapter5 = "chapter 5"
+    case Chapter6 = "chapter 6"
+    case DrivingWings = "Driving Wings"
+    case EverythingEndsEventually = "everything ends eventually"
+    case Lobby = "lobby"
+    case LostInAnEmptyPlaceDreamcoreEmptycorePlaylist = "lost in an empty place dreamcore, emptycore playlist"
+    case MainGreenToBlue = "main-green to blue"
 }
+let allMusicCases: [Music] = Music.allCases
 
-enum Effect: String {
-    case A = "1"
-    case B = "2"
-    case C = "3"
+enum Ambience: String, CaseIterable {
+    case Chapter1 = "chap1 neptune_1"
+    case Chapter2 = "chap2 uranus"
+    case Chapter3 = "chap3 saturn"
+    case Chapter4 = "chap4 jupiter"
+    case Chapter5 = "chap5 mars"
+    case Chapter6 = "chap6 earth"
 }
+let allAmbienceCases: [Ambience] = Ambience.allCases
 
+enum Effect: String, CaseIterable {
+    case ChangeColor = "change color"
+    case Fail = "fail"
+    case Fail2 = "fail2"
+    case Pause = "pause"
+    case Play = "play"
+    case Success = "success"
+    case Thrust1 = "thrust1"
+    case Thrust2 = "thrust2"
+    case Thrust3 = "thrust3"
+    case Thrust6 = "thrust6"
+    case Thrust7 = "thrust7"
+    case ThrustEmpty = "thrust_empty"
+}
+let allEffectCases: [Effect] = Effect.allCases

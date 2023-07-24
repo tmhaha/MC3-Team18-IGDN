@@ -91,7 +91,7 @@ enum Theme: Int, CaseIterable {
 //    }
 }
 
-let allCase: [Theme] = Theme.allCases
+let allThemeCases: [Theme] = Theme.allCases
 
 // Onboarding
 let story: [(String, String)] = [
