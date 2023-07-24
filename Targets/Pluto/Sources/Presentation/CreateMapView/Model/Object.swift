@@ -8,10 +8,10 @@
 
 import UIKit
 
-struct Object {
+struct Object: ObstacleProtocol {
     var point: CGPoint
     var size: CGSize
-    var color: UIColor
+    var color: AstronautColor
     var path: CGPath
     var imageName: String
     var isClockWise: Bool
@@ -20,10 +20,22 @@ struct Object {
     init(creativeObject: CreativeObject) {
         self.point = creativeObject.point
         self.size = CreativeObject.CGSizeList[creativeObject.sizeIndex]
-        self.color = UIColor(hex: 0x000000)/* 어떻게 매핑할지 결정해야 합니다. */
         self.path = creativeObject.path
         self.imageName = Obstacle.image[creativeObject.colorIndex][creativeObject.sizeIndex][creativeObject.shapeIndex]
         self.isClockWise = Obstacle.isClockWise[creativeObject.shapeIndex]
+        
+        switch creativeObject.color {
+        case "creative_color_white":
+            self.color = .none
+        case "creative_color_red":
+            self.color = .two
+        case "creative_color_yellow":
+            self.color = .combine
+        case "creative_color_green":
+            self.color = .one
+        default:
+            self.color = .none
+        }
     }
 }
 

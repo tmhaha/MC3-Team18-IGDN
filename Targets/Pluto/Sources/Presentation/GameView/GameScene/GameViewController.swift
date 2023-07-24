@@ -91,21 +91,28 @@ extension GameViewController: ShowAlertDelegate {
             gameAlertView = GameAlertView(frame: .zero, alertType: .fail)
             gameManager.gameTimer.stopTimer()
             gameAlertView.upCompletion = restartGame
-            gameAlertView.downCompletion = restartGame
+            gameAlertView.downCompletion = backToList
             addAlertView()
             
         case .pause:
             gameAlertView = GameAlertView(frame: .zero, alertType: .pause)
             gameManager.gameTimer.stopTimer()
             gameAlertView.upCompletion = pauseUpButtonAction
-            gameAlertView.downCompletion = restartGame
+            gameAlertView.downCompletion = backToList
             addAlertView()
+            
         case .tutorial(activate: let activate, bottomString: let bottomString, topString: let topString):
-            var tutorial = TutorailView().makeUIView()
-            tutorial.backgroundColor = .clear
-            tutorialView = tutorial
+            var tutorial = TutorailView(buttonsActivated: activate, bottomText: bottomString, topText: topString)
+            tutorial.delegate = self
+            tutorialView = tutorial.makeUIView()
+            tutorialView.backgroundColor = .clear
             addTutorialView()
         }
+    }
+    
+    func backToList() {
+        gameManager.gameTimer.resetTimer()
+        navigationController?.popViewController(animated: false)
     }
     
     func pauseUpButtonAction() {
@@ -131,9 +138,12 @@ extension GameViewController: ShowAlertDelegate {
     }
 }
 
-extension GameViewController: TutorialDelegate {
+extension GameViewController: ViewDismissDelegate {
     
-    func tutorialSuccess() {
-        
+    func dismiss() {
+        gameManager.gameTimer.restartTimer()
+        tutorialView.removeFromSuperview()
+        gameManager.scene?.isPaused = false
+        scene?.isUserInteractionEnabled = true
     }
 }

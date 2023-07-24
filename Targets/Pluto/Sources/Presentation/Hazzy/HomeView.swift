@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @EnvironmentObject var router: Router<Path>
-    @State var isStageCleared: Bool = false
+    @State var isStageCleared: Bool = true
     @State var isBackgroundAppear: Bool = false
     @State var isAnimating: Bool = false
     
@@ -139,6 +139,12 @@ struct ButtonLayer: View {
                         HStack {
                             Text("creative mode")
                                 .font(.custom(tasaExplorerBold, size: fontSize))
+                                .onTapGesture {
+                                }
+                            
+                            
+                            
+                            
                             Image(systemName: "lock.fill")
                                 .resizable()
                                 .frame(width: 15, height: 20)
@@ -149,6 +155,9 @@ struct ButtonLayer: View {
                         ZStack {
                             Text("creative mode")
                                 .font(.custom(tasaExplorerBold, size: fontSize))
+                                .onTapGesture {
+                                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel()))
+                                }
                             Image("Ellipse")
                                 .padding(.leading, 130)
                                 .padding(.bottom, 10)

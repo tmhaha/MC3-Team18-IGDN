@@ -25,14 +25,15 @@ class GameManager: ObservableObject {
     var nodes: Nodes
     var backGround: BackGround
     var label = SKLabelNode()
+    var percentLabel = SKLabelNode()
     var map: [ObstacleProtocol]
     
     // MARK: Node-Action Dictionary
     var nodeActionDictionary: [String : SKAction] = [:]
     
     // MARK: Timer
-    let gameTimer = GameTimer()
-    let throatTimer = GameTimer()
+    let gameTimer = GameTimer(timeInterval: 0.02)
+    let throatTimer = GameTimer(timeInterval: 1)
     
     // MARK: Delegate
     var delegate: ShowAlertDelegate? = nil
@@ -43,6 +44,11 @@ class GameManager: ObservableObject {
     
     // MARK: Temp
     var ObstacleIndex = 0
+    var plentTime = 0
+    private var isNodeMove = false
+    var succesPercent: Int {
+        Int(CGFloat(ObstacleIndex) / CGFloat(map.count) * 100)
+    }
     
     
     init(constants: GameConstants, map: [ObstacleProtocol]) {
@@ -60,11 +66,11 @@ class GameManager: ObservableObject {
     }
     
     func restartGame(scene: SKScene) {
-        
         settingGame(scene: scene)
     }
     
     func settingGame(scene: SKScene) {
+        scene.isUserInteractionEnabled = false
         self.scene = scene
         
         scene.addChilds(nodes.all)
@@ -74,58 +80,63 @@ class GameManager: ObservableObject {
         nodes.setName()
         nodes.imageSetting()
         scene.addChild(label)
+        percentLabel.position = CGPoint(x: scene.view!.bounds.width / 2, y: 200)
+        scene.addChild(percentLabel)
+        
         label.position = CGPoint(x: scene.view!.bounds.width / 2, y: scene.view!.bounds.height / 2)
+        
         label.text = "\(throatGauge)"
+        percentLabel.text = "\(0.0)%"
     }
     
     func startGame() {
-        
-        nodes.astronaut.startGame()
         gameTimer.startTimer(completion: gameTimerAction)
     }
     
-    func gameTimerAction(_ x: Int) {
-        
+    func gameTimerAction(_ x: Double) {
         // backGroundLayers
-        let index = x % 30
-        
-        let backgroundNodes = backGround.timeLayer[index]
-        scene?.addChilds(backgroundNodes.map { $0 })
-        
-        for node in backgroundNodes {
-            node.runAndRemove(SKAction.sequence([SKAction.fadeIn(withDuration: 1), SKAction.fadeOut(withDuration: 1)]).forever)
-            node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration), withKey: "moveBackground")
-        }
-        
-       
-        if x % gameConstants.planetsDistance == 0 {
-
-
-            let TempPlanetNode = nodes.planets[ObstacleIndex]
-            TempPlanetNode.delegate = self
-            scene?.addChild(TempPlanetNode)
-            TempPlanetNode.startDirectionNodesRotation()
+        if x.truncatingRemainder(dividingBy: 1.0) == 0 {
             
-            TempPlanetNode.runAndRemove(SKAction.moveTo(x: -100, duration: gameConstants.planetDuration))
-            ObstacleIndex += 1
+            let index = Int(x) % 30
+            
+            let backgroundNodes = backGround.timeLayer[index]
+            scene?.addChilds(backgroundNodes.map { $0 })
+            
+            for node in backgroundNodes {
+                node.runAndRemove(SKAction.sequence([SKAction.fadeIn(withDuration: 1), SKAction.fadeOut(withDuration: 1)]).forever)
+                node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration), withKey: "moveBackground")
+            }
         }
-//        if ObstacleIndex >= map.count {
+        
+        if ObstacleIndex >= map.count {
+//            gameTimer.stopTimer()
 //            scene?.isPaused = true
 //            delegate?.showAlert(alertType: .success)
-//        }
-//        else {
-//            while CGFloat(x * 10) < map[ObstacleIndex].point.x {
-//
-//                var currentData = map[ObstacleIndex]
-//                var planet = currentData.makePlanetNode()
-//                planet.delegate = self
-//                scene?.addChild(planet)
-//                planet.startDirectionNodesRotation()
-//                planet.runAndRemove(SKAction.moveTo(x: -150, duration: gameConstants.planetDuration))
-//
-//                ObstacleIndex += 1
-//            }
-//        }
+        }
+        else {
+            while ObstacleIndex < map.count && Double(plentTime) > map[ObstacleIndex].point.x {
+                let currentData = map[ObstacleIndex]
+                let planet = currentData.makePlanetNode()
+                planet.delegate = self
+                scene?.addChild(planet)
+                planet.startDirectionNodesRotation()
+                planet.runAndRemove(SKAction.moveTo(x: -150, duration: gameConstants.planetDuration))
+
+                ObstacleIndex += 1
+                print("@LOG")
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
+                    self.percentLabel.text = "\(self.succesPercent)%"
+                }
+                if !isNodeMove {
+                    isNodeMove = true
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        self.scene?.isUserInteractionEnabled = true
+                        self.nodes.astronaut.startGame()
+                    }
+                }
+            }
+        }
+        plentTime += 1
     }
         
     func binding() {
@@ -141,7 +152,7 @@ class GameManager: ObservableObject {
                     if self.nodes.rightButton.contains(location) {
                         if throatGauge > 0 {
                             nodes.astronaut.startTurnCounterClockwise()
-                            throatTimer.startTimer(timeInterval: 0.5) { _ in
+                            throatTimer.startTimer { _ in
                                 self.throatGauge -= 10
                                 self.throatGauge = max(self.throatGauge, 0)
                                 self.label.text = "\(self.throatGauge)"
@@ -151,7 +162,7 @@ class GameManager: ObservableObject {
                     else if self.nodes.leftButton.contains(location){
                         if throatGauge > 0 {
                             nodes.astronaut.startTurnClockwise()
-                            throatTimer.startTimer(timeInterval: 0.5) { _ in
+                            throatTimer.startTimer { _ in
                                 self.throatGauge -= 10
                                 self.throatGauge = max(self.throatGauge, 0)
                                 self.label.text = "\(self.throatGauge)"
@@ -184,7 +195,10 @@ class GameManager: ObservableObject {
                     }
                     if self.nodes.pauseButton.contains(location) {
                         scene.isPaused = true
-                        delegate?.showAlert(alertType: .pause)
+                        gameTimer.stopTimer()
+                        delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
+                                                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit"))
+                        //delegate?.showAlert(alertType: .pause)
                     }
                 }
             }
@@ -194,7 +208,7 @@ class GameManager: ObservableObject {
             .sink {  [weak self] (touches, scene) in
                 
                 guard let self = self else { return }
-                
+
                 for touch in touches {
                     let location = touch.location(in: scene)
                     
@@ -212,7 +226,6 @@ class GameManager: ObservableObject {
         
         $contact
             .sink { [weak self] contact in
-                
                 guard let self = self else { return }
                 
                 let nodeA = contact.bodyA.node
@@ -221,17 +234,16 @@ class GameManager: ObservableObject {
                 // 충돌 처리 로직을 추가합니다.
                 if (nodeA?.name == "astronaut" && nodeB?.name == "wall") || (nodeA?.name == "wall" && nodeB?.name == "astronaut") {
                     self.scene?.isPaused = true
-                    //delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise], bottomString: "", topString: ""))
                     delegate?.showAlert(alertType: .fail)
                 }
                 else if (nodeA?.name == "astronaut" && nodeB?.name == "planet") || (nodeA?.name == "planet" && nodeB?.name == "astronaut") {
-                    if nodeA?.name == "planet", let astronaut = nodeB as? AstronautNode, let planet = nodeA as? TempPlanetNode {
-                        if planet.color == astronaut.type {
-                            
+                    if nodeA?.name == "planet", let astronaut = nodeB as? AstronautNode, let planet = nodeA as? PlanetNode {
+                        if planet.astronautColor == astronaut.type {
+
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
                             throatTimer.resetTimer()
-                            throatTimer.startTimer(timeInterval: 0.5) { _ in
+                            throatTimer.startTimer { _ in
                                 self.throatGauge += 10
                                 self.throatGauge = min(self.throatGauge, 100)
                                 self.label.text = "\(self.throatGauge)"
@@ -246,12 +258,12 @@ class GameManager: ObservableObject {
                             delegate?.showAlert(alertType: .fail)
                         }
                     }
-                    else if let astronaut = nodeA as? AstronautNode, let planet = nodeB as? TempPlanetNode {
-                        if planet.color == astronaut.type {
+                    else if let astronaut = nodeA as? AstronautNode, let planet = nodeB as? PlanetNode {
+                        if planet.astronautColor == astronaut.type {
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
                             throatTimer.resetTimer()
-                            throatTimer.startTimer(timeInterval: 0.5) { _ in
+                            throatTimer.startTimer { _ in
                                 self.throatGauge += 10
                                 self.throatGauge = min(self.throatGauge, 100)
                                 self.label.text = "\(self.throatGauge)"
@@ -289,8 +301,8 @@ extension GameManager {
     }
     
     class Nodes {
-        
-        var astronaut = AstronautNode(color: .red, size: CGSize(width: 30, height: 30))
+
+        var astronaut = AstronautNode(color: .white, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
         let rightButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
         let changeColorOne = SKSpriteNode(color: AstronautColor.one.color, size: CGSize(width: 85, height: 85))
@@ -313,7 +325,7 @@ extension GameManager {
             rightButton.texture = texture2
             rightButton.zRotation = CGFloat.pi
             
-            let texture1 = SKTexture(imageNamed: "CounterClockWiseButton")
+            let texture1 = SKTexture(imageNamed: "ClockWiseButton")
             leftButton.texture = texture1
             
             let pauseButtonTexture = SKTexture(imageNamed: "buttonPause")

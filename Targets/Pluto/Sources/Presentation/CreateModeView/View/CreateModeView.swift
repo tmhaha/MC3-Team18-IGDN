@@ -28,7 +28,6 @@ final class CreateModeView: UIView {
     
     init() {
         super.init(frame: .zero)
- 
     }
     
     override func draw(_ rect: CGRect) {

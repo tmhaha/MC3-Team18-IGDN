@@ -10,13 +10,18 @@ import Foundation
 class GameTimer {
     
     private var timer: Timer?
-    private var afterStart: Int = 0
-    private var timingAction: (Int) -> () = { _ in }
-    var now: Int {
+    private var afterStart: Double = 0
+    var timeInterval: Double
+    private var timingAction: (Double) -> () = { _ in }
+    var now: Double {
         get { afterStart }
     }
     
-    func startTimer(timeInterval: TimeInterval = 1.0, completion: @escaping (Int) -> ()) {
+    init(timeInterval: Double) {
+        self.timeInterval = timeInterval
+    }
+    
+    func startTimer(completion: @escaping (Double) -> ()) {
         timingAction = completion
         timer = Timer.scheduledTimer(withTimeInterval: timeInterval, repeats: true) { [weak self] timer in
             guard let self = self else {
@@ -24,7 +29,7 @@ class GameTimer {
                 return
             }
             timingAction(self.afterStart)
-            self.afterStart += 1
+            self.afterStart += timeInterval
         }
     }
     

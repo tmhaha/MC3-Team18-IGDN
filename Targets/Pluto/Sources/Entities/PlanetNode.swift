@@ -14,7 +14,7 @@ class PlanetNode: SKSpriteNode {
     var gameConstants = GameConstants()
     var delegate: PassRotationingAstronautPointDelegate? = nil
     var status: Status = .none
-    //var color: AstronautColor = AstronautColor.allCases.randomElement()!
+    var astronautColor: AstronautColor = .none
     var astronautNode: AstronautNode? = nil
     var contactPoint: CGPoint = CGPoint()
     var contactNode: SKShapeNode = SKShapeNode()
@@ -49,7 +49,6 @@ class PlanetNode: SKSpriteNode {
     
     
     func startRotation(at point: CGPoint, thatNodePoint: AstronautNode) {
-        
         let followAction = SKAction.follow(path, asOffset: false, orientToPath: true, duration: gameConstants.planetFindContactPointDuration)
         followAction.timingFunction = timingFunc
         
