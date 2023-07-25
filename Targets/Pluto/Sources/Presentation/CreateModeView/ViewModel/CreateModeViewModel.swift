@@ -16,7 +16,7 @@ final class CreateModeViewModel {
         case playButtonDidTap(indexPath: IndexPath)
         case editButtonDidTap(indexPath: IndexPath)
         case deleteButtonDidTap(indexPath: IndexPath)
-        case cellDidTap(indexPath: IndexPath)
+        case cellDidTap
     }
     
     enum Output {
@@ -56,8 +56,8 @@ final class CreateModeViewModel {
                     UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
                 }
                 self?.output.send(.deleteButtonDidTapOutput(indexPath: indexPath))
-            case .cellDidTap(indexPath: let indexPath):
-                self.output.send(.reload)
+            case .cellDidTap:
+                self?.output.send(.reload)
             }
         }.store(in: &subscriptions)
 

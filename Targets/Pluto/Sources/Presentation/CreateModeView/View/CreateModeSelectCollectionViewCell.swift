@@ -25,7 +25,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     lazy var solidLine = UIImageView()
     lazy var preview = UIImageView()
     lazy var playButton = UIButton()
-    lazy var chevronRight = UIImageView()
     lazy var editButton = UIButton()
     lazy var deleteButton = UIButton()
     
@@ -43,7 +42,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         isDeleteButtonSelected = false
-        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight, deleteButton]
+        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 $0.isHidden = false
             }
@@ -58,7 +57,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     private func addSubviews() {
         
-        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight, deleteButton]
+        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 contentView.addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -112,11 +111,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             playButton.widthAnchor.constraint(equalToConstant: 120),
             playButton.heightAnchor.constraint(equalToConstant: 35),
             
-            chevronRight.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-            chevronRight.trailingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: -10),
-            chevronRight.widthAnchor.constraint(equalToConstant: 7.66),
-            chevronRight.heightAnchor.constraint(equalToConstant: 13.66),
-            
             editButton.leadingAnchor.constraint(equalTo: playButton.leadingAnchor),
             editButton.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 85),
@@ -160,34 +154,36 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         deleteButton.backgroundColor = UIColor(hex: 0xB4C1FF)
         deleteButton.layer.cornerRadius = 5
 
-        let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
-        ]
+//        let attributes: [NSAttributedString.Key: Any] = [
+//            .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
+//        ]
+//
+//        let playButtonString = NSAttributedString(string: "play", attributes: attributes)
+//        playButton.setAttributedTitle(playButtonString, for: .normal)
+//        playButton.layer.cornerRadius = 5
+//        playButton.setTitleColor(.white, for: .normal)
+//        playButton.layer.borderWidth = 2
+//        playButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
+//        playButton.backgroundColor = UIColor(hex: 0x002EFE)
+//
+//        let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
+//        editButton.setAttributedTitle(editButtonString, for: .normal)
+//        editButton.layer.cornerRadius = 5
+//        editButton.setTitleColor(UIColor(hex: 0x002EFE), for: .normal)
+//        editButton.layer.borderWidth = 2
+//        editButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
         
-        let playButtonString = NSAttributedString(string: "play", attributes: attributes)
-        playButton.setAttributedTitle(playButtonString, for: .normal)
-        playButton.layer.cornerRadius = 5
-        playButton.setTitleColor(.white, for: .normal)
-        playButton.layer.borderWidth = 2
-        playButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
-        playButton.backgroundColor = UIColor(hex: 0x002EFE)
+        playButton.setImage(UIImage(named: "play_up"), for: .normal)
+        playButton.setImage(UIImage(named: "play_down"), for: .highlighted)
         
-        chevronRight.image = UIImage(named: "chevron_right")
-        chevronRight.tintColor = .white
-        
-        let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
-        editButton.setAttributedTitle(editButtonString, for: .normal)
-        editButton.layer.cornerRadius = 5
-        editButton.setTitleColor(UIColor(hex: 0x002EFE), for: .normal)
-        editButton.layer.borderWidth = 2
-        editButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
-        
+        editButton.setImage(UIImage(named: "edit_up"), for: .normal)
+        editButton.setImage(UIImage(named: "edit_down"), for: .highlighted)
     }
     
     func configure(item: [CreativeMapModel], section: Int, indexPath: IndexPath) {
         self.indexPath = indexPath
         if section == 0 {
-            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight, deleteButton]
+            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, deleteButton]
                 .forEach {
                     $0.isHidden = true
                 }
@@ -225,18 +221,47 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     @objc private func buttonTapped(_ sender: UIButton) {
         switch sender {
         case playButton:
-            input.send(.playButtonDidTap(indexPath: indexPath))
+            animationForButton(sender: sender) {
+                self.input.send(.playButtonDidTap(indexPath: self.indexPath))
+            }
         case editButton:
-            input.send(.editButtonDidTap(indexPath: indexPath))
+            animationForButton(sender: sender) {
+                self.input.send(.editButtonDidTap(indexPath: self.indexPath))
+            }
         case deleteButton:
             isDeleteButtonSelected.toggle()
             sender.backgroundColor = isDeleteButtonSelected ? UIColor(hex: 0xED5959) : UIColor(hex: 0xB4C1FF)
             if !isDeleteButtonSelected {
                 input.send(.deleteButtonDidTap(indexPath: indexPath))
+            } else {
+                animationForButton(sender: sender)
             }
         default:
             fatalError()
         }
     }
+}
 
+extension CreateModeSelectCollectionViewCell {
+    private func animationForButton(sender: UIButton, completion: (() -> Void)?) {
+        UIView.animate(withDuration: 0.2, animations: {
+            sender.transform = CGAffineTransform(scaleX: 1.1, y: 1.1)
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                sender.transform = .identity
+                completion?()
+            }
+        }
+        
+    }
+    
+    private func animationForButton(sender: UIButton) {
+        UIView.animate(withDuration: 0.2, animations: {
+            sender.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        }) { _ in
+            UIView.animate(withDuration: 0.1) {
+                sender.transform = .identity
+            }
+        }
+    }
 }

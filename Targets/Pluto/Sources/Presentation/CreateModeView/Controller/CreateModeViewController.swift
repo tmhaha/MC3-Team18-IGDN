@@ -136,7 +136,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         if indexPath.section == 0 {
             input.send(.createMapButtonDidTap)
         } else {
-            input.send(.cellDidTap(indexPath: indexPath))
+            input.send(.cellDidTap)
         }
     }
     
