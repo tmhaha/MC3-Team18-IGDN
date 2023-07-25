@@ -12,7 +12,7 @@ struct HomeView: View {
     @State var isStageCleared: Bool = true
     @State var isBackgroundAppear: Bool = false
     @State var isAnimating: Bool = false
-    
+
     var body: some View {
         ZStack {
             BackgroundLayer()
@@ -120,7 +120,13 @@ struct ButtonLayer: View {
 
             Button {
                 if isStageCleared {
-                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel()))
+                    var mapList: [CreativeMapModel]
+                    if let loadedMapList = UserDefaultsManager.loadCreativeMapsFromUserDefaults() {
+                        mapList = loadedMapList
+                    } else {
+                        mapList = []
+                    }
+                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel(mapList: mapList)))
                 } else {
                     isAnimating.toggle()
                     hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)
