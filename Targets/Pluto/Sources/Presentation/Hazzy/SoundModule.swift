@@ -17,6 +17,7 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
     private var backgroundMusic: AVAudioPlayer? = nil
     private var ambienceSound: AVAudioPlayer? = nil
     private var soundEffects: [AVAudioPlayer] = []
+    private var thrustSound: AVAudioPlayer? = nil
 
     func playBackgroundMusic(_ music: Music) {
         guard let soundURL = Bundle.main.url(forResource: music.rawValue, withExtension: "mp3") else {
@@ -70,6 +71,33 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
         }
     }
     
+    func playThrust() {
+        guard let soundURL = Bundle.main.url(forResource: "thrust5", withExtension: "mp3") else {
+            print("Sound file not found.")
+            return
+        }
+        do {
+            let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
+            audioPlayer.volume = Float(SettingData.shared.effectVolume)
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            thrustSound = audioPlayer
+        } catch let error {
+            print("Error playing sound: \(error.localizedDescription)")
+        }
+    }
+    
+    func stopThrust() {
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+            if self.thrustSound!.volume > 0.1 {
+                self.thrustSound!.volume -= 0.1
+            } else {
+                self.thrustSound!.stop()
+                timer.invalidate()
+            }
+        }
+    }
+    
     func updateVolume(isBackgroundMusic: Bool, isAmbience: Bool, volume: Float) { // TODO: 수정필요!
         if isBackgroundMusic {
             backgroundMusic?.volume = volume
@@ -81,7 +109,7 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
             }
         }
     }
-
+    
     // AVAudioPlayerDelegate method to remove stopped audio players from the array
     /*
      ChatGPT
@@ -132,11 +160,11 @@ enum Effect: String, CaseIterable {
     case Pause = "pause"
     case Play = "play"
     case Success = "success"
-    case ThrustEmpty = "thrust_empty"
-    case Thrust1 = "thrust1"
-    case Thrust2 = "thrust2"
-    case Thrust3 = "thrust3"
-    case Thrust4 = "thrust4"
-    case Thrust5 = "thrust5"
+//    case ThrustEmpty = "thrust_empty"
+//    case Thrust1 = "thrust1"
+//    case Thrust2 = "thrust2"
+//    case Thrust3 = "thrust3"
+//    case Thrust4 = "thrust4"
+//    case Thrust5 = "thrust5"
 }
 let allEffectCases: [Effect] = Effect.allCases
