@@ -24,7 +24,6 @@ class GameManager: ObservableObject {
     // MARK: Nodes
     var nodes: Nodes
     var backGround: BackGround
-    var label = SKLabelNode()
     var percentLabel = SKLabelNode()
     var map: [ObstacleProtocol]
     
@@ -33,13 +32,13 @@ class GameManager: ObservableObject {
     
     // MARK: Timer
     let gameTimer = GameTimer(timeInterval: 0.02)
-    let throatTimer = GameTimer(timeInterval: 1)
     
     // MARK: Delegate
     var delegate: ShowAlertDelegate? = nil
     
     // MARK: private
     @Published var throatGauge: Int = 100
+
     private var gameConstants: GameConstants
     
     // MARK: Temp
@@ -79,13 +78,11 @@ class GameManager: ObservableObject {
         nodes.setEachPhisicalBody()
         nodes.setName()
         nodes.imageSetting()
-        scene.addChild(label)
+
         percentLabel.position = CGPoint(x: scene.view!.bounds.width / 2, y: 200)
         scene.addChild(percentLabel)
         
-        label.position = CGPoint(x: scene.view!.bounds.width / 2, y: scene.view!.bounds.height / 2)
-        
-        label.text = "\(throatGauge)"
+        nodes.leftThroat.delegate = self
         percentLabel.text = "\(0.0)%"
     }
     
@@ -123,7 +120,7 @@ class GameManager: ObservableObject {
                 planet.runAndRemove(SKAction.moveTo(x: -150, duration: gameConstants.planetDuration))
 
                 ObstacleIndex += 1
-                print("@LOG")
+
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
                     self.percentLabel.text = "\(self.succesPercent)%"
                 }
@@ -150,23 +147,17 @@ class GameManager: ObservableObject {
                     let location = touch.location(in: scene)
                     
                     if self.nodes.rightButton.contains(location) {
-                        if throatGauge > 0 {
+                        if throatGauge > 0 && nodes.astronaut.status != .inOribt {
                             nodes.astronaut.startTurnCounterClockwise()
-                            throatTimer.startTimer { _ in
-                                self.throatGauge -= 10
-                                self.throatGauge = max(self.throatGauge, 0)
-                                self.label.text = "\(self.throatGauge)"
-                            }
+                            nodes.leftThroat.useThroat()
+                            nodes.rightThroat.useThroat()
                         }
                     }
                     else if self.nodes.leftButton.contains(location){
-                        if throatGauge > 0 {
+                        if throatGauge > 0  && nodes.astronaut.status != .inOribt{
                             nodes.astronaut.startTurnClockwise()
-                            throatTimer.startTimer { _ in
-                                self.throatGauge -= 10
-                                self.throatGauge = max(self.throatGauge, 0)
-                                self.label.text = "\(self.throatGauge)"
-                            }
+                            nodes.leftThroat.useThroat()
+                            nodes.rightThroat.useThroat()
                         }
                     }
                     
@@ -177,7 +168,8 @@ class GameManager: ObservableObject {
                             nodes.astronaut = newAstronuat
                             nodes.setAstronuat()
                             scene.addChild(nodes.astronaut)
-                            throatTimer.resetTimer()
+                            nodes.leftThroat.stopUse()
+                            nodes.rightThroat.stopUse()
                             nodes.astronaut.startFoward()
                         }
                     }
@@ -187,7 +179,8 @@ class GameManager: ObservableObject {
                             guard let newAstronuat = nodes.astronaut.orbitPlanet?.changedColor(to: newColor) else { return }
                             nodes.astronaut = newAstronuat
                             nodes.setAstronuat()
-                            throatTimer.resetTimer()
+                            nodes.leftThroat.stopUse()
+                            nodes.rightThroat.stopUse()
                             scene.addChild(nodes.astronaut)
                             
                             nodes.astronaut.startFoward()
@@ -213,11 +206,13 @@ class GameManager: ObservableObject {
                     let location = touch.location(in: scene)
                     
                     if self.nodes.rightButton.contains(location) {
-                        throatTimer.resetTimer()
+                        nodes.leftThroat.stopUse()
+                        nodes.rightThroat.stopUse()
                         nodes.astronaut.endTurnCounterClockwise()
                     }
                     else if self.nodes.leftButton.contains(location){
-                        throatTimer.resetTimer()
+                        nodes.leftThroat.stopUse()
+                        nodes.rightThroat.stopUse()
                         nodes.astronaut.endTurnClockwise()
                     }
                 }
@@ -242,12 +237,9 @@ class GameManager: ObservableObject {
 
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
-                            throatTimer.resetTimer()
-                            throatTimer.startTimer { _ in
-                                self.throatGauge += 10
-                                self.throatGauge = min(self.throatGauge, 100)
-                                self.label.text = "\(self.throatGauge)"
-                            }
+
+                            nodes.leftThroat.fillThroat()
+                            nodes.rightThroat.fillThroat()
                             planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 astronaut.removeFromParent()
@@ -262,12 +254,9 @@ class GameManager: ObservableObject {
                         if planet.astronautColor == astronaut.type {
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
-                            throatTimer.resetTimer()
-                            throatTimer.startTimer { _ in
-                                self.throatGauge += 10
-                                self.throatGauge = min(self.throatGauge, 100)
-                                self.label.text = "\(self.throatGauge)"
-                            }
+
+                            nodes.leftThroat.fillThroat()
+                            nodes.rightThroat.fillThroat()
                             planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
                                 astronaut.removeFromParent()
@@ -284,8 +273,10 @@ class GameManager: ObservableObject {
             .store(in: &bag)
         
         $throatGauge
-            .sink { gauge in
-                if gauge <= 0 {
+            .sink { gague in
+                if gague < 0 {
+                    self.nodes.leftThroat.stopUse()
+                    self.nodes.rightThroat.stopUse()
                     self.nodes.astronaut.removeAllActions()
                     self.nodes.astronaut.startFoward()
                 }
@@ -304,7 +295,9 @@ extension GameManager {
 
         var astronaut = AstronautNode(color: .white, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
+        let leftThroat = ThroatProgressNode()
         let rightButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
+        let rightThroat = ThroatProgressNode()
         let changeColorOne = SKSpriteNode(color: AstronautColor.one.color, size: CGSize(width: 85, height: 85))
         let changeColorTwo = SKSpriteNode(color: AstronautColor.two.color, size: CGSize(width: 85, height: 85))
         let leftWall = SKSpriteNode()
@@ -316,7 +309,7 @@ extension GameManager {
         
         
         var all: [SKNode] {
-            [astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
+            [leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
         }
         
         func imageSetting() {
@@ -388,21 +381,26 @@ extension GameManager {
             pauseButton.zPosition = 2
             
             leftButton.positionFromLeftBottom(46, 69.5)
+            leftThroat.position = leftButton.position
             changeColorOne.positionFromLeftBottom(259, 69.5)
             changeColorOne.zPosition = 2
             leftButton.zPosition = 2
+            leftThroat.zPosition = 2
         
             changeColorTwo.positionFromLeftBottom(46, 689.5)
             rightButton.positionFromLeftBottom(259, 689.5)
+            rightThroat.position = rightButton.position
+            rightThroat.zRotation = CGFloat.pi
+            rightThroat.zPosition = 2
             rightButton.zPosition = 2
             changeColorTwo.zPosition = 2
             
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
             topWall.size = CGSize(width: size.width, height: 116)
-            topWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 1)
+            topWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.1)
             bottomWall.size = CGSize(width: size.width, height: 116)
-            bottomWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 1)
+            bottomWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.1)
             
             leftWall.position = CGPoint(x: 0, y: 0)
             rightWall.position = CGPoint(x: size.width - 1 , y: 0)
@@ -548,5 +546,13 @@ extension GameManager: PassRotationingAstronautPointDelegate {
             scene?.isPaused = true
             delegate?.showAlert(alertType: .fail)
         }
+    }
+}
+
+extension GameManager: SendThroatGaugeDelegate {
+    func send(gague: CGFloat) {
+        var temp = gague * 100
+
+        self.throatGauge = Int(temp)
     }
 }
