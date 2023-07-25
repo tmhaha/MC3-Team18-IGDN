@@ -114,27 +114,14 @@ class CreateMapViewController: UIViewController {
             }
         case self.contentView.topToolView.saveButton:
             if viewModel.isEditing {
-                if let capturedImage = self.contentView.scrollView.screenshot() {
-                    // MARK: 이미지 리사이징 여부 확정시 사용
-    //                // 이미지 크기를 166.63*70 비율로 조정
-    //                if let resizedImage = capturedImage.resize(to: CGSize(width: 166.63, height: 70)){
-    //                    // 이미지 저장
-    //                    if let imageData = resizedImage.pngData() {
-    //                        let previewId = UUID().uuidString
-    //                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
-    //                        UserDefaults.standard.set(imageData, forKey: previewId)
-    //                        self.viewModel.previewId = previewId
-    //                        input.send(.saveButtonDidTap)
-    //                    }
-    //                }
-                    // 이미지 저장
-                    if let imageData = capturedImage.pngData() {
-                        let previewId = UUID().uuidString
-                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
-                        UserDefaults.standard.set(imageData, forKey: previewId)
-                        self.viewModel.previewId = previewId
-                        input.send(.saveButtonDidTap)
-                    }
+                let capturingView = self.contentView
+                capturingView.gridContainerView.isHidden = true
+                if let capturedImage = capturingView.scrollView.screenshot(),
+                   let imageData = capturedImage.pngData() {
+                    let previewId = UUID().uuidString
+                    UserDefaults.standard.set(imageData, forKey: previewId)
+                    self.viewModel.previewId = previewId
+                    input.send(.saveButtonDidTap)
                 }
             } else {
                 showNameInputView(isShown: true)
@@ -153,28 +140,15 @@ class CreateMapViewController: UIViewController {
                 viewModel.map?.titleLabel = self.contentView.nameInputView.nameTextField.text!
             }
             showContentView(isShown: true)
-            if let capturedImage = self.contentView.scrollView.screenshot() {
-                // MARK: 이미지 리사이징 여부 확정시 사용
-//                // 이미지 크기를 166.63*70 비율로 조정
-//                if let resizedImage = capturedImage.resize(to: CGSize(width: 166.63, height: 70)){
-//                    // 이미지 저장
-//                    if let imageData = resizedImage.pngData() {
-//                        let previewId = UUID().uuidString
-//                        UserDefaults.standard.removeObject(forKey: viewModel.previewId)
-//                        UserDefaults.standard.set(imageData, forKey: previewId)
-//                        self.viewModel.previewId = previewId
-//                        input.send(.saveButtonDidTap)
-//                    }
-//                }
-                // 이미지 저장
-                if let imageData = capturedImage.pngData() {
-                    let previewId = UUID().uuidString
-                    UserDefaults.standard.set(imageData, forKey: previewId)
-                    self.viewModel.previewId = previewId
-                    input.send(.saveButtonDidTap)
-                }
+            let capturingView = self.contentView
+            capturingView.gridContainerView.isHidden = true
+            if let capturedImage = capturingView.scrollView.screenshot(),
+               let imageData = capturedImage.pngData() {
+                let previewId = UUID().uuidString
+                UserDefaults.standard.set(imageData, forKey: previewId)
+                self.viewModel.previewId = previewId
+                input.send(.saveButtonDidTap)
             }
-            
         default:
             fatalError()
         }
@@ -272,21 +246,25 @@ extension CreateMapViewController: UITextFieldDelegate {
 
 fileprivate extension UIScrollView {
     func screenshot() -> UIImage? {
-        UIGraphicsBeginImageContext(self.contentSize)
-                
-                let savedContentOffset = self.contentOffset
-                let savedFrame = self.frame
-                
-                self.contentOffset = CGPoint.zero
-                self.layer.frame = CGRect(x: 0, y: 0, width: self.contentSize.width, height: self.contentSize.height)
-                
-                self.layer.render(in: UIGraphicsGetCurrentContext()!)
-                let image = UIGraphicsGetImageFromCurrentImageContext()
-                
-                self.contentOffset = savedContentOffset
-                self.frame = savedFrame
-                UIGraphicsEndImageContext()
-                return image
+        let contentWidth = self.contentSize.width
+        let contentHeight = self.contentSize.height
+        let captureWidth = contentHeight * 2
+        
+        UIGraphicsBeginImageContext(CGSize(width: captureWidth, height: contentHeight))
+        
+        let savedContentOffset = self.contentOffset
+        let savedFrame = self.frame
+        
+        self.contentOffset = CGPoint.zero
+        self.layer.frame = CGRect(x: 0, y: 0, width: contentWidth, height: contentHeight)
+        
+        self.layer.render(in: UIGraphicsGetCurrentContext()!)
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        self.contentOffset = savedContentOffset
+        self.frame = savedFrame
+        UIGraphicsEndImageContext()
+        return image
     }
 }
 
