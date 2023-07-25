@@ -120,7 +120,7 @@ struct ButtonLayer: View {
 
             Button {
                 if isStageCleared {
-                    // NavigationLink
+                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel()))
                 } else {
                     isAnimating.toggle()
                     hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)
