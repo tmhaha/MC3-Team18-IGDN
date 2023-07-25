@@ -131,9 +131,9 @@ extension GameViewController: ShowAlertDelegate {
     }
 }
 
-extension GameViewController: TutorialDelegate {
-    
-    func tutorialSuccess() {
-        
-    }
-}
+//extension GameViewController: TutorialDelegate {
+//
+//    func tutorialSuccess() {
+//
+//    }
+//}

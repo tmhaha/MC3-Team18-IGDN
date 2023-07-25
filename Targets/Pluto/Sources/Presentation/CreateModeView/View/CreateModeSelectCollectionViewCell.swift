@@ -14,7 +14,9 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     var indexPath: IndexPath!
+    
     private var textFieldIsActive = false
+    public var isDeleteButtonSelected = false
     
     lazy var title = UITextField()
     lazy var dateDescriptionLabel = UILabel()
@@ -25,6 +27,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     lazy var playButton = UIButton()
     lazy var chevronRight = UIImageView()
     lazy var editButton = UIButton()
+    lazy var deleteButton = UIButton()
     
     lazy var imageView = UIImageView()
     lazy var descriptions = UILabel()
@@ -39,7 +42,8 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     // cell 재사용 문제 해결
     override func prepareForReuse() {
         super.prepareForReuse()
-        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight]
+        isDeleteButtonSelected = false
+        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight, deleteButton]
             .forEach {
                 $0.isHidden = false
             }
@@ -54,7 +58,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     private func addSubviews() {
         
-        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight]
+        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, chevronRight, deleteButton]
             .forEach {
                 contentView.addSubview($0)
                 $0.translatesAutoresizingMaskIntoConstraints = false
@@ -100,12 +104,12 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             
             preview.leadingAnchor.constraint(equalTo: title.leadingAnchor),
             preview.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -25),
-            preview.widthAnchor.constraint(equalToConstant: 166.63),
+            preview.widthAnchor.constraint(equalToConstant: 140),
             preview.heightAnchor.constraint(equalToConstant: 70),
             
             playButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -19.06),
             playButton.topAnchor.constraint(equalTo: preview.topAnchor),
-            playButton.widthAnchor.constraint(equalToConstant: 94.94),
+            playButton.widthAnchor.constraint(equalToConstant: 120),
             playButton.heightAnchor.constraint(equalToConstant: 35),
             
             chevronRight.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
@@ -113,11 +117,15 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             chevronRight.widthAnchor.constraint(equalToConstant: 7.66),
             chevronRight.heightAnchor.constraint(equalToConstant: 13.66),
             
-            editButton.trailingAnchor.constraint(equalTo: playButton.trailingAnchor),
+            editButton.leadingAnchor.constraint(equalTo: playButton.leadingAnchor),
             editButton.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
-            editButton.widthAnchor.constraint(equalToConstant: 94.94),
+            editButton.widthAnchor.constraint(equalToConstant: 85),
             editButton.heightAnchor.constraint(equalToConstant: 30),
             
+            deleteButton.widthAnchor.constraint(equalToConstant: 30),
+            deleteButton.heightAnchor.constraint(equalToConstant: 30),
+            deleteButton.trailingAnchor.constraint(equalTo: playButton.trailingAnchor),
+            deleteButton.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
         ])
     }
     
@@ -147,6 +155,10 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         solidLine.tintColor = UIColor(hex: 0xB4C1FF)
                 
         preview.layer.cornerRadius = 5
+        
+        deleteButton.setImage(UIImage(named: "trash"), for: .normal)
+        deleteButton.backgroundColor = UIColor(hex: 0xB4C1FF)
+        deleteButton.layer.cornerRadius = 5
 
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
@@ -175,7 +187,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     func configure(item: [CreativeMapModel], section: Int, indexPath: IndexPath) {
         self.indexPath = indexPath
         if section == 0 {
-            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight]
+            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, chevronRight, deleteButton]
                 .forEach {
                     $0.isHidden = true
                 }
@@ -185,6 +197,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             
             playButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             editButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
+            deleteButton.addTarget(self, action: #selector(buttonTapped(_:)), for: .touchUpInside)
             
             title.text = item[indexPath.row].titleLabel
             lastEdited.text = item[indexPath.row].lastEditedString()
@@ -215,6 +228,12 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             input.send(.playButtonDidTap(indexPath: indexPath))
         case editButton:
             input.send(.editButtonDidTap(indexPath: indexPath))
+        case deleteButton:
+            isDeleteButtonSelected.toggle()
+            sender.backgroundColor = isDeleteButtonSelected ? UIColor(hex: 0xED5959) : UIColor(hex: 0xB4C1FF)
+            if !isDeleteButtonSelected {
+                input.send(.deleteButtonDidTap(indexPath: indexPath))
+            }
         default:
             fatalError()
         }
