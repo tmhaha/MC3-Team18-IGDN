@@ -95,8 +95,7 @@ class CreateModeViewController: UIViewController {
     }
     
     @objc private func backButtonDidTap(){
-        let vc = HomeView().makeViewController()
-        AppDelegate.vc?.present(vc)
+        self.navigationController?.popViewController(animated: true)
     }
 
 }
