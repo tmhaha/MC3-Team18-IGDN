@@ -12,13 +12,18 @@ struct HomeView: View {
     @State var isStageCleared: Bool = true
     @State var isBackgroundAppear: Bool = false
     @State var isAnimating: Bool = false
-    
+
     var body: some View {
         ZStack {
             BackgroundLayer()
             if isBackgroundAppear == true {
-                LogoLayer(isStageCleared: $isStageCleared)
-                ButtonLayer(isStageCleared: $isStageCleared)
+                Group {
+                    LogoLayer(isStageCleared: $isStageCleared)
+                    ButtonLayer(isStageCleared: $isStageCleared)
+                }
+                .opacity(isAnimating ? 1.0 : 0.0)
+                .animation(.easeIn(duration: 1.5), value: isAnimating)
+                .onAppear { isAnimating = true }
             }
         }
         .foregroundColor(SettingData.shared.selectedTheme.origin)
@@ -30,9 +35,11 @@ struct HomeView: View {
     }
 }
 
+// MARK: Background
 struct BackgroundLayer: View {
     @State var isAnimating: Bool = false
     @State var onboardingState: Int = 1
+    
     var body: some View {
         VStack {
             Circle()
@@ -49,9 +56,10 @@ struct BackgroundLayer: View {
     }
 }
 
+
+// MARK: Logo
 struct LogoLayer: View {
     @Binding var isStageCleared: Bool
-    @State var isAnimating: Bool = false
     
     var body: some View {
         if isStageCleared == false {
@@ -60,27 +68,19 @@ struct LogoLayer: View {
                 .resizable()
                 .foregroundColor(.white)
                 .aspectRatio(contentMode: .fit)
-                .opacity(isAnimating ? 1.0 : 0.0)
-                .offset(y: isAnimating ? 0 : -200)
-                .animation(.easeInOut(duration: 1), value: isAnimating)
-                .onAppear { isAnimating = true }
         } else {
             Image("HomeLogo2")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-                .opacity(isAnimating ? 1.0 : 0.0)
-                .offset(y: isAnimating ? 0 : -200)
-                .animation(.easeInOut(duration: 1), value: isAnimating)
-                .onAppear { isAnimating = true }
         }
     }
 }
 
+// MARK: Button
 struct ButtonLayer: View {
     @EnvironmentObject var router: Router<Path>
     @Binding var isStageCleared: Bool
     @State var isAnimating: Bool = false
-    @State var isLockAnimating: Bool = false
     
     var body: some View {
         VStack {
@@ -90,9 +90,6 @@ struct ButtonLayer: View {
             settingButton
             Spacer(minLength: 100)
         }
-        .scaleEffect(isAnimating ? 1.0 : 0.0)
-        .animation(.easeInOut(duration: 1), value: isAnimating)
-        .onAppear { isAnimating = true }
     }
     
     var gameButton: some View {
@@ -123,9 +120,15 @@ struct ButtonLayer: View {
 
             Button {
                 if isStageCleared {
-                    // NavigationLink
+                    var mapList: [CreativeMapModel]
+                    if let loadedMapList = UserDefaultsManager.loadCreativeMapsFromUserDefaults() {
+                        mapList = loadedMapList
+                    } else {
+                        mapList = []
+                    }
+                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel(mapList: mapList)))
                 } else {
-                    isLockAnimating.toggle()
+                    isAnimating.toggle()
                     hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)
                 }
             } label: {
@@ -139,25 +142,16 @@ struct ButtonLayer: View {
                         HStack {
                             Text("creative mode")
                                 .font(.custom(tasaExplorerBold, size: fontSize))
-                                .onTapGesture {
-                                }
-                            
-                            
-                            
-                            
                             Image(systemName: "lock.fill")
                                 .resizable()
                                 .frame(width: 15, height: 20)
-                                .offset(x: isLockAnimating ? 5 : 0)
-                                .animation(Animation.easeInOut(duration: 0.1).repeatCount(5), value: isLockAnimating)
+                                .offset(x: isAnimating ? 5 : 0)
+                                .animation(Animation.easeInOut(duration: 0.1).repeatCount(5), value: isAnimating)
                         }
                     } else {
                         ZStack {
                             Text("creative mode")
                                 .font(.custom(tasaExplorerBold, size: fontSize))
-                                .onTapGesture {
-                                    AppDelegate.vc?.present(CreateModeViewController(with: CreateModeViewModel()))
-                                }
                             Image("Ellipse")
                                 .padding(.leading, 130)
                                 .padding(.bottom, 10)
