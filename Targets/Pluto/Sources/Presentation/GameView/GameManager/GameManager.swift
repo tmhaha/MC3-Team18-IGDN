@@ -24,7 +24,6 @@ class GameManager: ObservableObject {
     // MARK: Nodes
     var nodes: Nodes
     var backGround: BackGround
-    var percentLabel = SKLabelNode()
     var map: [ObstacleProtocol]
     
     // MARK: Node-Action Dictionary
@@ -45,10 +44,6 @@ class GameManager: ObservableObject {
     var ObstacleIndex = 0
     var plentTime = 0
     private var isNodeMove = false
-    var succesPercent: Int {
-        Int(CGFloat(ObstacleIndex) / CGFloat(map.count) * 100)
-    }
-    
     
     init(constants: GameConstants, map: [ObstacleProtocol]) {
         self.touchesBegin = ([], SKScene())
@@ -78,12 +73,9 @@ class GameManager: ObservableObject {
         nodes.setEachPhisicalBody()
         nodes.setName()
         nodes.imageSetting()
-
-        percentLabel.position = CGPoint(x: scene.view!.bounds.width / 2, y: 200)
-        scene.addChild(percentLabel)
         
         nodes.leftThroat.delegate = self
-        percentLabel.text = "\(0.0)%"
+
     }
     
     func startGame() {
@@ -120,9 +112,11 @@ class GameManager: ObservableObject {
                 planet.runAndRemove(SKAction.moveTo(x: -150, duration: gameConstants.planetDuration))
 
                 ObstacleIndex += 1
-
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-                    self.percentLabel.text = "\(self.succesPercent)%"
+               
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { [self] in
+                    let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
+                    self.nodes.topProgressBar.percent = percent
+                    self.nodes.bottomProgressBar.percent = percent
                 }
                 if !isNodeMove {
                     isNodeMove = true
@@ -237,7 +231,6 @@ class GameManager: ObservableObject {
 
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
-
                             nodes.leftThroat.fillThroat()
                             nodes.rightThroat.fillThroat()
                             planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
@@ -254,7 +247,6 @@ class GameManager: ObservableObject {
                         if planet.astronautColor == astronaut.type {
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
-
                             nodes.leftThroat.fillThroat()
                             nodes.rightThroat.fillThroat()
                             planet.startRotation(at: contact.contactPoint, thatNodePoint: astronaut)
@@ -274,7 +266,8 @@ class GameManager: ObservableObject {
         
         $throatGauge
             .sink { gague in
-                if gague < 0 {
+                print("@LOG \(gague)")
+                if gague <= 0 {
                     self.nodes.leftThroat.stopUse()
                     self.nodes.rightThroat.stopUse()
                     self.nodes.astronaut.removeAllActions()
@@ -296,6 +289,8 @@ extension GameManager {
         var astronaut = AstronautNode(color: .white, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
         let leftThroat = ThroatProgressNode()
+        let topProgressBar = ProgressBarNode()
+        let bottomProgressBar = ProgressBarNode()
         let rightButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
         let rightThroat = ThroatProgressNode()
         let changeColorOne = SKSpriteNode(color: AstronautColor.one.color, size: CGSize(width: 85, height: 85))
@@ -309,7 +304,7 @@ extension GameManager {
         
         
         var all: [SKNode] {
-            [leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
+            [bottomProgressBar, topProgressBar, leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
         }
         
         func imageSetting() {
@@ -382,6 +377,8 @@ extension GameManager {
             
             leftButton.positionFromLeftBottom(46, 69.5)
             leftThroat.position = leftButton.position
+            bottomProgressBar.position = CGPoint(x: size.width / 2, y: 192.5)
+            
             changeColorOne.positionFromLeftBottom(259, 69.5)
             changeColorOne.zPosition = 2
             leftButton.zPosition = 2
@@ -389,6 +386,8 @@ extension GameManager {
         
             changeColorTwo.positionFromLeftBottom(46, 689.5)
             rightButton.positionFromLeftBottom(259, 689.5)
+            topProgressBar.position = CGPoint(x: size.width / 2, y: 651.5)
+            topProgressBar.zRotation = CGFloat.pi
             rightThroat.position = rightButton.position
             rightThroat.zRotation = CGFloat.pi
             rightThroat.zPosition = 2
@@ -398,9 +397,9 @@ extension GameManager {
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
             topWall.size = CGSize(width: size.width, height: 116)
-            topWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.1)
+            topWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.4)
             bottomWall.size = CGSize(width: size.width, height: 116)
-            bottomWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.1)
+            bottomWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.4)
             
             leftWall.position = CGPoint(x: 0, y: 0)
             rightWall.position = CGPoint(x: size.width - 1 , y: 0)
@@ -551,8 +550,9 @@ extension GameManager: PassRotationingAstronautPointDelegate {
 
 extension GameManager: SendThroatGaugeDelegate {
     func send(gague: CGFloat) {
-        var temp = gague * 100
-
+        print("@LOG \(gague)")
+        let temp = gague * 100
+        
         self.throatGauge = Int(temp)
     }
 }

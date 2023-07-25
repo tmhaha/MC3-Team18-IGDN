@@ -13,6 +13,9 @@ class ThroatProgressNode: SKShapeNode {
     var percent: CGFloat = 1.0 {
         didSet(newValue) {
             delegate?.send(gague: newValue)
+            if newValue == 0 {
+                path = nil
+            }
         }
     }
     var delegate: SendThroatGaugeDelegate? = nil
@@ -50,15 +53,15 @@ class ThroatProgressNode: SKShapeNode {
     func useThroat() {
         
         let startAngle: CGFloat = (CGFloat.pi * 2 + (CGFloat.pi / 2))
+        let initPercent = percent
         
         let customAction = SKAction.customAction(withDuration: self.animationDuration) { [weak self] (node, time) in
             
             guard let self = self else { return }
             if self.currentAngle >= 0 {
-                let t = CGFloat(time) / self.animationDuration
-                
-                self.percent = 1 - t
-                self.currentAngle = recenteAngle - (CGFloat.pi * 2 * t)
+                let t = initPercent - (CGFloat(time) / self.animationDuration)
+                self.percent = t
+                self.currentAngle = recenteAngle - (CGFloat.pi * 2 * (CGFloat(time) / self.animationDuration))
                 let fanPath = UIBezierPath()
                 fanPath.addArc(withCenter: .zero, radius: radius, startAngle: startAngle, endAngle: currentAngle, clockwise: true)
                 self.path = fanPath.cgPath
@@ -72,19 +75,17 @@ class ThroatProgressNode: SKShapeNode {
     }
     
     func fillThroat() {
+      
         let startAngle: CGFloat = CGFloat.pi / 2
-        
+        let initPercent = percent
         let customAction = SKAction.customAction(withDuration: self.animationDuration) { [weak self] (node, time) in
-            
             guard let self = self else { return }
             if currentAngle <= (CGFloat.pi * 2 + (CGFloat.pi / 2)) {
-                let t = CGFloat(time) / self.animationDuration
-
+                let t =  initPercent + (CGFloat(time) / self.animationDuration)
                 self.percent = t
-                self.currentAngle = recenteAngle + (CGFloat.pi * 2 * t)
+                self.currentAngle = recenteAngle + (CGFloat.pi * 2 * (CGFloat(time) / self.animationDuration))
                 let fanPath = UIBezierPath()
                 fanPath.addArc(withCenter: .zero, radius: radius, startAngle: startAngle, endAngle: currentAngle, clockwise: true)
-                
                 self.path = fanPath.cgPath
             }
             else {
