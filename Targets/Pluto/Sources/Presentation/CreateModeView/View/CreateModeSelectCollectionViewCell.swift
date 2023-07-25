@@ -149,30 +149,12 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         solidLine.tintColor = UIColor(hex: 0xB4C1FF)
                 
         preview.layer.cornerRadius = 5
+        preview.clipsToBounds = true
         
         deleteButton.setImage(UIImage(named: "trash"), for: .normal)
         deleteButton.backgroundColor = UIColor(hex: 0xB4C1FF)
         deleteButton.layer.cornerRadius = 5
 
-//        let attributes: [NSAttributedString.Key: Any] = [
-//            .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
-//        ]
-//
-//        let playButtonString = NSAttributedString(string: "play", attributes: attributes)
-//        playButton.setAttributedTitle(playButtonString, for: .normal)
-//        playButton.layer.cornerRadius = 5
-//        playButton.setTitleColor(.white, for: .normal)
-//        playButton.layer.borderWidth = 2
-//        playButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
-//        playButton.backgroundColor = UIColor(hex: 0x002EFE)
-//
-//        let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
-//        editButton.setAttributedTitle(editButtonString, for: .normal)
-//        editButton.layer.cornerRadius = 5
-//        editButton.setTitleColor(UIColor(hex: 0x002EFE), for: .normal)
-//        editButton.layer.borderWidth = 2
-//        editButton.layer.borderColor = UIColor(hex: 0x002EFE).cgColor
-        
         playButton.setImage(UIImage(named: "play_up"), for: .normal)
         playButton.setImage(UIImage(named: "play_down"), for: .highlighted)
         
