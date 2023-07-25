@@ -12,7 +12,7 @@ class AstronautNode: SKSpriteNode {
     var id: String = UUID().uuidString
     var gameConstants: GameConstants = GameConstants()
     var status: Status = .none
-    var orbitPlanet: TempPlanetNode? = nil
+    var orbitPlanet: PlanetNode? = nil
     
     var type: AstronautColor = .none {
         willSet(newValue) {
@@ -119,5 +119,4 @@ extension AstronautNode {
         let vector = CGVector(dx: dx * speed, dy: dy * speed)
         return vector
     }
-    
 }

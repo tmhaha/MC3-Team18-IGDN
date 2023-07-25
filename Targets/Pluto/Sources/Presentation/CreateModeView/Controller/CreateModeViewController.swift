@@ -63,7 +63,11 @@ class CreateModeViewController: UIViewController {
                     
                 // TODO: objects를 안 받을 수도 있음. 이때 게임뷰로 화면전환 해야함
                 case .playButtonDidTapOutput(let objects):
-                    print(objects)
+
+                     self?.navigationController?.pushViewController(
+                       GameViewController(gameConstants: GameConstants(),
+                                           map: objects),
+                       animated: false)
                 case .deleteButtonDidTapOutput(indexPath: _):
                     self?.contentView.collectionView.reloadData()
                 }

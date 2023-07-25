@@ -37,6 +37,7 @@ enum GameAlertType {
             return .clear
         }
     }
+    
     var title: String {
         switch self {
         case .success:
@@ -89,11 +90,11 @@ enum GameAlertType {
     var titleImage: UIImage {
         switch self {
         case .success:
-            return UIImage(named: "SuccessButton")!
+            return UIImage(named: "SuccessImage")!
         case .fail:
-            return UIImage(named: "FailButton")!
+            return UIImage(named: "FailImage")!
         case .pause:
-            return UIImage(named: "PauseButton")!
+            return UIImage(named: "PauseImage")!
         default:
             return UIImage()
         }
