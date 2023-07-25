@@ -43,7 +43,7 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = Float(SettingData.shared.isAmbianceOn ? 0.5 : 0)
+            audioPlayer.volume = Float(SettingData.shared.isAmbianceOn ? 0.1 : 0)
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             ambienceSound = audioPlayer
@@ -108,11 +108,10 @@ enum Music: String, CaseIterable {
     case Chapter4 = "chapter 4"
     case Chapter5 = "chapter 5"
     case Chapter6 = "chapter 6"
-    case DrivingWings = "Driving Wings"
-    case EverythingEndsEventually = "everything ends eventually"
     case Lobby = "lobby"
-    case LostInAnEmptyPlaceDreamcoreEmptycorePlaylist = "lost in an empty place dreamcore, emptycore playlist"
-    case MainGreenToBlue = "main-green to blue"
+    case Story1 = "Driving Wings"
+    case Story2 = "everything ends eventually"
+    case Story3 = "main-green to blue"
 }
 let allMusicCases: [Music] = Music.allCases
 
@@ -133,11 +132,11 @@ enum Effect: String, CaseIterable {
     case Pause = "pause"
     case Play = "play"
     case Success = "success"
+    case ThrustEmpty = "thrust_empty"
     case Thrust1 = "thrust1"
     case Thrust2 = "thrust2"
     case Thrust3 = "thrust3"
-    case Thrust6 = "thrust6"
-    case Thrust7 = "thrust7"
-    case ThrustEmpty = "thrust_empty"
+    case Thrust4 = "thrust4"
+    case Thrust5 = "thrust5"
 }
 let allEffectCases: [Effect] = Effect.allCases
