@@ -6,4 +6,11 @@
 //  Copyright © 2023 tuist.io. All rights reserved.
 //
 
-import Foundation
+import UIKit
+
+extension UINavigationController: PresentToUIViewControllerFromViewDelegate {
+    
+    func present(_ vc: UIViewController, _ animatied: Bool = false) {
+        self.pushViewController(vc, animated: animatied)
+    }
+}

@@ -24,7 +24,7 @@ struct SplashView: View {
                 Text("Touch to start")
                     .font(.custom(tasaExplorerBold, size: 20))
             }
-        }
+        }.onTapGesture { showSplashView.toggle() }
     }
 }
 

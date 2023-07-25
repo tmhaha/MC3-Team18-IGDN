@@ -4,6 +4,7 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    static var vc: UINavigationController? = nil
 
     func application(
         _ application: UIApplication,
@@ -49,10 +50,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("-------------------")
         }
         
-        let viewController = CreateModeViewController(with: CreateModeViewModel(mapList: mapList))
-        let navigationController = UINavigationController(rootViewController: viewController)
-        navigationController.isNavigationBarHidden = true
-        window?.rootViewController = navigationController
+        //let viewController = CreateModeViewController(with: CreateModeViewModel(mapList: mapList))
+        //let navigationController = UINavigationController(rootViewController: viewController)
+        //navigationController.isNavigationBarHidden = true
+        let homeVC = UINavigationController(rootViewController: ContentView().makeViewController())
+        homeVC.navigationBar.isHidden = true
+        AppDelegate.vc = homeVC
+        window?.rootViewController = homeVC
         window?.makeKeyAndVisible()
 
         return true

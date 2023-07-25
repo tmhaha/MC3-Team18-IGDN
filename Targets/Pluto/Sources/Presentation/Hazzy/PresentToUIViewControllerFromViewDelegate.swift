@@ -1,5 +1,5 @@
 //
-//  PresentToUIViewControllerFromView.swift
+//  PresentToUIViewControllerFromViewDelegate.swift
 //  Pluto
 //
 //  Created by changgyo seo on 2023/07/24.
@@ -8,6 +8,6 @@
 
 import SwiftUI
 
-protocol PresentToUIViewControllerFromView {
+protocol PresentToUIViewControllerFromViewDelegate {
     func present(_ vc: UIViewController, _ animatied: Bool)
 }

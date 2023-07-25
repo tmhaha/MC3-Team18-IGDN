@@ -6,4 +6,9 @@
 //  Copyright © 2023 tuist.io. All rights reserved.
 //
 
-import Foundation
+import SwiftUI
+
+protocol ViewDismissDelegate {
+    func dismiss()
+}
+

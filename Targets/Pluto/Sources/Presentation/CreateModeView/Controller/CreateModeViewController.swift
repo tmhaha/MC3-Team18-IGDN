@@ -71,6 +71,10 @@ class CreateModeViewController: UIViewController {
                     
                 // TODO: objects를 안 받을 수도 있음. 이때 게임뷰로 화면전환 해야함
                 case .playButtonDidTapOutput(let objects):
+                    self?.navigationController?.pushViewController(
+                        GameViewController(gameConstants: GameConstants(),
+                                           map: objects),
+                        animated: false)
                     print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG
                     print(">>>>>> OBJECTS SEND <<<<<<<")
                     print(">>>>>> OBJECTS SEND <<<<<<<")
@@ -83,7 +87,6 @@ class CreateModeViewController: UIViewController {
                     print("-                         -")
                     print(">>>>>> OBJECTS SEND <<<<<<<")
                     print(">>>>>> OBJECTS SEND <<<<<<<")
-                    
                 }
             }
             .store(in: &subscriptions)

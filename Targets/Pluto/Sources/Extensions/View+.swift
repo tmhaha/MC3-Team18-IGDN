@@ -9,6 +9,7 @@
 import SwiftUI
 
 extension View {
+    
     @inlinable
     public func reverseMask<Mask: View>(
         alignment: Alignment = .center,
@@ -21,5 +22,13 @@ extension View {
                         .blendMode(.destinationOut)
                 }
         }
+    }
+    
+    func makeUIView() -> UIView {
+        UIHostingController(rootView: self).view
+    }
+    
+    func makeViewController() -> UIViewController {
+        UIHostingController(rootView: self)
     }
 }
