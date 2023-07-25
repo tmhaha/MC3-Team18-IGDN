@@ -35,8 +35,8 @@ class CreateModeViewController: UIViewController {
         view.backgroundColor = UIColor(hex: 0x2244FF)
         
         setUpCollectionView();
+        setUpTargets()
         bind()
-        
     }
     
     private func bind(){
@@ -88,6 +88,15 @@ class CreateModeViewController: UIViewController {
     private func setUpCollectionView() {
         contentView.collectionView.delegate = self
         contentView.collectionView.dataSource = self
+    }
+    
+    private func setUpTargets() {
+        contentView.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
+    }
+    
+    @objc private func backButtonDidTap(){
+        let vc = HomeView().makeViewController()
+        AppDelegate.vc?.present(vc)
     }
 
 }
