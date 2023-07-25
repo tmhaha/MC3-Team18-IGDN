@@ -52,14 +52,6 @@ class CreateModeViewController: UIViewController {
                     self?.viewModel.bind(with: mapViewModel)
                     self?.navigationController?.pushViewController(vc, animated: true)
                     self?.contentView.collectionView.reloadData()
-                case .presentSelectMapView:
-                    // TODO: 화면 전환
-                    self?.contentView.collectionView.reloadData()
-                    print("삭제")
-                    print("삭제")
-                    print("삭제")
-                    print("삭제")
-                    
                 case .reload:
                     self?.contentView.collectionView.reloadData()
                     print("RELOAD: \(self?.viewModel.mapList.count ?? 0) ") // MARK: DEBUG
@@ -71,22 +63,13 @@ class CreateModeViewController: UIViewController {
                     
                 // TODO: objects를 안 받을 수도 있음. 이때 게임뷰로 화면전환 해야함
                 case .playButtonDidTapOutput(let objects):
-                    self?.navigationController?.pushViewController(
-                        GameViewController(gameConstants: GameConstants(),
+
+                     self?.navigationController?.pushViewController(
+                       GameViewController(gameConstants: GameConstants(),
                                            map: objects),
-                        animated: false)
-                    print("'''VC에서의 playButton으로 인한 화면전환'''")// MARK: DEBUG
-                    print(">>>>>> OBJECTS SEND <<<<<<<")
-                    print(">>>>>> OBJECTS SEND <<<<<<<")
-                    print("-                         -")
-                    print("-                         -")
-                    print("-                         -")
-                    print(objects)
-                    print("-                         -")
-                    print("-                         -")
-                    print("-                         -")
-                    print(">>>>>> OBJECTS SEND <<<<<<<")
-                    print(">>>>>> OBJECTS SEND <<<<<<<")
+                       animated: false)
+                case .deleteButtonDidTapOutput(indexPath: _):
+                    self?.contentView.collectionView.reloadData()
                 }
             }
             .store(in: &subscriptions)
@@ -157,8 +140,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
         if indexPath.section == 0 {
             input.send(.createMapButtonDidTap)
         } else {
-            print(">>> 선택한 게임뷰로 넘어갑니다.")// MARK: DEBUG
-            input.send(.selectButtonDidTap(indexPath: indexPath))
+            input.send(.cellDidTap)
         }
     }
     

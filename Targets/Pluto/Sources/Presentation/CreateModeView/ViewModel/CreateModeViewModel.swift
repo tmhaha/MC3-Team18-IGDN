@@ -12,20 +12,19 @@ import Combine
 
 final class CreateModeViewModel {
     enum Input {
-        case selectButtonDidTap(indexPath: IndexPath) // TODO: TestCode임 추후 삭제(DEBUG용)
         case createMapButtonDidTap
         case playButtonDidTap(indexPath: IndexPath)
         case editButtonDidTap(indexPath: IndexPath)
-//        case editTitleButtonDidTap(indexPath: IndexPath)
+        case deleteButtonDidTap(indexPath: IndexPath)
+        case cellDidTap
     }
     
     enum Output {
-        case presentSelectMapView
         case presentCreateMapView
         case reload
         case playButtonDidTapOutput(objects: [Object])
-        case editButtonDidTapOutput(IndexPath: IndexPath)
-//        case editTitleButtonDidTapOutput(IndexPath: IndexPath)
+        case editButtonDidTapOutput(indexPath: IndexPath)
+        case deleteButtonDidTapOutput(indexPath: IndexPath)
     }
     
     private let output = PassthroughSubject<Output, Never>()
@@ -41,33 +40,24 @@ final class CreateModeViewModel {
     func transform(input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] event in
             switch event {
-            case .selectButtonDidTap(let indexPath): // TODO: TestCode임 추후 삭제 (선택한 뷰의 데이터를 삭제)(DEBUG용)
-                self?.mapList.remove(at: indexPath.row)
-                if let mapList = self?.mapList {
-                    UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
-                }
-                self?.output.send(.presentSelectMapView)
             case .createMapButtonDidTap:
-                // TODO: 비즈니스 로직
                 self?.output.send(.presentCreateMapView)
             case .playButtonDidTap(let indexPath):
-                // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 게임화면으로 연결
                 if let objects = self?.mapList[indexPath.row].objectList {
                     if let transferObjects = self?.convertToObject(with: objects) {
                         self?.output.send(.playButtonDidTapOutput(objects: transferObjects))
                     }
                 }
-                print(">>> \(indexPath.row)번째 Cell의 playButton DidTap")// MARK: DEBUG
             case .editButtonDidTap(let indexPath):
-                print("'''VM에서의 editButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
-                // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> objectList를 불러와서 해당 object들이 배치되어있는 뷰로 연결
-                print(">>> \(indexPath.row)번째 Cell의 editButton DidTap")// MARK: DEBUG
-                self?.output.send(.editButtonDidTapOutput(IndexPath: indexPath))
-//            case .editTitleButtonDidTap(let indexPath):
-//                print("'''VM에서의 editTitleButton으로 인한 비즈니스 로직'''")// MARK: DEBUG
-//                // TODO: 탭한 editButton의 cell이 몇 번째 indexPath.row인지 알아내서 해당하는 index의 mapList의 정보를 불러오기 -> title 변경
-//                print(">>> \(indexPath.row)번째 Cell의 editTitleButton")// MARK: DEBUG
-//                self?.output.send(.editTitleButtonDidTapOutput(IndexPath: indexPath))
+                self?.output.send(.editButtonDidTapOutput(indexPath: indexPath))
+            case .deleteButtonDidTap(indexPath: let indexPath):
+                self?.mapList.remove(at: indexPath.row)
+                if let mapList = self?.mapList {
+                    UserDefaultsManager.saveCreativeMapsToUserDefaults(mapList)
+                }
+                self?.output.send(.deleteButtonDidTapOutput(indexPath: indexPath))
+            case .cellDidTap:
+                self?.output.send(.reload)
             }
         }.store(in: &subscriptions)
 
