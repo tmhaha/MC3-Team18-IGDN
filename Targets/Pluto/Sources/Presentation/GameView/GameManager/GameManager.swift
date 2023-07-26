@@ -266,7 +266,6 @@ class GameManager: ObservableObject {
         
         $throatGauge
             .sink { gague in
-                print("@LOG \(gague)")
                 if gague <= 0 {
                     self.nodes.leftThroat.stopUse()
                     self.nodes.rightThroat.stopUse()
@@ -286,6 +285,7 @@ extension GameManager {
     
     class Nodes {
 
+        let background = SKSpriteNode()
         var astronaut = AstronautNode(color: .white, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
         let leftThroat = ThroatProgressNode()
@@ -304,7 +304,7 @@ extension GameManager {
         
         
         var all: [SKNode] {
-            [bottomProgressBar, topProgressBar, leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
+            [background, bottomProgressBar, topProgressBar, leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
         }
         
         func imageSetting() {
@@ -325,7 +325,6 @@ extension GameManager {
             
             let blueButtonTexture = SKTexture(imageNamed: "BlueButton_blue")
             changeColorOne.texture = blueButtonTexture
-            
         }
         
         func settingPlanets() {
@@ -367,7 +366,24 @@ extension GameManager {
             }
         }
         
+        func makeGradient(_ color1: UIColor, _ color2: UIColor) -> CAGradientLayer {
+            let gradient = CAGradientLayer()
+            gradient.colors = [color1, color2]
+            gradient.locations = [0.0, 1.0]
+            gradient.startPoint = CGPoint(x: 5.0, y: 0.0)
+            gradient.endPoint = CGPoint(x: 5.0, y: 1.0)
+           
+            return gradient
+        }
+        
+        
         func positioning(size: CGSize) {
+
+            let bgTexture = SKTexture(imageNamed: "BackGround")
+            background.texture = bgTexture
+            background.position = CGPoint(x: size.width / 2, y: size.height / 2)
+            background.size = size
+            background.zPosition = -100
             
             astronaut.position = CGPoint(x: 70, y: size.height / 2)
             astronaut.zPosition = 1
@@ -397,9 +413,14 @@ extension GameManager {
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
             topWall.size = CGSize(width: size.width, height: 116)
-            topWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.4)
+            let layer = makeGradient(UIColor(red: 0, green: 102 / 255, blue: 254 / 255, alpha: 1), UIColor(red: 1 / 255, green: 13 / 255, blue: 71 / 255, alpha: 0.5))
+            let texture = SKTexture(imageNamed: "ButtonArea")
+            bottomWall.texture = texture
+            topWall.texture = texture
+            topWall.zRotation = CGFloat.pi
             bottomWall.size = CGSize(width: size.width, height: 116)
-            bottomWall.color = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 0.4)
+            print("@LOG \(bottomWall.inputView)")
+            
             
             leftWall.position = CGPoint(x: 0, y: 0)
             rightWall.position = CGPoint(x: size.width - 1 , y: 0)
@@ -550,7 +571,6 @@ extension GameManager: PassRotationingAstronautPointDelegate {
 
 extension GameManager: SendThroatGaugeDelegate {
     func send(gague: CGFloat) {
-        print("@LOG \(gague)")
         let temp = gague * 100
         
         self.throatGauge = Int(temp)
