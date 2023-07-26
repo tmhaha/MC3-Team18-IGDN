@@ -65,7 +65,6 @@ class ThroatProgressNode: SKShapeNode {
                 let fanPath = UIBezierPath()
                 fanPath.addArc(withCenter: .zero, radius: radius, startAngle: startAngle, endAngle: currentAngle, clockwise: true)
                 self.path = fanPath.cgPath
-                print("s")
             }
             else{
                 stopUse()
