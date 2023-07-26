@@ -17,7 +17,7 @@ struct SplashView: View {
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .onTapGesture { showSplashView.toggle() }
-                .foregroundColor(SettingData.shared.selectedTheme.origin)
+                .foregroundColor(SettingData.shared.selectedTheme.main)
                 .background(Color.white)
             VStack {
                 Color.clear.frame(height: 500)

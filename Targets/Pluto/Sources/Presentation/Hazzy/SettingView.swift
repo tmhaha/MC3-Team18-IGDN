@@ -37,8 +37,8 @@ struct SettingView: View {
                 resetButton
                 
             }
-            .foregroundColor(SettingData.shared.selectedTheme.origin)
-            .tint(SettingData.shared.selectedTheme.origin)
+            .foregroundColor(SettingData.shared.selectedTheme.main)
+            .tint(SettingData.shared.selectedTheme.main)
             
             if (showResetView) {
                 ResetView(showResetView: $showResetView)
@@ -76,7 +76,7 @@ extension SettingView {
     var selectTheme: some View {
         HStack {
             RoundedRectangle(cornerRadius: 20)
-                .foregroundColor(SettingData.shared.selectedTheme.light)
+                .foregroundColor(SettingData.shared.selectedTheme.mainLight)
                 .frame(width: 120, height: 120)
                 .padding(.trailing, 5)
             ZStack {
@@ -131,7 +131,7 @@ extension SettingView {
     var dividingLine: some View  {
         Rectangle()
             .frame(width: 308, height: 2)
-            .foregroundColor(SettingData.shared.selectedTheme.light)
+            .foregroundColor(SettingData.shared.selectedTheme.mainLight)
     }
     
     var slider: some View {
@@ -158,7 +158,7 @@ extension SettingView {
             ZStack {
                 Rectangle()
                     .frame(width: 151, height: 1.5)
-                    .foregroundColor(SettingData.shared.selectedTheme.light)
+                    .foregroundColor(SettingData.shared.selectedTheme.mainLight)
                     .padding(.leading, 50)
                 
                 Toggle("Ambiance", isOn: SettingData.shared.$isAmbianceOn)
@@ -171,7 +171,7 @@ extension SettingView {
             ZStack {
                 Rectangle()
                     .frame(width: 182, height: 1.5)
-                    .foregroundColor(SettingData.shared.selectedTheme.light)
+                    .foregroundColor(SettingData.shared.selectedTheme.mainLight)
                     .padding(.leading, 15)
                 
                 Toggle("Haptic", isOn: SettingData.shared.$isHapticOn)

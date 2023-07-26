@@ -25,7 +25,7 @@ struct SelectStageView: View {
                 .padding(.bottom, 50)
         }
         .padding(.top, 30)
-        .foregroundColor(SettingData.shared.selectedTheme.origin)
+        .foregroundColor(SettingData.shared.selectedTheme.main)
     }
 
     var stageImage: some View {
@@ -106,12 +106,12 @@ struct PlayButton: View {
                             .offset(x: isAnimating ? 5 : 0)
                             .animation(Animation.easeInOut(duration: 0.5).repeatCount(3), value: isAnimating)
                     }
-                    .foregroundColor(SettingData.shared.selectedTheme.light)
+                    .foregroundColor(SettingData.shared.selectedTheme.mainLight)
                 }
             }
             .frame(width: 200, height: 45)
         }
-        .foregroundColor(selectedStage > currentStage ? SettingData.shared.selectedTheme.pressed : SettingData.shared.selectedTheme.origin)
+        .foregroundColor(selectedStage > currentStage ? SettingData.shared.selectedTheme.lockedMain : SettingData.shared.selectedTheme.main)
     }
 }
         

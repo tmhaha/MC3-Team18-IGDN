@@ -26,7 +26,7 @@ struct HomeView: View {
                 .onAppear { isAnimating = true }
             }
         }
-        .foregroundColor(SettingData.shared.selectedTheme.origin)
+        .foregroundColor(SettingData.shared.selectedTheme.main)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 isBackgroundAppear = true

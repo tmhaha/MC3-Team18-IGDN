@@ -12,7 +12,7 @@ struct ResetView: View {
     
     var body: some View {
         ZStack {
-            SettingData.shared.selectedTheme.origin
+            SettingData.shared.selectedTheme.main
                 .ignoresSafeArea()
                 .opacity(0.8)
             VStack {
@@ -36,7 +36,7 @@ struct ResetView: View {
                             .frame(width: 262, height: 45)
                         Text("return to setting")
                             .font(.custom(tasaExplorerBold, size: 18))
-                            .foregroundColor(SettingData.shared.selectedTheme.origin)
+                            .foregroundColor(SettingData.shared.selectedTheme.main)
                     }
                 }
                 

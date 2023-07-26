@@ -24,50 +24,127 @@ enum Theme: Int, CaseIterable {
         }
     }
 
-    var origin: Color {
+    var main: Color {
         switch self {
         case .blue:
             return Color(hex: "002EFE")
         case .orange:
-            return Color.orange
+            return Color(hex: "FF7F04")
         case .lime:
             return Color.green
         }
     }
 
-    var light: Color {
-        switch self {
-        case .blue:
-            return Color(hex: "B4C1FF")
-        case .orange:
-            return Color.orange.opacity(0.5)
-        case .lime:
-            return Color.green.opacity(0.5)
-        }
-    }
-
+    
     var cover: Color {
         switch self {
         case .blue:
             return Color(hex: "002EFE").opacity(0.75)
         case .orange:
-            return Color.orange.opacity(0.5)
-        case .lime:
-            return Color.green.opacity(0.5)
-        }
-    }
-
-    var pressed: Color {
-        switch self {
-        case .blue:
-            return Color(hex: "00198C")
-        case .orange:
-            return Color.orange.opacity(0.5)
+            return Color(hex: "FF7F04").opacity(0.75)
         case .lime:
             return Color.green.opacity(0.5)
         }
     }
     
+    var creative: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "2244FF")
+        case .orange:
+            return Color(hex: "FFA54E")
+        case .lime:
+            return Color.green.opacity(0.5)
+        }
+    }
+    
+    var grid: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "4061F8")
+        case .orange:
+            return Color(hex: "F5771C")
+        case .lime:
+            return Color.green.opacity(0.5)
+        }
+    }
+    
+    var mainLight: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "B4C1FF")
+        case .orange:
+            return Color(hex: "FFBB81")
+        case .lime:
+            return Color.green.opacity(0.5)
+        }
+    }
+
+    var lockedMain: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "00198C")
+        case .orange:
+            return Color(hex: "C55D00")
+        case .lime:
+            return Color.green.opacity(0.5)
+        }
+    }
+    
+    var lockedWhite: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "8996D1")
+        case .orange:
+            return Color(hex: "D9A77F")
+        case .lime:
+            return Color.green.opacity(0.5)
+        }
+    }
+    
+    var warnRed: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "ED5959")
+        case .orange:
+            return Color(hex: "ED5959")
+        case .lime:
+            return Color(hex: "ED5959")
+        }
+    }
+    
+    var white: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "FFFFFF")
+        case .orange:
+            return Color(hex: "FFFFFF")
+        case .lime:
+            return Color(hex: "FFFFFF")
+        }
+    }
+    
+    var gray: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "E6E7E7")
+        case .orange:
+            return Color(hex: "E6E7E7")
+        case .lime:
+            return Color(hex: "E6E7E7")
+        }
+    }
+    
+    var black: Color {
+        switch self {
+        case .blue:
+            return Color(hex: "000000")
+        case .orange:
+            return Color(hex: "000000")
+        case .lime:
+            return Color(hex: "000000")
+        }
+    }
 //    var pauseButtonImage: String { // todo
 //        switch self {
 //        case .blue:
