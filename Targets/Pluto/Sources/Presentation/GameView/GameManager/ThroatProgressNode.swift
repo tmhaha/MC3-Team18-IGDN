@@ -19,7 +19,7 @@ class ThroatProgressNode: SKShapeNode {
         }
     }
     var delegate: SendThroatGaugeDelegate? = nil
-    var radius: CGFloat = 55
+    var radius: CGFloat = 48
     var recenteAngle = (CGFloat.pi * 2 + (CGFloat.pi / 2))
     var currentAngle: CGFloat = 0.0
     var animationDuration: TimeInterval = 5
@@ -40,7 +40,7 @@ class ThroatProgressNode: SKShapeNode {
         path.close()
         
         self.path = path.cgPath
-        self.strokeColor = .blue
+        self.strokeColor = UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 1)
         self.lineWidth = 8
     }
     

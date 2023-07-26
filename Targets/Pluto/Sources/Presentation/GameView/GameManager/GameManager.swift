@@ -157,6 +157,7 @@ class GameManager: ObservableObject {
                     
                     if self.nodes.changeColorOne.contains(location) {
                         let newColor = nodes.astronaut.type.combine(.one)
+                        typeForChangeColor(newColor)
                         if nodes.astronaut.status == .inOribt {
                             guard let newAstronuat = nodes.astronaut.orbitPlanet?.changedColor(to: newColor) else { return }
                             nodes.astronaut = newAstronuat
@@ -169,6 +170,7 @@ class GameManager: ObservableObject {
                     }
                     if self.nodes.changeColorTwo.contains(location) {
                         let newColor = nodes.astronaut.type.combine(.two)
+                        typeForChangeColor(newColor)
                         if nodes.astronaut.status == .inOribt {
                             guard let newAstronuat = nodes.astronaut.orbitPlanet?.changedColor(to: newColor) else { return }
                             nodes.astronaut = newAstronuat
@@ -275,6 +277,27 @@ class GameManager: ObservableObject {
             }
             .store(in: &bag)
     }
+    
+    func typeForChangeColor(_ newType: AstronautColor) {
+        let redButton = SKTexture(imageNamed: "RedButton")
+        let greenButton = SKTexture(imageNamed: "GreenButton")
+        let redButtonDisable = SKTexture(imageNamed: "RedButtonDisable")
+        let greenButtonDisable = SKTexture(imageNamed: "GreenButtonDisable")
+        switch newType {
+        case .one:
+            nodes.changeColorOne.texture = greenButtonDisable
+            nodes.changeColorTwo.texture = redButton
+        case .two:
+            nodes.changeColorOne.texture = greenButton
+            nodes.changeColorTwo.texture = redButtonDisable
+        case .none:
+            nodes.changeColorOne.texture = greenButton
+            nodes.changeColorTwo.texture = redButton
+        case .combine:
+            nodes.changeColorOne.texture = greenButtonDisable
+            nodes.changeColorTwo.texture = redButtonDisable
+        }
+    }
 }
 
 extension GameManager {
@@ -319,11 +342,11 @@ extension GameManager {
             let pauseButtonTexture = SKTexture(imageNamed: "buttonPause")
             pauseButton.texture = pauseButtonTexture
             
-            let redButtonTexture = SKTexture(imageNamed: "RedButton_blue")
+            let redButtonTexture = SKTexture(imageNamed: "RedButton")
             changeColorTwo.texture = redButtonTexture
             changeColorTwo.zRotation = CGFloat.pi
             
-            let blueButtonTexture = SKTexture(imageNamed: "BlueButton_blue")
+            let blueButtonTexture = SKTexture(imageNamed: "GreenButton")
             changeColorOne.texture = blueButtonTexture
         }
         
@@ -419,8 +442,6 @@ extension GameManager {
             topWall.texture = texture
             topWall.zRotation = CGFloat.pi
             bottomWall.size = CGSize(width: size.width, height: 116)
-            print("@LOG \(bottomWall.inputView)")
-            
             
             leftWall.position = CGPoint(x: 0, y: 0)
             rightWall.position = CGPoint(x: size.width - 1 , y: 0)
