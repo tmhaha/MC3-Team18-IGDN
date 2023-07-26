@@ -40,8 +40,8 @@ final class CreateMapTopToolView: UIView {
             backButton.heightAnchor.constraint(equalToConstant: 20),
             
             saveButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -43),
-            saveButton.heightAnchor.constraint(equalToConstant: 40),
-            saveButton.widthAnchor.constraint(equalToConstant: 40),
+            saveButton.heightAnchor.constraint(equalToConstant: 30),
+            saveButton.widthAnchor.constraint(equalToConstant: 30),
             saveButton.centerYAnchor.constraint(equalTo: backButton.centerYAnchor),
         ])
     }

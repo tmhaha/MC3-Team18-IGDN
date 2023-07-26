@@ -87,7 +87,7 @@ final class CreateMapNameInputView: UIView {
     private func setUpViews() {
         self.backgroundColor = .clear
         
-        imageView.image = UIImage(named: "pencil_name_input")
+        imageView.image = UIImage(named: "nametag")
         
         nameDescription.text = "Name your journey"
         nameDescription.textAlignment = .center
