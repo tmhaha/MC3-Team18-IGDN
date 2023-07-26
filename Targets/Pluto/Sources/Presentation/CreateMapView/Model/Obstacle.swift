@@ -30,7 +30,7 @@ struct Obstacle {
     ]
     
     static let isClockWise: [Bool] = [
-        true,
+        false,
         true,
         true,
         false
