@@ -197,7 +197,7 @@ class GameManager: ObservableObject {
                         scene.isPaused = true
                         gameTimer.stopTimer()
                         delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
-                                                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit"))
+                                                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit", imageName: "", isLast: true))
                         //delegate?.showAlert(alertType: .pause)
                     }
                 }
