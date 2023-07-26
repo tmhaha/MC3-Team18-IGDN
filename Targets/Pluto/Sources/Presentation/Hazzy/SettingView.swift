@@ -182,9 +182,9 @@ extension SettingView {
     }
     
     var spinImage: some View {
-        Image("Spin")
-            .renderingMode(.template)
+        Image(SettingData.shared.selectedTheme.plutoImage1)
             .resizable()
+            .scaledToFit()
             .frame(width: 130, height: 82)
     }
     

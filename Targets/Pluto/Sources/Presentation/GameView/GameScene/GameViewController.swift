@@ -101,7 +101,7 @@ extension GameViewController: ShowAlertDelegate {
             gameAlertView.downCompletion = backToList
             addAlertView()
             
-        case .tutorial(activate: let activate, bottomString: let bottomString, topString: let topString):
+        case .tutorial(activate: let activate, bottomString: let bottomString, topString: let topString, imageName: let imageName, isLast: let isLast):
             var tutorial = TutorailView(buttonsActivated: activate, bottomText: bottomString, topText: topString)
             tutorial.delegate = self
             tutorialView = tutorial.makeUIView()
