@@ -36,7 +36,7 @@ final class CreateMapBottomToolView: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        self.backgroundColor = .white
+        self.backgroundColor = SettingData().selectedTheme.white.uiColor
     }
     
     private func setUpConstraints() {

@@ -103,7 +103,7 @@ final class CreateMapView: UIView {
         // 가로 선 그리기
         for y in stride(from: 0, to: contentView.bounds.height, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: 0, y: y, width: contentView.bounds.width, height: 1)
             gridContainerView.addSubview(lineView)
         }
@@ -111,7 +111,7 @@ final class CreateMapView: UIView {
         // 세로 선 그리기
         for x in stride(from: 0, to: contentView.bounds.width, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: x, y: 0, width: 1, height: contentView.bounds.height)
             gridContainerView.addSubview(lineView)
         }
@@ -126,13 +126,13 @@ final class CreateMapView: UIView {
     }
 
     private func setUpViews() {
-        self.backgroundColor = UIColor(hex: 0x2244FF)
+        self.backgroundColor = SettingData().selectedTheme.creative.uiColor
         topToolView.backgroundColor = .clear
         bottomToolView.backgroundColor = .clear
         alertView.backgroundColor = .clear
         nameInputView.backgroundColor = .clear
         
-        scrollView.backgroundColor = UIColor(hex: 0x2244FF)
+        scrollView.backgroundColor = SettingData().selectedTheme.creative.uiColor
         scrollView.isPagingEnabled = false
         scrollView.isScrollEnabled = true
         scrollView.alwaysBounceVertical = false // 세로 스크롤 비활성화

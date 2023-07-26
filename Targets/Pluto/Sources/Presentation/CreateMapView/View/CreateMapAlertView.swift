@@ -87,7 +87,7 @@ final class CreateMapAlertView: UIView {
         alertDescription.textAlignment = .center
         alertDescription.numberOfLines = 0
         alertDescription.font = UIFont(name: "TASAExplorer-Bold", size: 28)
-        alertDescription.textColor = .white
+        alertDescription.textColor = SettingData().selectedTheme.white.uiColor
         
         
         let attributes: [NSAttributedString.Key: Any] = [
@@ -96,13 +96,13 @@ final class CreateMapAlertView: UIView {
         
         let keepEditingButtonString = NSAttributedString(string: "keep editing", attributes: attributes)
         keepEditingButton.setAttributedTitle(keepEditingButtonString, for: .normal)
-        keepEditingButton.setTitleColor(UIColor(hex: 0x002EFE), for: .normal)
-        keepEditingButton.backgroundColor = .white
+        keepEditingButton.setTitleColor(SettingData().selectedTheme.main.uiColor, for: .normal)
+        keepEditingButton.backgroundColor = SettingData().selectedTheme.white.uiColor
         
         let discardButtonString = NSAttributedString(string: "discard", attributes: attributes)
         discardButton.setAttributedTitle(discardButtonString, for: .normal)
-        discardButton.setTitleColor(.white, for: .normal)
-        discardButton.backgroundColor = UIColor(hex: 0xED5959)
+        discardButton.setTitleColor(SettingData().selectedTheme.white.uiColor, for: .normal)
+        discardButton.backgroundColor = SettingData().selectedTheme.warnRed.uiColor
     }
     
     private func drawGrid() {
@@ -114,7 +114,7 @@ final class CreateMapAlertView: UIView {
         // 가로 선 그리기
         for y in stride(from: 0, to: self.bounds.height, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: 0, y: y, width: self.bounds.width, height: 1)
             gridContainerView.addSubview(lineView)
         }
@@ -122,7 +122,7 @@ final class CreateMapAlertView: UIView {
         // 세로 선 그리기
         for x in stride(from: 0, to: self.bounds.width, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: x, y: 0, width: 1, height: self.bounds.height)
             gridContainerView.addSubview(lineView)
         }

@@ -93,22 +93,22 @@ final class CreateMapNameInputView: UIView {
         nameDescription.textAlignment = .center
         nameDescription.numberOfLines = 1
         nameDescription.font = UIFont(name: "TASAExplorer-Bold", size: 28)
-        nameDescription.textColor = .white
+        nameDescription.textColor = SettingData().selectedTheme.white.uiColor
         
         nameTextField.setNameTextField(with: UIImage(named: "x_mark")!, mode: .whileEditing)
         
         let attributes: [NSAttributedString.Key: Any] = [
             .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0),
-            .foregroundColor: UIColor(hex: 0x002EFE)
+            .foregroundColor: SettingData().selectedTheme.main.uiColor
         ]
         let discardButtonString = NSAttributedString(string: "save", attributes: attributes)
         saveButton.setAttributedTitle(discardButtonString, for: .normal)
-        saveButton.setTitleColor(UIColor(hex: 0x002EFE), for: .normal)
-        saveButton.backgroundColor = .white
+        saveButton.setTitleColor(SettingData().selectedTheme.main.uiColor, for: .normal)
+        saveButton.backgroundColor = SettingData().selectedTheme.white.uiColor
         saveButton.layer.cornerRadius = 22.5
         
         backButton.setImage(UIImage(named: "L_arrow_white"), for: .normal)
-        backButton.tintColor = .white
+        backButton.tintColor = SettingData().selectedTheme.white.uiColor
         backButton.layer.cornerRadius = 15
     }
     
@@ -121,7 +121,7 @@ final class CreateMapNameInputView: UIView {
         // 가로 선 그리기
         for y in stride(from: 0, to: self.bounds.height, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: 0, y: y, width: self.bounds.width, height: 1)
             gridContainerView.addSubview(lineView)
         }
@@ -129,7 +129,7 @@ final class CreateMapNameInputView: UIView {
         // 세로 선 그리기
         for x in stride(from: 0, to: self.bounds.width, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: x, y: 0, width: 1, height: self.bounds.height)
             gridContainerView.addSubview(lineView)
         }

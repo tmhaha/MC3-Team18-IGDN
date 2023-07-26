@@ -50,11 +50,11 @@ final class CreateMapTopToolView: UIView {
         self.backgroundColor = .systemBackground
         
         backButton.setImage(UIImage(named: "L_arrow_white"), for: .normal)
-        backButton.tintColor = .white
+        backButton.tintColor = SettingData().selectedTheme.white.uiColor
         backButton.layer.cornerRadius = 15
         
         saveButton.setImage(UIImage(named: "save"), for: .normal)
-        saveButton.tintColor = .white
+        saveButton.tintColor = SettingData().selectedTheme.white.uiColor
         saveButton.layer.cornerRadius = 15
 
     }

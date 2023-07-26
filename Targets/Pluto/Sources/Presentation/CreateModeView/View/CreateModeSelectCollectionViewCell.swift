@@ -125,12 +125,12 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     private func setUpViews() {
         contentView.layer.cornerRadius = 30
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = SettingData().selectedTheme.white.uiColor
         
         imageView.image = UIImage(named: "creative_plus")
         
         descriptions.font = UIFont(name: "TASAExplorer-Bold", size: 20)
-        descriptions.textColor = UIColor(hex: 0xB4C1FF)
+        descriptions.textColor = SettingData().selectedTheme.mainLight.uiColor
         descriptions.text = "create your own journey!"
         
         title.font = UIFont(name: "TASAExplorer-Bold", size: 22)
@@ -140,19 +140,19 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         
         dateDescriptionLabel.text = "last Edited:"
         dateDescriptionLabel.font = UIFont(name: "TASAExplorer-Regular", size: 12)
-        dateDescriptionLabel.textColor = UIColor(hex: 0xB4C1FF)
+        dateDescriptionLabel.textColor = SettingData().selectedTheme.mainLight.uiColor
         
         lastEdited.font = UIFont(name: "TASAExplorer-Bold", size: 12)
-        lastEdited.textColor = UIColor(hex: 0xB4C1FF)
+        lastEdited.textColor = SettingData().selectedTheme.mainLight.uiColor
         
         solidLine.image = UIImage(named: "solid_line")
-        solidLine.tintColor = UIColor(hex: 0xB4C1FF)
+        solidLine.tintColor = SettingData().selectedTheme.mainLight.uiColor
                 
         preview.layer.cornerRadius = 5
         preview.clipsToBounds = true
         
         deleteButton.setImage(UIImage(named: "trash"), for: .normal)
-        deleteButton.backgroundColor = UIColor(hex: 0xB4C1FF)
+        deleteButton.backgroundColor = SettingData().selectedTheme.mainLight.uiColor
         deleteButton.layer.cornerRadius = 5
 
         playButton.setImage(UIImage(named: "play_up"), for: .normal)
@@ -184,7 +184,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
                let previewImage = UIImage(data: previewData) {
                 preview.image = previewImage
                 preview.contentMode = .scaleAspectFit
-                preview.backgroundColor = UIColor(hex: 0xB4C1FF)
+                preview.backgroundColor = SettingData().selectedTheme.mainLight.uiColor
             }
         }
     }
@@ -212,7 +212,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             }
         case deleteButton:
             isDeleteButtonSelected.toggle()
-            sender.backgroundColor = isDeleteButtonSelected ? UIColor(hex: 0xED5959) : UIColor(hex: 0xB4C1FF)
+            sender.backgroundColor = isDeleteButtonSelected ? SettingData().selectedTheme.warnRed.uiColor : SettingData().selectedTheme.mainLight.uiColor
             if !isDeleteButtonSelected {
                 input.send(.deleteButtonDidTap(indexPath: indexPath))
             } else {

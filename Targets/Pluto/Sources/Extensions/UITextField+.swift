@@ -40,7 +40,7 @@ extension UITextField {
         self.textColor = UIColor(hex: 0xA3A3A3)
         self.font = UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
         self.autocapitalizationType = .none
-        self.backgroundColor = .white
+        self.backgroundColor = SettingData().selectedTheme.white.uiColor
         self.layer.cornerRadius = 5
         
         let rightView = UIView(frame: CGRectMake(0, 0, 24, 24))

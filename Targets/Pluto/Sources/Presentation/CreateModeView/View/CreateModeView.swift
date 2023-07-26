@@ -89,7 +89,7 @@ final class CreateModeView: UIView {
         // 가로 선 그리기
         for y in stride(from: 0, to: self.bounds.height, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: 0, y: y, width: self.bounds.width, height: 1)
             gridContainerView.addSubview(lineView)
         }
@@ -97,7 +97,7 @@ final class CreateModeView: UIView {
         // 세로 선 그리기
         for x in stride(from: 0, to: self.bounds.width, by: gridSize) {
             let lineView = UIView()
-            lineView.backgroundColor = UIColor(hex: 0x4061F8)
+            lineView.backgroundColor = SettingData().selectedTheme.grid.uiColor
             lineView.frame = CGRect(x: x, y: 0, width: 1, height: self.bounds.height)
             gridContainerView.addSubview(lineView)
         }
@@ -119,14 +119,13 @@ final class CreateModeView: UIView {
         
         titleLabel.text = "creative"
         titleLabel.font = UIFont(name: "TASAExplorer-Black", size: 30)
-        titleLabel.textColor = .white
+        titleLabel.textColor = SettingData().selectedTheme.white.uiColor
 
         collectionView.collectionViewLayout = collectionViewFlowLayout
         collectionView.isScrollEnabled = true
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.showsVerticalScrollIndicator = false
         collectionView.clipsToBounds = true
-//        collectionView.backgroundColor = UIColor(hex: 0x2244FF)
         collectionView.backgroundColor = .clear
         
         collectionView.register(CreateModeSelectCollectionViewCell.self, forCellWithReuseIdentifier: CreateModeSelectCollectionViewCell.identifier)

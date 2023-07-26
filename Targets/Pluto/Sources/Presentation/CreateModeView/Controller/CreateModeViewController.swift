@@ -32,7 +32,7 @@ class CreateModeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(hex: 0x2244FF)
+        view.backgroundColor = SettingData().selectedTheme.creative.uiColor
         
         setUpCollectionView();
         setUpTargets()
