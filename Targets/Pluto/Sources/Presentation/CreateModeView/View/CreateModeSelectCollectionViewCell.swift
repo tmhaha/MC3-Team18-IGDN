@@ -25,6 +25,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     lazy var solidLine = UIImageView()
     lazy var preview = UIImageView()
     lazy var playButton = UIButton()
+    lazy var chevronRight = UIImageView()
     lazy var editButton = UIButton()
     lazy var deleteButton = UIButton()
     
@@ -42,6 +43,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         isDeleteButtonSelected = false
+//        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton, chevronRight]
         [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 $0.isHidden = false
@@ -57,6 +59,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     private func addSubviews() {
         
+//        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton, chevronRight]
         [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 contentView.addSubview($0)
@@ -111,6 +114,11 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             playButton.widthAnchor.constraint(equalToConstant: 120),
             playButton.heightAnchor.constraint(equalToConstant: 35),
             
+//            chevronRight.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
+//            chevronRight.trailingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: -10),
+//            chevronRight.widthAnchor.constraint(equalToConstant: 7.66),
+//            chevronRight.heightAnchor.constraint(equalToConstant: 13.66),
+            
             editButton.leadingAnchor.constraint(equalTo: playButton.leadingAnchor),
             editButton.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 85),
@@ -127,7 +135,8 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 30
         contentView.backgroundColor = SettingData().selectedTheme.white.uiColor
         
-        imageView.image = UIImage(named: "creative_plus")
+        imageView.image = UIImage(named: "creative_plus")?.withRenderingMode(.alwaysTemplate)
+        imageView.tintColor = SettingData().selectedTheme.mainLight.uiColor
         
         descriptions.font = UIFont(name: "TASAExplorer-Bold", size: 20)
         descriptions.textColor = SettingData().selectedTheme.mainLight.uiColor
@@ -135,8 +144,8 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         
         title.font = UIFont(name: "TASAExplorer-Bold", size: 22)
         
-        editTitleButton.setImage(UIImage(named: "pencil"), for: .normal)
-        editTitleButton.tintColor = UIColor(hex: 0x4A6AFF)
+        editTitleButton.setImage(UIImage(named: "pencil")?.withRenderingMode(.alwaysTemplate), for: .normal)
+        editTitleButton.tintColor = SettingData().selectedTheme.creative.uiColor
         
         dateDescriptionLabel.text = "last Edited:"
         dateDescriptionLabel.font = UIFont(name: "TASAExplorer-Regular", size: 12)
@@ -145,7 +154,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         lastEdited.font = UIFont(name: "TASAExplorer-Bold", size: 12)
         lastEdited.textColor = SettingData().selectedTheme.mainLight.uiColor
         
-        solidLine.image = UIImage(named: "solid_line")
+        solidLine.image = UIImage(named: "solid_line")?.withRenderingMode(.alwaysTemplate)
         solidLine.tintColor = SettingData().selectedTheme.mainLight.uiColor
                 
         preview.layer.cornerRadius = 5
@@ -154,17 +163,39 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         deleteButton.setImage(UIImage(named: "trash"), for: .normal)
         deleteButton.backgroundColor = SettingData().selectedTheme.mainLight.uiColor
         deleteButton.layer.cornerRadius = 5
-
-        playButton.setImage(UIImage(named: "play_up"), for: .normal)
-        playButton.setImage(UIImage(named: "play_down"), for: .highlighted)
         
-        editButton.setImage(UIImage(named: "edit_up"), for: .normal)
-        editButton.setImage(UIImage(named: "edit_down"), for: .highlighted)
+        
+        let attributes: [NSAttributedString.Key: Any] = [
+            .font: UIFont(name: "TASAExplorer-Bold", size: 18.0) ?? UIFont.systemFont(ofSize: 18.0)
+        ]
+        
+        let playButtonString = NSAttributedString(string: "play", attributes: attributes)
+        playButton.setAttributedTitle(playButtonString, for: .normal)
+        playButton.layer.cornerRadius = 5
+        playButton.setTitleColor(SettingData().selectedTheme.white.uiColor, for: .normal)
+        playButton.layer.borderWidth = 2
+        playButton.layer.borderColor = SettingData().selectedTheme.creative.uiColor.cgColor
+        playButton.backgroundColor = SettingData().selectedTheme.creative.uiColor
+        playButton.setImage(UIImage(named: "chevron_right"), for: .normal)
+        playButton.contentHorizontalAlignment = .center
+        playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
+        playButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
+        
+//        chevronRight.image = UIImage(named: "chevron_right")
+//        chevronRight.tintColor = SettingData().selectedTheme.white.uiColor
+        
+        let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
+        editButton.setAttributedTitle(editButtonString, for: .normal)
+        editButton.layer.cornerRadius = 5
+        editButton.setTitleColor(SettingData().selectedTheme.creative.uiColor, for: .normal)
+        editButton.layer.borderWidth = 2
+        editButton.layer.borderColor = SettingData().selectedTheme.creative.uiColor.cgColor
     }
     
     func configure(item: [CreativeMapModel], section: Int, indexPath: IndexPath) {
         self.indexPath = indexPath
         if section == 0 {
+//            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, deleteButton, chevronRight]
             [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, deleteButton]
                 .forEach {
                     $0.isHidden = true
