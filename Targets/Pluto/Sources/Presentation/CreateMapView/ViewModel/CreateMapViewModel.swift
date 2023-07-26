@@ -126,6 +126,8 @@ final class CreateMapViewModel {
             // MARK: 겹치는 오브젝트 제거
             removeObjectView(overlappingObjectView)
             overlappingObjectView.removeFromSuperview()
+            
+            hapticFeedback(style: .medium, duration: 0.05, interval: 0.05)
             return false
         } else {
             let objectView = UIImageView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
@@ -151,6 +153,8 @@ final class CreateMapViewModel {
             // MARK: 2. 생성한 creativeObject 추가
             creativeObjectList.append(creativeObject)
             objectViewList.append(objectView)
+            
+            hapticFeedback(style: .heavy, duration: 0.1, interval: 0.05)
             return true
         }
     }
