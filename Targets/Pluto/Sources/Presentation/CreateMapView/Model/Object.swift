@@ -19,7 +19,12 @@ struct Object: ObstacleProtocol {
     // 초기화
     init(creativeObject: CreativeObject) {
         self.point = creativeObject.point
-        self.size = CreativeObject.CGSizeList[creativeObject.sizeIndex]
+        if creativeObject.shapeIndex == 3 {
+            self.size = CreativeObject.CGSizeList_Diamond[creativeObject.sizeIndex]
+        }
+        else {
+            self.size = CreativeObject.CGSizeList[creativeObject.sizeIndex]
+        }
         self.path = creativeObject.path
         self.imageName = Obstacle.image[creativeObject.colorIndex][creativeObject.sizeIndex][creativeObject.shapeIndex]
         self.isClockWise = Obstacle.isClockWise[creativeObject.shapeIndex]
