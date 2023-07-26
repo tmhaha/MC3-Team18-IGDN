@@ -57,7 +57,7 @@ public struct CreatePath {
         case .circle:
             let center = CGPoint(x: size.width * 0.5, y: size.height * 0.5)
             let radius = min(size.width, size.height) * 0.5
-            path.addArc(withCenter: .zero, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            path.addArc(withCenter: .zero, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             path.close()
             
         }
