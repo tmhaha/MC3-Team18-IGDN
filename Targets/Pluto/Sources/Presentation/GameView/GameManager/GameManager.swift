@@ -377,7 +377,7 @@ extension GameManager {
             
             leftButton.positionFromLeftBottom(46, 69.5)
             leftThroat.position = leftButton.position
-            bottomProgressBar.position = CGPoint(x: size.width / 2, y: 192.5)
+            bottomProgressBar.position = CGPoint(x: 320, y: 192.5)
             
             changeColorOne.positionFromLeftBottom(259, 69.5)
             changeColorOne.zPosition = 2
@@ -386,7 +386,7 @@ extension GameManager {
         
             changeColorTwo.positionFromLeftBottom(46, 689.5)
             rightButton.positionFromLeftBottom(259, 689.5)
-            topProgressBar.position = CGPoint(x: size.width / 2, y: 651.5)
+            topProgressBar.position = CGPoint(x: 320, y: 651.5)
             topProgressBar.zRotation = CGFloat.pi
             rightThroat.position = rightButton.position
             rightThroat.zRotation = CGFloat.pi

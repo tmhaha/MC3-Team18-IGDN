@@ -10,7 +10,7 @@ import SpriteKit
 
 class ProgressBarNode: SKShapeNode {
     
-    let totalWidth = 298.0
+    let totalWidth = 100.0
     var percent: CGFloat = 0.0 {
         willSet(newValue) {
             changeProgress(newValue * totalWidth)
@@ -41,21 +41,23 @@ class ProgressBarNode: SKShapeNode {
 
         let path = UIBezierPath()
 
-        path.move(to: CGPoint(x: 0, y: -8)) // 시작점 (100, 100)
-        path.addLine(to: CGPoint(x: 8, y: 8)) // 두 번째 점 (150, 150)
-        path.addLine(to: CGPoint(x: -8, y: 8)) // 세 번째 점 (50, 150)
+        path.move(to: .zero)
+        path.addLine(to: CGPoint(x: -4, y: -8))
+        path.addLine(to: CGPoint(x: 12, y: 0)) //
+        path.addLine(to: CGPoint(x: -4, y: 8)) //
         path.close() // 삼각형
 
         directionNode.path = path.cgPath
-        directionNode.fillColor = .blue
+        directionNode.fillColor = .white
         directionNode.strokeColor = .clear
+        directionNode.zPosition = 3
 
         label.text = "0%"
-        label.fontSize = 25
-        label.position = CGPoint(x: 0, y: 14)
-
-        directionNode.position = CGPoint(x: -totalWidth / 2, y: 18)
-        directionNode.addChild(label)
+        label.fontSize = 16
+        label.position = CGPoint(x: (totalWidth / 2) - (label.frame.width / 2), y: 6)
+        
+        directionNode.position = CGPoint(x: -totalWidth / 2, y: 0)
+        addChild(label)
         addChild(directionNode)
     }
     
