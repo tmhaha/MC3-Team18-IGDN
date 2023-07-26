@@ -220,6 +220,7 @@ extension CreateMapViewController: UIScrollViewDelegate {
     
 }
 
+// MARK: Path의 Shape를 그리는 역할 [DEBUG]
 extension UIView {
     func addShapeLayer(to path: CGPath) {
         let shapeLayer = CAShapeLayer()
