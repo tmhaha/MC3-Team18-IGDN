@@ -116,6 +116,7 @@ class CreateMapViewController: UIViewController {
             if viewModel.isEditing {
                 let capturingView = self.contentView
                 capturingView.gridContainerView.isHidden = true
+                capturingView.scrollView.backgroundColor = .clear
                 if let capturedImage = capturingView.scrollView.screenshot(),
                    let imageData = capturedImage.pngData() {
                     let previewId = UUID().uuidString
@@ -142,6 +143,7 @@ class CreateMapViewController: UIViewController {
             showContentView(isShown: true)
             let capturingView = self.contentView
             capturingView.gridContainerView.isHidden = true
+            capturingView.scrollView.backgroundColor = .clear
             if let capturedImage = capturingView.scrollView.screenshot(),
                let imageData = capturedImage.pngData() {
                 let previewId = UUID().uuidString
