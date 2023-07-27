@@ -8,9 +8,9 @@
 
 import Foundation
 
-extension Array where Element == TutorailView.Activate {
+extension Array where Element == TutorialView.Activate {
     
-    func contain(_ button: TutorailView.Activate) -> Bool {
+    func contain(_ button: TutorialView.Activate) -> Bool {
         contains(where: { $0 == button })
     }
 }

@@ -31,13 +31,14 @@ class GameManager: ObservableObject {
     
     // MARK: Timer
     let gameTimer = GameTimer(timeInterval: 0.02)
+    let backgroundTimer = GameTimer(timeInterval: 1.0)
     
     // MARK: Delegate
     var delegate: ShowAlertDelegate? = nil
     
     // MARK: private
     @Published var throatGauge: Int = 100
-
+    
     private var gameConstants: GameConstants
     
     // MARK: Temp
@@ -68,39 +69,27 @@ class GameManager: ObservableObject {
         self.scene = scene
         
         scene.addChilds(nodes.all)
-        nodes.settingPlanets()
+        //nodes.settingPlanets()
         nodes.positioning(size: scene.size)
         nodes.setEachPhisicalBody()
         nodes.setName()
         nodes.imageSetting()
         
         nodes.leftThroat.delegate = self
-
+        
     }
     
     func startGame() {
         gameTimer.startTimer(completion: gameTimerAction)
+        backgroundTimer.startTimer(completion: backgroundTimerAction)
     }
     
     func gameTimerAction(_ x: Double) {
-        // backGroundLayers
-        if x.truncatingRemainder(dividingBy: 1.0) == 0 {
-            
-            let index = Int(x) % 30
-            
-            let backgroundNodes = backGround.timeLayer[index]
-            scene?.addChilds(backgroundNodes.map { $0 })
-            
-            for node in backgroundNodes {
-                node.runAndRemove(SKAction.sequence([SKAction.fadeIn(withDuration: 1), SKAction.fadeOut(withDuration: 1)]).forever)
-                node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration), withKey: "moveBackground")
-            }
-        }
         
         if ObstacleIndex >= map.count {
-//            gameTimer.stopTimer()
-//            scene?.isPaused = true
-//            delegate?.showAlert(alertType: .success)
+            //            gameTimer.stopTimer()
+            //            scene?.isPaused = true
+            //            delegate?.showAlert(alertType: .success)
         }
         else {
             while ObstacleIndex < map.count && Double(plentTime) > map[ObstacleIndex].point.x {
@@ -110,9 +99,9 @@ class GameManager: ObservableObject {
                 scene?.addChild(planet)
                 planet.startDirectionNodesRotation()
                 planet.runAndRemove(SKAction.moveTo(x: -150, duration: gameConstants.planetDuration))
-
+                
                 ObstacleIndex += 1
-               
+                
                 DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) { [self] in
                     let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
                     self.nodes.topProgressBar.percent = percent
@@ -129,7 +118,20 @@ class GameManager: ObservableObject {
         }
         plentTime += 1
     }
+    
+    func backgroundTimerAction(_ x: Double) {
+        let index = Int(x) % 30
         
+        let backgroundNodes = backGround.timeLayer[index]
+        print("@LOG \(index), \(x) : \(backgroundNodes.count)")
+        scene?.addChilds(backgroundNodes.map { $0 })
+        for node in backgroundNodes {
+            node.runAndRemove(SKAction.sequence([SKAction.fadeIn(withDuration: 1), SKAction.fadeOut(withDuration: 1)]).forever)
+            node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration), withKey: "moveBackground")
+        }
+        
+    }
+    
     func binding() {
         
         $touchesBegin
@@ -142,13 +144,15 @@ class GameManager: ObservableObject {
                     
                     if self.nodes.rightButton.contains(location) {
                         if throatGauge > 0 && nodes.astronaut.status != .inOribt {
+                            
                             nodes.astronaut.startTurnCounterClockwise()
                             nodes.leftThroat.useThroat()
                             nodes.rightThroat.useThroat()
                         }
                     }
                     else if self.nodes.leftButton.contains(location){
-                        if throatGauge > 0  && nodes.astronaut.status != .inOribt{
+                        if throatGauge > 0  && nodes.astronaut.status != .inOribt {
+                           
                             nodes.astronaut.startTurnClockwise()
                             nodes.leftThroat.useThroat()
                             nodes.rightThroat.useThroat()
@@ -183,11 +187,13 @@ class GameManager: ObservableObject {
                         }
                     }
                     if self.nodes.pauseButton.contains(location) {
+                        
                         scene.isPaused = true
                         gameTimer.stopTimer()
-                        delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
-                                                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit", imageName: "", isLast: true))
-                        //delegate?.showAlert(alertType: .pause)
+                        backgroundTimer.stopTimer()
+                       // delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
+                                //                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit"))
+                        delegate?.showAlert(alertType: .pause)
                     }
                 }
             }
@@ -197,7 +203,7 @@ class GameManager: ObservableObject {
             .sink {  [weak self] (touches, scene) in
                 
                 guard let self = self else { return }
-
+                
                 for touch in touches {
                     let location = touch.location(in: scene)
                     
@@ -230,7 +236,7 @@ class GameManager: ObservableObject {
                 else if (nodeA?.name == "astronaut" && nodeB?.name == "planet") || (nodeA?.name == "planet" && nodeB?.name == "astronaut") {
                     if nodeA?.name == "planet", let astronaut = nodeB as? AstronautNode, let planet = nodeA as? PlanetNode {
                         if planet.astronautColor == astronaut.type {
-
+                            
                             astronaut.orbitPlanet = planet
                             astronaut.status = .inOribt
                             nodes.leftThroat.fillThroat()
@@ -307,7 +313,7 @@ extension GameManager {
     }
     
     class Nodes {
-
+        
         let background = SKSpriteNode()
         var astronaut = AstronautNode(color: .white, size: CGSize(width: 30, height: 30))
         let leftButton = SKSpriteNode(color: .white, size: CGSize(width: 85, height: 85))
@@ -322,9 +328,8 @@ extension GameManager {
         let rightWall = SKSpriteNode()
         let topWall = SKSpriteNode()
         let bottomWall = SKSpriteNode()
-        var planets: [TempPlanetNode] = []
+       // var planets: [TempPlanetNode] = []
         var pauseButton = SKSpriteNode(color: .white, size: CGSize(width: 37, height: 144))
-        
         
         var all: [SKNode] {
             [background, bottomProgressBar, topProgressBar, leftThroat, rightThroat, astronaut, leftButton, rightButton, leftWall, rightWall, topWall, bottomWall, changeColorOne, changeColorTwo, pauseButton]
@@ -348,46 +353,48 @@ extension GameManager {
             
             let blueButtonTexture = SKTexture(imageNamed: "GreenButton")
             changeColorOne.texture = blueButtonTexture
+            
+            let astronautTexture = SKTexture(imageNamed: AstronautColor.none.imageName)
+            astronaut.texture = astronautTexture
         }
         
-        func settingPlanets() {
-            
-            var index = 0
-            let circlePath = TempPlanetNode.createCirclePath(center: .zero, radius: 50)
-            let squarePath = TempPlanetNode.createSquarePath()
-            
-            for _ in 0 ..< 10 {
-                
-                var path = CGPath(rect: .zero, transform: nil)
-                
-                if index % 2 == 0 {
-                    path = squarePath
-                }
-                else if index % 2 == 1 {
-                    path = circlePath
-                }
-                
-                let planet = TempPlanetNode()
-                planet.path = path //TempPlanetNode(path: path)
-                planet.physicsBody = SKPhysicsBody(polygonFrom: path)
-               
-                planet.fillColor = planet.color.color
-                planet.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(planet.frame.height)))))
-                
-               
-                planet.strokeColor = .clear
-                
-                planet.name = "planet"
-                
-                planet.physicsBody?.categoryBitMask = 4
-                
-                planet.physicsBody?.contactTestBitMask = 1
-                planet.physicsBody?.collisionBitMask = 0
-                planets.append(planet)
-                
-                index += 1
-            }
-        }
+//        func settingPlanets() {
+//
+//            var index = 0
+//            let circlePath = TempPlanetNode.createCirclePath(center: .zero, radius: 50)
+//            let squarePath = TempPlanetNode.createSquarePath()
+//
+//            for _ in 0 ..< 10 {
+//
+//                var path = CGPath(rect: .zero, transform: nil)
+//
+//                if index % 2 == 0 {
+//                    path = squarePath
+//                }
+//                else if index % 2 == 1 {
+//                    path = circlePath
+//                }
+//
+//                let planet = TempPlanetNode()
+//                planet.path = path //TempPlanetNode(path: path)
+//                planet.physicsBody = SKPhysicsBody(polygonFrom: path)
+//
+//                planet.fillColor = planet.color.color
+//                planet.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(planet.frame.height)))))
+//
+//                planet.strokeColor = .clear
+//
+//                planet.name = "planet"
+//
+//                planet.physicsBody?.categoryBitMask = 4
+//
+//                planet.physicsBody?.contactTestBitMask = 1
+//                planet.physicsBody?.collisionBitMask = 0
+//                planets.append(planet)
+//
+//                index += 1
+//            }
+//        }
         
         func makeGradient(_ color1: UIColor, _ color2: UIColor) -> CAGradientLayer {
             let gradient = CAGradientLayer()
@@ -395,13 +402,13 @@ extension GameManager {
             gradient.locations = [0.0, 1.0]
             gradient.startPoint = CGPoint(x: 5.0, y: 0.0)
             gradient.endPoint = CGPoint(x: 5.0, y: 1.0)
-           
+            
             return gradient
         }
         
         
         func positioning(size: CGSize) {
-
+            
             let bgTexture = SKTexture(imageNamed: "BackGround")
             background.texture = bgTexture
             background.position = CGPoint(x: size.width / 2, y: size.height / 2)
@@ -422,7 +429,7 @@ extension GameManager {
             changeColorOne.zPosition = 2
             leftButton.zPosition = 2
             leftThroat.zPosition = 2
-        
+            
             changeColorTwo.positionFromLeftBottom(46, 689.5)
             rightButton.positionFromLeftBottom(259, 689.5)
             topProgressBar.position = CGPoint(x: 320, y: 651.5)
@@ -436,7 +443,6 @@ extension GameManager {
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
             topWall.size = CGSize(width: size.width, height: 116)
-            let layer = makeGradient(UIColor(red: 0, green: 102 / 255, blue: 254 / 255, alpha: 1), UIColor(red: 1 / 255, green: 13 / 255, blue: 71 / 255, alpha: 0.5))
             let texture = SKTexture(imageNamed: "ButtonArea")
             bottomWall.texture = texture
             topWall.texture = texture
@@ -463,11 +469,11 @@ extension GameManager {
                     node.removeAllActions()
                     node.removeAllChildren()
                 }
-            planets.forEach { node in
-                node.removeAllActions()
-                node.removeAllChildren()
-                
-            }
+//            planets.forEach { node in
+//                node.removeAllActions()
+//                node.removeAllChildren()
+//
+//            }
         }
         
         func setAstronuat() {
@@ -539,14 +545,15 @@ extension GameManager {
         
         init(constants: GameConstants) {
             
-            for _ in 0 ... 100 {
+            for _ in 0 ... 20 {
                 let time = Int.random(in: 0 ... 30)
                 let node = Node(
                     time: time,
                     duration: constants.backgroundFirstLayerDuration )
                 
-                node.color = .yellow
-                node.size = CGSize(width: 15, height: 15)
+                let sizeNTexture = makeLayer1Random()
+                node.texture = sizeNTexture.0
+                node.size = sizeNTexture.1
                 node.zPosition = -1
                 
                 node.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(node.size.height)))))
@@ -558,24 +565,89 @@ extension GameManager {
                 let node = Node(time: time,
                                 duration: constants.backgroundSecondLayerDuration)
                 
-                node.color = .yellow
                 node.zPosition = -1
-                node.size = CGSize(width: 10, height: 10)
+                let sizeNTexture = makeLayer2Random()
+                node.texture = sizeNTexture.0
+                node.size = sizeNTexture.1
                 node.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(node.size.height)))))
                 timeLayer[time].append(node)
             }
             
-            for _ in 0 ... 100 {
+            for _ in 0 ... 200 {
                 let time = Int.random(in: 0 ... 30)
                 let node = Node(time: time,
                                 duration: constants.backgroundThirdLayerDuration)
                 
-                node.color = .yellow
                 node.zPosition = -1
-                node.size = CGSize(width: 5, height: 5)
+                let sizeNTexture = makeLayer3Random()
+                node.texture = sizeNTexture.0
+                node.size = sizeNTexture.1
+                
                 node.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(node.size.height)))))
                 timeLayer[time].append(node)
             }
+        }
+        
+        func makeLayer3Random() -> (SKTexture, CGSize) {
+            let first = Int.random(in: 11 ... 13)
+            let second = Int.random(in: 1 ... 20)
+            let result = "\(first)-\(second)"
+            var bgSize = CGSize()
+            
+            switch second % 4 {
+            case 1:
+                bgSize = CGSize(width: 2, height: 2)
+            case 2:
+                bgSize = CGSize(width: 3, height: 3)
+            case 3:
+                bgSize = CGSize(width: 4, height: 4)
+            case 0:
+                bgSize = CGSize(width: 5, height: 5)
+            default:
+                break
+            }
+            
+            return (SKTexture(imageNamed: result), bgSize)
+        }
+        
+        func makeLayer2Random() -> (SKTexture, CGSize) {
+            let first = Int.random(in: 1...9)
+            var size = CGSize()
+            
+            
+            switch first % 3 {
+            case 1:
+                size = CGSize(width: 10, height: 10)
+            case 2:
+                size = CGSize(width: 8, height: 8)
+            case 0:
+                size = CGSize(width: 6, height: 6)
+            default:
+                break
+            }
+            
+            return (SKTexture(imageNamed: "21-\(first)"), size)
+        }
+        
+        func makeLayer1Random() -> (SKTexture, CGSize) {
+            let first = Int.random(in: 1...3)
+            let second = Int.random(in: 1...4)
+            
+            var size = CGSize()
+            
+            switch second % 4 {
+            case 1:
+                size = CGSize(width: 40, height: 1)
+            case 2:
+                size = CGSize(width: 50, height: 2)
+            case 3:
+                size = CGSize(width: 60, height: 4)
+            case 0:
+                size = CGSize(width: 70, height: 8)
+            default:
+                break
+            }
+            return (SKTexture(imageNamed: "3\(first)-\(second)"), size)
         }
     }
 }

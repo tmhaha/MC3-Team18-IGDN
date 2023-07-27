@@ -1,5 +1,6 @@
 import UIKit
 
+
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -50,13 +51,29 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             print("-------------------")
         }
         
-        //let viewController = CreateModeViewController(with: CreateModeViewModel(mapList: mapList))
-        //let navigationController = UINavigationController(rootViewController: viewController)
-        //navigationController.isNavigationBarHidden = true
+        let viewController = CreateModeViewController(with: CreateModeViewModel(mapList: mapList))
+        let navigationController = UINavigationController(rootViewController: viewController)
+        navigationController.isNavigationBarHidden = true
         let homeVC = UINavigationController(rootViewController: ContentView().makeViewController())
         homeVC.navigationBar.isHidden = true
         AppDelegate.vc = homeVC
+        
+        let vc = UIViewController()
+        
         window?.rootViewController = homeVC
+        
+        let temp = TutorialView(frame: vc.view.bounds)
+        temp.activates = [.changeGreen, .changeRed, .pauseButton, .turnClockWise, .turnCounterClockWise, .ThroatGagueOne, .ThroatGagueTwo]
+        vc.view.backgroundColor = .clear
+        
+        vc.view.addSubview(temp)
+        temp.translatesAutoresizingMaskIntoConstraints = false
+        temp.topAnchor.constraint(equalTo: vc.view.topAnchor).isActive = true
+        temp.bottomAnchor.constraint(equalTo: vc.view.bottomAnchor).isActive = true
+        temp.leadingAnchor.constraint(equalTo: vc.view.leadingAnchor).isActive = true
+        temp.trailingAnchor.constraint(equalTo: vc.view.trailingAnchor).isActive = true
+        
+        
         window?.makeKeyAndVisible()
 
         return true
