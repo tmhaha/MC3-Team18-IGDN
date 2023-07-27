@@ -7,10 +7,3 @@
 //
 
 import Foundation
-
-extension Array where Element == TutorialView.Activate {
-    
-    func contain(_ button: TutorialView.Activate) -> Bool {
-        contains(where: { $0 == button })
-    }
-}

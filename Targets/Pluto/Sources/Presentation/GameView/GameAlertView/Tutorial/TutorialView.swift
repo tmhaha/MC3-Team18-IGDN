@@ -190,7 +190,7 @@ class TutorialView: UIView {
         let boundsPath = UIBezierPath(rect: bounds)
         
         for activate in Activate.allCases {
-            if activates.contain(activate) {
+            if activates.contains(where: { $0 == activate }) {
                 boundsPath.append(activate.path)
             }
             else {
