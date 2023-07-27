@@ -11,7 +11,7 @@ import SwiftUI
 enum Theme: Int, CaseIterable {
     case blue = 0
     case orange = 1
-    case lime = 2
+    case gray = 2
         
     var name: String {
         switch self {
@@ -19,8 +19,8 @@ enum Theme: Int, CaseIterable {
             return "blue"
         case .orange:
             return "orange"
-        case .lime:
-            return "green"
+        case .gray:
+            return "Gray"
         }
     }
 
@@ -30,11 +30,10 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "002EFE")
         case .orange:
             return Color(hex: "FF7F04")
-        case .lime:
-            return Color.green
+        case .gray:
+            return Color(hex: "292929")
         }
     }
-
     
     var cover: Color {
         switch self {
@@ -42,8 +41,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "002EFE").opacity(0.75)
         case .orange:
             return Color(hex: "FF7F04").opacity(0.75)
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "292929").opacity(0.75)
         }
     }
     
@@ -53,8 +52,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "2244FF")
         case .orange:
             return Color(hex: "FFA54E")
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "444444")
         }
     }
     
@@ -64,8 +63,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "4061F8")
         case .orange:
             return Color(hex: "F5771C")
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "9F9F9F")
         }
     }
     
@@ -75,8 +74,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "B4C1FF")
         case .orange:
             return Color(hex: "FFBB81")
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "E1E1E1")
         }
     }
 
@@ -86,8 +85,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "00198C")
         case .orange:
             return Color(hex: "C55D00")
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "000000")
         }
     }
     
@@ -97,8 +96,8 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "8996D1")
         case .orange:
             return Color(hex: "D9A77F")
-        case .lime:
-            return Color.green.opacity(0.5)
+        case .gray:
+            return Color(hex: "757575")
         }
     }
     
@@ -108,7 +107,7 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "ED5959")
         case .orange:
             return Color(hex: "ED5959")
-        case .lime:
+        case .gray:
             return Color(hex: "ED5959")
         }
     }
@@ -119,7 +118,7 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "FFFFFF")
         case .orange:
             return Color(hex: "FFFFFF")
-        case .lime:
+        case .gray:
             return Color(hex: "FFFFFF")
         }
     }
@@ -130,7 +129,7 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "E6E7E7")
         case .orange:
             return Color(hex: "E6E7E7")
-        case .lime:
+        case .gray:
             return Color(hex: "E6E7E7")
         }
     }
@@ -141,10 +140,33 @@ enum Theme: Int, CaseIterable {
             return Color(hex: "000000")
         case .orange:
             return Color(hex: "000000")
-        case .lime:
+        case .gray:
             return Color(hex: "000000")
         }
     }
+    
+    var plutoImage1: String {
+        switch self {
+        case .blue:
+            return "pluto_blue"
+        case .orange:
+            return "pluto_orange"
+        case .gray:
+            return "pluto_gray"
+        }
+    }
+    
+    var plutoImage2: String { // todo
+        switch self {
+        case .blue:
+            return "pluto_blue2"
+        case .orange:
+            return "pluto_orange2"
+        case .gray:
+            return "pluto_gray2"
+        }
+    }
+    
 //    var pauseButtonImage: String { // todo
 //        switch self {
 //        case .blue:
@@ -156,16 +178,6 @@ enum Theme: Int, CaseIterable {
 //        }
 //    }
 //
-//    var spinImage: String { // todo
-//        switch self {
-//        case .blue:
-//            return
-//        case .orange:
-//            return
-//        case .lime:
-//            return
-//        }
-//    }
 }
 
 let allThemeCases: [Theme] = Theme.allCases

@@ -104,7 +104,7 @@ struct PlayButton: View {
                             .resizable()
                             .frame(width: 15, height: 20)
                             .offset(x: isAnimating ? 5 : 0)
-                            .animation(Animation.easeInOut(duration: 0.5).repeatCount(3), value: isAnimating)
+                            .animation(Animation.easeInOut(duration: 0.1).repeatCount(5), value: isAnimating)
                     }
                     .foregroundColor(SettingData.shared.selectedTheme.mainLight)
                 }
