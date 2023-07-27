@@ -60,12 +60,9 @@ final class CreateMapBottomToolView: UIView {
     }
     
     private func setUpViews() {
-
-        objectColorButton.setImage(UIImage(named: "creative_color_white"), for: .normal)
-        objectShapeButton.setImage(UIImage(named: "creative_shape_circle"), for: .normal)
-        objectSizeButton.setImage(UIImage(named: "creative_size_1x"), for: .normal)
-        
+        objectColorButton.setImage(UIImage(named: SettingData().selectedTheme.creativeColor[0]), for: .normal)
+        objectShapeButton.setImage(UIImage(named: SettingData().selectedTheme.creativeShape[0]), for: .normal)
+        objectSizeButton.setImage(UIImage(named: SettingData().selectedTheme.creativeSize[0]), for: .normal)
     }
-    
     
 }
