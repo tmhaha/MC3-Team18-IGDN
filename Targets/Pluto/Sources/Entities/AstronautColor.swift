@@ -98,13 +98,13 @@ extension AstronautColor {
     var imageName: String {
         switch self {
         case .one:
-            return "GreenAstronaut"
+            return "greenAstronuat"
         case .two:
-            return "RedAstronuat"
+            return "redAstronuat"
         case .none:
-            return "NoneAstronaut"
+            return "blueAstronuat"
         case .combine:
-            return "YellowAstronaut"
+            return "yellowAstronuat"
         }
     }
 }

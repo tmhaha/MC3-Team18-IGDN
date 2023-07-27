@@ -353,6 +353,9 @@ extension GameManager {
             
             let blueButtonTexture = SKTexture(imageNamed: "GreenButton")
             changeColorOne.texture = blueButtonTexture
+            
+            let astronautTexture = SKTexture(imageNamed: AstronautColor.none.imageName)
+            astronaut.texture = astronautTexture
         }
         
 //        func settingPlanets() {

@@ -44,9 +44,6 @@ class PlanetNode: SKSpriteNode {
           
             directionNode.append(node)
         }
-        
-        let newTexture = SKTexture(imageNamed: astronautColor.imageName)
-        
     }
     
     
@@ -62,9 +59,7 @@ class PlanetNode: SKSpriteNode {
         
         astronautNode = thatNodePoint
         
-        astronaut.zRotation += CGFloat.pi / 2
         addChild(astronaut)
-
         astronaut.run(SKAction.repeatForever(followAction), withKey: "followAction")
         
         addChild(contactNode)
@@ -75,7 +70,7 @@ class PlanetNode: SKSpriteNode {
         astronaut.removeAction(forKey: "followAction")
         astronaut.removeFromParent()
         astronaut.speed = 1
-        astronaut.zRotation = astronaut.zRotation + CGFloat.pi/2
+        astronaut.zRotation += CGFloat.pi / 2
         astronaut.position = CGPoint(x: position.x + astronaut.position.x, y: position.y + astronaut.position.y )
         astronaut.id = id
         
@@ -86,68 +81,19 @@ class PlanetNode: SKSpriteNode {
 extension PlanetNode {
     
     private func timingFunc(_ timing: Float) -> Float {
+        
         if astronaut.color == astronautNode!.color {
             delegate?.passAstronautPoint(at: CGPoint(x: position.x + astronaut.position.x, y: position.y + astronaut.position.y))
         }
         if contactNode.path!.contains(astronaut.position) {
             
-            let newTexture = SKTexture(imageNamed: astronautColor.imageName)
-            
+            let newTexture = SKTexture(imageNamed: astronautColor.imageName + "CW")
             astronaut.texture = newTexture
             astronaut.speed = gameConstants.planetOrbitDuration
             return timing
         }
         
         return timing
-    }
-    
-    static func createSquarePath() -> CGPath {
-        let size = CGSize(width: 100, height: 100)
-        let path = UIBezierPath(roundedRect: CGRect(origin: .zero, size: size), cornerRadius: 20)
-        return path.cgPath
-    }
-    
-    func createCircularNode(at point: CGPoint, radius: CGFloat, color: UIColor) -> (SKNode, CGPath) {
-        let node = SKNode()
-        
-        let path = UIBezierPath(arcCenter: point, radius: radius, startAngle: 0, endAngle: CGFloat.pi * 2, clockwise: true)
-        let shapeNode = SKShapeNode(path: path.cgPath)
-        shapeNode.strokeColor = color
-        shapeNode.fillColor = UIColor.clear
-        
-        node.addChild(shapeNode)
-        
-        return (node, path.cgPath)
-    }
-    
-    static func createRoundedStarPath(cornerRadius: CGFloat = 20, width: CGFloat = 100, height: CGFloat = 100) -> CGPath {
-        let path = UIBezierPath()
-        
-        let center = CGPoint(x: width/2, y: height/2)
-        let numberOfPoints = 5
-        let angle = 4 * CGFloat.pi / CGFloat(numberOfPoints)
-        let outerRadius = min(width, height) / 2
-        let innerRadius = outerRadius * cos(angle/2) / cos(2 * angle)
-        
-        for i in 0..<(numberOfPoints * 2) {
-            let currentAngle = CGFloat(i) * angle - CGFloat.pi / 2
-            let radius = (i % 2 == 0) ? outerRadius : innerRadius
-            
-            let x = center.x + radius * cos(currentAngle)
-            let y = center.y + radius * sin(currentAngle)
-            
-            if i == 0 {
-                path.move(to: CGPoint(x: x, y: y))
-            } else {
-                path.addLine(to: CGPoint(x: x, y: y))
-            }
-        }
-        
-        path.close()
-        
-        let roundedPath = path.cgPath.copy(strokingWithWidth: cornerRadius, lineCap: .butt, lineJoin: .round, miterLimit: 0)
-        
-        return roundedPath
     }
     
     private func orginPointToNodePoint(at origin: CGPoint, to nodePoint: CGPoint, nodeSize: CGSize) -> CGPoint {
@@ -157,17 +103,7 @@ extension PlanetNode {
         return answer
     }
     
-    private func nodePointToOriginPoint(at nodePoint: CGPoint, in thatPoint: CGPoint, nodeSize: CGSize) -> CGPoint {
-        let nodeCenterPoint = CGPoint(x: nodePoint.x + (nodeSize.width / 2), y: nodePoint.y + (nodeSize.height / 2))
-        let answer = CGPoint(x: nodeCenterPoint.x + thatPoint.x, y: nodeCenterPoint.y + thatPoint.y)
-        
-        return answer
-    }
-    
-    private func positionToCenter(at point: CGPoint, nodeSize: CGSize) -> CGPoint {
-        CGPoint(x: point.x - (nodeSize.width / 2), y: point.y - (nodeSize.height / 2))
-    }
-    
+  
     static func createCirclePath(center: CGPoint, radius: CGFloat) -> CGPath {
         let path = CGMutablePath()
         let startAngle: CGFloat = 0
