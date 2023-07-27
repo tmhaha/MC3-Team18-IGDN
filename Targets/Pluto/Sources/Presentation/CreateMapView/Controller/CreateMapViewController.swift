@@ -56,15 +56,18 @@ class CreateMapViewController: UIViewController {
     }
     
     private func setUpTargets() {
-        contentView.bottomToolView.objectColorButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectShapeButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
-        contentView.bottomToolView.objectSizeButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.topToolView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.alertView.keepEditingButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.alertView.discardButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.nameInputView.backButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
         contentView.nameInputView.saveButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectColorUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectColorDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectShapeUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectShapeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectSizeUpButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
+        contentView.bottomToolView.objectSizeDownButton.addTarget(self, action: #selector(buttonDidTap(_:)), for: .touchUpInside)
     }
     
     private func setUpEditModeView() {
@@ -83,11 +86,11 @@ class CreateMapViewController: UIViewController {
             .sink { [weak self] event in
                 switch event {
                 case .objectColorButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectColorButton.setImage(UIImage(named: "\(self?.viewModel.objectColor ?? "")"), for: .normal)
+                    self?.contentView.bottomToolView.objectColorImageView.image = UIImage(named: "\(self?.viewModel.objectColor ?? "")")
                 case .objectShapeButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectShapeButton.setImage(UIImage(named: "\(self?.viewModel.objectShape ?? "")"), for: .normal)
+                    self?.contentView.bottomToolView.objectShapeImageView.image = UIImage(named: "\(self?.viewModel.objectShape ?? "")")
                 case .objectSizeButtonDidTapOutput:
-                    self?.contentView.bottomToolView.objectSizeButton.setImage(UIImage(named: "\(self?.viewModel.objectSize ?? "")"), for: .normal)
+                    self?.contentView.bottomToolView.objectSizeImageView.image = UIImage(named: "\(self?.viewModel.objectSize ?? "")")
                 case .saveButtonDidTapOutput:
                     self?.navigationController?.popViewController(animated: false)
                 }
@@ -97,15 +100,24 @@ class CreateMapViewController: UIViewController {
     
     @objc private func buttonDidTap(_ sender: UIButton) {
         switch sender {
-        case self.contentView.bottomToolView.objectColorButton:
+        case self.contentView.bottomToolView.objectColorUpButton:
             viewModel.updateObjectColor()
             input.send(.objectColorButtonDidTap)
-        case self.contentView.bottomToolView.objectShapeButton:
+        case self.contentView.bottomToolView.objectShapeUpButton:
             viewModel.updateObjectShape()
             input.send(.objectShapeButtonDidTap)
-        case self.contentView.bottomToolView.objectSizeButton:
+        case self.contentView.bottomToolView.objectSizeUpButton:
             viewModel.updateObjectSize()
             input.send(.objectSizeButtonDidTap)
+        case self.contentView.bottomToolView.objectColorDownButton:
+            viewModel.updateObjectColorDown()
+            input.send(.objectColorButtonDownDidTap)
+        case self.contentView.bottomToolView.objectShapeDownButton:
+            viewModel.updateObjectShapeDown()
+            input.send(.objectShapeButtonDownDidTap)
+        case self.contentView.bottomToolView.objectSizeDownButton:
+            viewModel.updateObjectSizeDown()
+            input.send(.objectSizeButtonDownDidTap)
         case self.contentView.topToolView.backButton:
             if viewModel.isChangedCreativeObjectList() {
                 self.navigationController?.popViewController(animated: true)

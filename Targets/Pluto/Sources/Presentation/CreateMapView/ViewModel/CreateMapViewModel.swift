@@ -16,6 +16,9 @@ final class CreateMapViewModel {
         case objectColorButtonDidTap
         case objectShapeButtonDidTap
         case objectSizeButtonDidTap
+        case objectColorButtonDownDidTap
+        case objectShapeButtonDownDidTap
+        case objectSizeButtonDownDidTap
         case saveButtonDidTap
     }
     enum Output {
@@ -83,12 +86,19 @@ final class CreateMapViewModel {
                 self?.output.send(.objectShapeButtonDidTapOutput)
             case .objectSizeButtonDidTap:
                 self?.output.send(.objectSizeButtonDidTapOutput)
+            case .objectColorButtonDownDidTap:
+                self?.output.send(.objectColorButtonDidTapOutput)
+            case .objectShapeButtonDownDidTap:
+                self?.output.send(.objectShapeButtonDidTapOutput)
+            case .objectSizeButtonDownDidTap:
+                self?.output.send(.objectSizeButtonDidTapOutput)
             case .saveButtonDidTap:
                 self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!, previewId: (self?.previewId)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
                 }
                 self?.output.send(.saveButtonDidTapOutput)
+            
             }
         }.store(in: &subscriptions)
         return output.eraseToAnyPublisher()
@@ -199,6 +209,18 @@ final class CreateMapViewModel {
     
     func updateObjectSize() {
         objectSizeIndex = (objectSizeIndex + 1) % SettingData().selectedTheme.creativeSize.count
+    }
+    
+    func updateObjectColorDown() {
+        objectColorIndex = (objectColorIndex - 1 + 4) % SettingData().selectedTheme.creativeColor.count
+    }
+    
+    func updateObjectShapeDown() {
+        objectShapeIndex = (objectShapeIndex - 1 + 4) % SettingData().selectedTheme.creativeShape.count
+    }
+    
+    func updateObjectSizeDown() {
+        objectSizeIndex = (objectSizeIndex - 1 + 3) % SettingData().selectedTheme.creativeSize.count
     }
     
     private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, pathIndex: Int, rect: CGRect, colorIndex: Int, sizeIndex: Int, shapeIndex: Int) -> CreativeObject {
