@@ -15,6 +15,7 @@ struct Object: ObstacleProtocol {
     var path: CGPath
     var imageName: String
     var isClockWise: Bool
+    var tutorails: [GameAlertType] = []
     
     // 초기화
     init(creativeObject: CreativeObject) {

@@ -22,6 +22,7 @@ class PlanetNode: SKSpriteNode {
     var directionNode: [SKShapeNode] = []
     var path: CGPath = CGPath(ellipseIn: .zero, transform: nil)
     var isClockWise = true
+    var tutorials: [TutorialView] = []
     
     func startDirectionNodesRotation() {
         

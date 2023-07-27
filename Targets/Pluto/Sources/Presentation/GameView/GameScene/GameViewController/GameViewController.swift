@@ -82,6 +82,44 @@ class GameViewController: UIViewController {
 
 extension GameViewController: ShowAlertDelegate {
     
+    func showTutorial(tutorials: [GameAlertType]) {
+        var tutorial = TutorialView()
+        var activates: [[TutorialView.Activate]] = []
+        var topText: [String] = []
+        var bottomText: [String] = []
+        var image: [UIImage] = []
+        for tutorial in tutorials {
+            switch tutorial {
+            case .tutorial(activate: let activate,
+                           bottomString: let bottomString,
+                           topString: let topString,
+                           imageName: let imageName,
+                           isLast: _):
+                activates.append(activate)
+                topText.append(topString)
+                bottomText.append(bottomString)
+                image.append(UIImage(named: "diamond_100_yellow")!)
+            default:
+                break
+            }
+        }
+        tutorial.activates = activates
+        tutorial.image = image
+        tutorial.bottomText = bottomText
+        tutorial.topText = topText
+        tutorial.tutorialFinishDelegate = self
+        
+        view.addSubview(tutorial)
+        
+        tutorial.translatesAutoresizingMaskIntoConstraints = false
+        
+        tutorial.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        tutorial.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+        tutorial.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        tutorial.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+    }
+    
+    
     func showAlert(alertType: GameAlertType) {
         scene?.isUserInteractionEnabled = false
         switch alertType {
@@ -101,23 +139,11 @@ extension GameViewController: ShowAlertDelegate {
             gameAlertView.downCompletion = backToList
             addAlertView()
             
-        case .tutorial(activate: let activates, bottomString: let bottomString, topString: let topString, imageName: let imageName, isLast: let isLast):
-            
-            var tutorial = TutorialView(frame: scene!.frame)
-            tutorial.activates = [.changeGreen, .changeRed,  .turnClockWise, .ThroatGagueOne, .ThroatGagueTwo]
-            //tutorial.delegate = self
-            //tutorialView = tutorial.makeUIView()
-            //tutorialView.backgroundColor = .clear
-            //addTutorialView()
-            view.addSubview(tutorial)
-            
-            tutorial.translatesAutoresizingMaskIntoConstraints = false
-            
-            tutorial.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            tutorial.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-            tutorial.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-            tutorial.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
+        default:
+            break
         }
+        
+        
     }
     
     func backToList() {
@@ -155,5 +181,22 @@ extension GameViewController: ViewDismissDelegate {
         tutorialView.removeFromSuperview()
         gameManager.scene?.isPaused = false
         scene?.isUserInteractionEnabled = true
+    }
+}
+
+extension GameViewController: TutorialFinishDelegate {
+    func finish(_ touches: Set<UITouch>, with event: UIEvent?, endedType: Int) {
+        if endedType == 1 {
+            gameManager.gameTimer.restartTimer()
+            gameManager.scene?.isPaused = false
+            scene?.isUserInteractionEnabled = true
+            gameManager.touchesBegin = (touches, scene!)
+        }
+        else if endedType == 2{
+            gameManager.touchesBegin = (touches, scene!)
+        }
+        else {
+            gameManager.touchesEnd = (touches, scene!)
+        }
     }
 }

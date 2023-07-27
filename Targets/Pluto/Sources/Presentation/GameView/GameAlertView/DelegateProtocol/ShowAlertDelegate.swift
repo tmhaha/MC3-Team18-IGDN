@@ -9,5 +9,6 @@
 import Foundation
 
 protocol ShowAlertDelegate {
-    func showAlert(alertType: GameAlertType) -> Void
+    func showAlert(alertType: GameAlertType)
+    func showTutorial(tutorials: [GameAlertType])
 }
