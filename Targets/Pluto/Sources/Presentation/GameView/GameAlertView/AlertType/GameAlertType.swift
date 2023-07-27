@@ -12,7 +12,7 @@ enum GameAlertType {
     case success
     case fail
     case pause
-    case tutorial(activate: [TutorailView.Activate], bottomString: String, topString: String)
+    case tutorial(activate: [TutorialView.Activate], bottomString: String, topString: String)
     
     var backgroundColor: UIColor {
         switch self {

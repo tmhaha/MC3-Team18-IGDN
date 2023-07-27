@@ -69,7 +69,7 @@ class GameManager: ObservableObject {
         self.scene = scene
         
         scene.addChilds(nodes.all)
-        nodes.settingPlanets()
+        //nodes.settingPlanets()
         nodes.positioning(size: scene.size)
         nodes.setEachPhisicalBody()
         nodes.setName()
@@ -144,13 +144,15 @@ class GameManager: ObservableObject {
                     
                     if self.nodes.rightButton.contains(location) {
                         if throatGauge > 0 && nodes.astronaut.status != .inOribt {
+                            
                             nodes.astronaut.startTurnCounterClockwise()
                             nodes.leftThroat.useThroat()
                             nodes.rightThroat.useThroat()
                         }
                     }
                     else if self.nodes.leftButton.contains(location){
-                        if throatGauge > 0  && nodes.astronaut.status != .inOribt{
+                        if throatGauge > 0  && nodes.astronaut.status != .inOribt {
+                           
                             nodes.astronaut.startTurnClockwise()
                             nodes.leftThroat.useThroat()
                             nodes.rightThroat.useThroat()
@@ -185,11 +187,13 @@ class GameManager: ObservableObject {
                         }
                     }
                     if self.nodes.pauseButton.contains(location) {
+                        
                         scene.isPaused = true
                         gameTimer.stopTimer()
-                        delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
-                                                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit"))
-                        //delegate?.showAlert(alertType: .pause)
+                        backgroundTimer.stopTimer()
+                       // delegate?.showAlert(alertType: .tutorial(activate: [.changeGreen, .turnClockWise],
+                                //                                 bottomString: "FUCK YOU GUYs", topString: "fuck the shit"))
+                        delegate?.showAlert(alertType: .pause)
                     }
                 }
             }
@@ -324,7 +328,7 @@ extension GameManager {
         let rightWall = SKSpriteNode()
         let topWall = SKSpriteNode()
         let bottomWall = SKSpriteNode()
-        var planets: [TempPlanetNode] = []
+       // var planets: [TempPlanetNode] = []
         var pauseButton = SKSpriteNode(color: .white, size: CGSize(width: 37, height: 144))
         
         var all: [SKNode] {
@@ -351,43 +355,43 @@ extension GameManager {
             changeColorOne.texture = blueButtonTexture
         }
         
-        func settingPlanets() {
-            
-            var index = 0
-            let circlePath = TempPlanetNode.createCirclePath(center: .zero, radius: 50)
-            let squarePath = TempPlanetNode.createSquarePath()
-            
-            for _ in 0 ..< 10 {
-                
-                var path = CGPath(rect: .zero, transform: nil)
-                
-                if index % 2 == 0 {
-                    path = squarePath
-                }
-                else if index % 2 == 1 {
-                    path = circlePath
-                }
-                
-                let planet = TempPlanetNode()
-                planet.path = path //TempPlanetNode(path: path)
-                planet.physicsBody = SKPhysicsBody(polygonFrom: path)
-                
-                planet.fillColor = planet.color.color
-                planet.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(planet.frame.height)))))
-                
-                planet.strokeColor = .clear
-                
-                planet.name = "planet"
-                
-                planet.physicsBody?.categoryBitMask = 4
-                
-                planet.physicsBody?.contactTestBitMask = 1
-                planet.physicsBody?.collisionBitMask = 0
-                planets.append(planet)
-                
-                index += 1
-            }
-        }
+//        func settingPlanets() {
+//
+//            var index = 0
+//            let circlePath = TempPlanetNode.createCirclePath(center: .zero, radius: 50)
+//            let squarePath = TempPlanetNode.createSquarePath()
+//
+//            for _ in 0 ..< 10 {
+//
+//                var path = CGPath(rect: .zero, transform: nil)
+//
+//                if index % 2 == 0 {
+//                    path = squarePath
+//                }
+//                else if index % 2 == 1 {
+//                    path = circlePath
+//                }
+//
+//                let planet = TempPlanetNode()
+//                planet.path = path //TempPlanetNode(path: path)
+//                planet.physicsBody = SKPhysicsBody(polygonFrom: path)
+//
+//                planet.fillColor = planet.color.color
+//                planet.positionFromLeftBottom(400, CGFloat(Int.random(in: 170 ... (674 - Int(planet.frame.height)))))
+//
+//                planet.strokeColor = .clear
+//
+//                planet.name = "planet"
+//
+//                planet.physicsBody?.categoryBitMask = 4
+//
+//                planet.physicsBody?.contactTestBitMask = 1
+//                planet.physicsBody?.collisionBitMask = 0
+//                planets.append(planet)
+//
+//                index += 1
+//            }
+//        }
         
         func makeGradient(_ color1: UIColor, _ color2: UIColor) -> CAGradientLayer {
             let gradient = CAGradientLayer()
@@ -462,11 +466,11 @@ extension GameManager {
                     node.removeAllActions()
                     node.removeAllChildren()
                 }
-            planets.forEach { node in
-                node.removeAllActions()
-                node.removeAllChildren()
-                
-            }
+//            planets.forEach { node in
+//                node.removeAllActions()
+//                node.removeAllChildren()
+//
+//            }
         }
         
         func setAstronuat() {

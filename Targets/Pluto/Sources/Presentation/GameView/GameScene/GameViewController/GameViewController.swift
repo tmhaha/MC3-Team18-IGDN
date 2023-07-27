@@ -102,11 +102,21 @@ extension GameViewController: ShowAlertDelegate {
             addAlertView()
             
         case .tutorial(activate: let activate, bottomString: let bottomString, topString: let topString):
-            var tutorial = TutorailView(buttonsActivated: activate, bottomText: bottomString, topText: topString)
-            tutorial.delegate = self
-            tutorialView = tutorial.makeUIView()
-            tutorialView.backgroundColor = .clear
-            addTutorialView()
+            
+            var tutorial = TutorialView(frame: scene!.frame)
+            tutorial.activates = [.changeGreen, .changeRed,  .turnClockWise, .ThroatGagueOne, .ThroatGagueTwo]
+            //tutorial.delegate = self
+            //tutorialView = tutorial.makeUIView()
+            //tutorialView.backgroundColor = .clear
+            //addTutorialView()
+            view.addSubview(tutorial)
+            
+            tutorial.translatesAutoresizingMaskIntoConstraints = false
+            
+            tutorial.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            tutorial.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+            tutorial.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            tutorial.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
         }
     }
     
