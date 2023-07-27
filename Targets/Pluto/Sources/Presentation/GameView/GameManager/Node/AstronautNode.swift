@@ -16,7 +16,8 @@ class AstronautNode: SKSpriteNode {
     
     var type: AstronautColor = .none {
         willSet(newValue) {
-            color = newValue.color
+            let newTexture = SKTexture(imageNamed: newValue.imageName)
+            texture = newTexture
         }
     }
     

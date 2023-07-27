@@ -44,6 +44,9 @@ class PlanetNode: SKSpriteNode {
           
             directionNode.append(node)
         }
+        
+        let newTexture = SKTexture(imageNamed: astronautColor.imageName)
+        
     }
     
     
@@ -59,8 +62,9 @@ class PlanetNode: SKSpriteNode {
         
         astronautNode = thatNodePoint
         
+        astronaut.zRotation += CGFloat.pi / 2
         addChild(astronaut)
-        
+
         astronaut.run(SKAction.repeatForever(followAction), withKey: "followAction")
         
         addChild(contactNode)
@@ -87,7 +91,9 @@ extension PlanetNode {
         }
         if contactNode.path!.contains(astronaut.position) {
             
-            astronaut.color = astronautNode!.color
+            let newTexture = SKTexture(imageNamed: astronautColor.imageName)
+            
+            astronaut.texture = newTexture
             astronaut.speed = gameConstants.planetOrbitDuration
             return timing
         }
