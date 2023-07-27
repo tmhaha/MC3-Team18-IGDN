@@ -11,19 +11,23 @@ struct SplashView: View {
     @Binding var showSplashView: Bool
     
     var body: some View {
-        ZStack {
-            Image("Splash")
-                .renderingMode(.template)
+        VStack {
+            Image("Logo_blue")
                 .resizable()
-                .aspectRatio(contentMode: .fill)
-                .onTapGesture { showSplashView.toggle() }
+                .renderingMode(.template)
                 .foregroundColor(SettingData.shared.selectedTheme.main)
-                .background(Color.white)
-            VStack {
-                Color.clear.frame(height: 500)
-                Text("Touch to start")
-                    .font(.custom(tasaExplorerBold, size: 20))
-            }
+                .scaledToFit()
+                .frame(width: 240, height: 80)
+                .padding([.top, .trailing], 50)
+            Spacer()
+            Image(SettingData.shared.selectedTheme.plutoImage1)
+                .resizable()
+                .scaledToFit()
+                .frame(width: 282, height: 178)
+                .padding(.bottom, 70)
+            Text("Touch to start")
+                .font(.custom(tasaExplorerBold, size: 20))
+            Spacer()
         }.onTapGesture { showSplashView.toggle() }
     }
 }

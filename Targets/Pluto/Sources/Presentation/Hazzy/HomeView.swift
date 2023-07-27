@@ -60,18 +60,25 @@ struct BackgroundLayer: View {
 // MARK: Logo
 struct LogoLayer: View {
     @Binding var isStageCleared: Bool
+    @EnvironmentObject var settingData: SettingData
     
     var body: some View {
-        if isStageCleared == false {
-            Image("HomeLogo1")
-                .renderingMode(.template)
+        VStack {
+            Spacer()
+            Image(isStageCleared ? "HomeCircle" : settingData.selectedTheme.plutoImage2)
                 .resizable()
-                .foregroundColor(.white)
-                .aspectRatio(contentMode: .fit)
-        } else {
-            Image("HomeLogo2")
+                .scaledToFit()
+                .frame(width: 172, height: isStageCleared ? 172 : 109)
+                .padding(.bottom)
+            Image("Logo_white")
                 .resizable()
-                .aspectRatio(contentMode: .fit)
+                .scaledToFit()
+                .frame(width: 248, height: 80)
+            Spacer()
+            Spacer()
+            if isStageCleared {
+                Spacer()
+            }
         }
     }
 }
