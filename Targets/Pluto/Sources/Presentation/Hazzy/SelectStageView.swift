@@ -77,13 +77,13 @@ struct PlayButton: View {
                 if stages[selectedStage].startStory != nil {
                     router.push(.Story)
                     GameData.shared.selectedStage = selectedStage
+                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
                 } else {
                     // MARK: 여기서 게임 진입! (스토리X)
-                    SoundManager.shared.playBackgroundMusic(allMusicCases[selectedStage])
-                    SoundManager.shared.playAmbience(allAmbienceCases[selectedStage])
+                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
+                    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[selectedStage])
                     GameData.shared.selectedStage = selectedStage
-                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[selectedStage].path), animated: false)
-                    
+                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
                 }
             } else {
                 isAnimating.toggle()
