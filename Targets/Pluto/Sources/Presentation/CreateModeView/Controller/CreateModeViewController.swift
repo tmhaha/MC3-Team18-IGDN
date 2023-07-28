@@ -145,7 +145,10 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if indexPath.section == 0 {
+        let CELL_MAX_COUNT: Int = Constants.CELL_MAX_COUNT
+        
+        if indexPath.section == 0,
+           collectionView.numberOfItems(inSection: 1) <  CELL_MAX_COUNT {
             input.send(.createMapButtonDidTap)
         } else {
             input.send(.cellDidTap)

@@ -167,14 +167,78 @@ enum Theme: Int, CaseIterable {
         }
     }
     
-    var stageImage: [String] {
+    var creativeColor: [String] {
         switch self {
         case .blue:
-            return []
+            return [
+                "creative_color_white",
+                "creative_color_red",
+                "creative_color_yellow",
+                "creative_color_green"
+            ]
         case .orange:
-            return []
+            return [
+                "orange_color_white",
+                "orange_color_red",
+                "orange_color_yellow",
+                "orange_color_green"
+            ]
         case .gray:
-            return []
+            return [
+                "gray_color_white",
+                "gray_color_red",
+                "gray_color_yellow",
+                "gray_color_green"
+            ]
+        }
+    }
+    
+    var creativeShape: [String] {
+        switch self {
+        case .blue:
+            return [
+                "creative_shape_circle",
+                "creative_shape_rectangle",
+                "creative_shape_triangle",
+                "creative_shape_diamond"
+            ]
+        case .orange:
+            return [
+                "orange_shape_circle",
+                "orange_shape_rectangle",
+                "orange_shape_triangle",
+                "orange_shape_diamond"
+            ]
+        case .gray:
+            return [
+                "gray_shape_circle",
+                "gray_shape_rectangle",
+                "gray_shape_triangle",
+                "gray_shape_diamond"
+            ]
+        }
+    }
+    
+    var creativeSize: [String] {
+        switch self {
+        case .blue:
+            return [
+                "creative_size_1x",
+                "creative_size_2x",
+                "creative_size_3x"
+            ]
+        case .orange:
+            return [
+                "orange_size_1x",
+                "orange_size_2x",
+                "orange_size_3x"
+            ]
+        case .gray:
+            return [
+                "gray_size_1x",
+                "gray_size_2x",
+                "gray_size_3x"
+            ]
         }
     }
     

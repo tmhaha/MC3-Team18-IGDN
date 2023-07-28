@@ -16,6 +16,9 @@ final class CreateMapViewModel {
         case objectColorButtonDidTap
         case objectShapeButtonDidTap
         case objectSizeButtonDidTap
+        case objectColorButtonDownDidTap
+        case objectShapeButtonDownDidTap
+        case objectSizeButtonDownDidTap
         case saveButtonDidTap
     }
     enum Output {
@@ -35,11 +38,6 @@ final class CreateMapViewModel {
     var subscriptions = Set<AnyCancellable>()
     
     private let objectImageList: [[[String]]] = Obstacle.image
-    
-    private let objectColorList: [String] = Obstacle.color
-    private let objectSizeList: [String] = Obstacle.size
-    private let objectShapeList: [String] = Obstacle.shape
-    
     private let CGSizeList: [CGSize] = CreativeObject.CGSizeList
     private let CGSizeList_Diamond: [CGSize] = CreativeObject.CGSizeList_Diamond
 
@@ -59,13 +57,13 @@ final class CreateMapViewModel {
     var indexPath: IndexPath?
     
     var objectColor: String {
-        return objectColorList[objectColorIndex]
+        return SettingData().selectedTheme.creativeColor[objectColorIndex]
     }
     var objectSize: String {
-        return objectSizeList[objectSizeIndex]
+        return SettingData().selectedTheme.creativeSize[objectSizeIndex]
     }
     var objectShape: String {
-        return objectShapeList[objectShapeIndex]
+        return SettingData().selectedTheme.creativeShape[objectShapeIndex]
     }
     
     init(map: CreativeMapModel? = nil, isEditing: Bool? = nil, indexPath: IndexPath? = nil) {
@@ -88,12 +86,19 @@ final class CreateMapViewModel {
                 self?.output.send(.objectShapeButtonDidTapOutput)
             case .objectSizeButtonDidTap:
                 self?.output.send(.objectSizeButtonDidTapOutput)
+            case .objectColorButtonDownDidTap:
+                self?.output.send(.objectColorButtonDidTapOutput)
+            case .objectShapeButtonDownDidTap:
+                self?.output.send(.objectShapeButtonDidTapOutput)
+            case .objectSizeButtonDownDidTap:
+                self?.output.send(.objectSizeButtonDidTapOutput)
             case .saveButtonDidTap:
                 self?.map = CreativeMapModel(titleLabel: (self?.map?.titleLabel)!, lastEdited: Date.now, objectList: (self?.creativeObjectList)!, previewId: (self?.previewId)!)
                 if let map = self?.map {
                     self?.creativeMapSubject.send((map, self?.isEditing ?? false, self?.indexPath ?? IndexPath()))
                 }
                 self?.output.send(.saveButtonDidTapOutput)
+            
             }
         }.store(in: &subscriptions)
         return output.eraseToAnyPublisher()
@@ -126,12 +131,36 @@ final class CreateMapViewModel {
             // MARK: 겹치는 오브젝트 제거
             removeObjectView(overlappingObjectView)
             overlappingObjectView.removeFromSuperview()
+            
+            hapticFeedback(style: .medium, duration: 0.05, interval: 0.05)
             return false
         } else {
             let objectView = UIImageView(frame: CGRect(origin: tapCenterPoint, size: objectSize))
             objectView.backgroundColor = .clear
             objectView.image = UIImage(named: "\(objectImageList[objectColorIndex][objectSizeIndex][objectShapeIndex])")
-        
+            
+            // MARK: addObject 화면 밖영역 못 나가게 하는 임시 코드
+//            let validView = UIView(frame: CGRect(x: 0, y: 116, width: 3900, height: 612))
+////            print(objectView.bounds)
+//            print(objectView.frame)
+//            print(validView.frame)
+//            if !(tapLocation.x - objectSize.width/2 > 0) ||
+//               !(tapLocation.y - objectSize.height/2 > 116) ||
+//               !(tapLocation.x + objectSize.width/2 < 3900) ||
+//               !(tapLocation.y + objectSize.height/2 < 620) {
+//                // The objectView's frame is outside scrollView's bounds
+//                print("NO")
+//                return false
+//            }else {
+//                print(tapLocation.x - objectSize.width/2)
+//                print(tapLocation.y - objectSize.height/2)
+//                print(tapLocation.x + objectSize.width/2)
+//                print(tapLocation.y + objectSize.height/2)
+//                print("YES")
+//            }
+
+                
+      
             let pathIndex = getPathIndex(size: objectSize, shapeIndex: objectShapeIndex)
             
             // MARK: 1. creativeObject 생성
@@ -151,6 +180,8 @@ final class CreateMapViewModel {
             // MARK: 2. 생성한 creativeObject 추가
             creativeObjectList.append(creativeObject)
             objectViewList.append(objectView)
+            
+            hapticFeedback(style: .heavy, duration: 0.1, interval: 0.05)
             return true
         }
     }
@@ -169,15 +200,27 @@ final class CreateMapViewModel {
     }
     
     func updateObjectColor() {
-        objectColorIndex = (objectColorIndex + 1) % objectColorList.count
+        objectColorIndex = (objectColorIndex + 1) % SettingData().selectedTheme.creativeColor.count
     }
     
     func updateObjectShape() {
-        objectShapeIndex = (objectShapeIndex + 1) % objectShapeList.count
+        objectShapeIndex = (objectShapeIndex + 1) % SettingData().selectedTheme.creativeShape.count
     }
     
     func updateObjectSize() {
-        objectSizeIndex = (objectSizeIndex + 1) % objectSizeList.count
+        objectSizeIndex = (objectSizeIndex + 1) % SettingData().selectedTheme.creativeSize.count
+    }
+    
+    func updateObjectColorDown() {
+        objectColorIndex = (objectColorIndex - 1 + 4) % SettingData().selectedTheme.creativeColor.count
+    }
+    
+    func updateObjectShapeDown() {
+        objectShapeIndex = (objectShapeIndex - 1 + 4) % SettingData().selectedTheme.creativeShape.count
+    }
+    
+    func updateObjectSizeDown() {
+        objectSizeIndex = (objectSizeIndex - 1 + 3) % SettingData().selectedTheme.creativeSize.count
     }
     
     private func createCreativeObject(point: CGPoint, color: String, size: String, shape: String, pathIndex: Int, rect: CGRect, colorIndex: Int, sizeIndex: Int, shapeIndex: Int) -> CreativeObject {
@@ -234,4 +277,10 @@ final class CreateMapViewModel {
             fatalError()
         }
     }
+//
+//    func changeSeletedTheme() {
+//        self.objectColorList = Obstacle.color
+//        self.objectSizeList = Obstacle.size
+//        self.objectShapeList = Obstacle.shape
+//    }
 }

@@ -12,9 +12,11 @@ import Combine
 class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     static let identifier = String(describing: CreateModeSelectCollectionViewCell.self)
     
+    
     let input = PassthroughSubject<CreateModeViewModel.Input, Never>()
     var indexPath: IndexPath!
     
+    private let CELL_MAX_COUNT: Int = Constants.CELL_MAX_COUNT
     private var textFieldIsActive = false
     public var isDeleteButtonSelected = false
     
@@ -25,7 +27,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     lazy var solidLine = UIImageView()
     lazy var preview = UIImageView()
     lazy var playButton = UIButton()
-    lazy var chevronRight = UIImageView()
     lazy var editButton = UIButton()
     lazy var deleteButton = UIButton()
     
@@ -43,7 +44,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         isDeleteButtonSelected = false
-//        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton, chevronRight]
+        
         [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 $0.isHidden = false
@@ -59,7 +60,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     
     private func addSubviews() {
         
-//        [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton, chevronRight]
         [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, imageView, descriptions, solidLine, deleteButton]
             .forEach {
                 contentView.addSubview($0)
@@ -114,11 +114,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
             playButton.widthAnchor.constraint(equalToConstant: 120),
             playButton.heightAnchor.constraint(equalToConstant: 35),
             
-//            chevronRight.centerYAnchor.constraint(equalTo: playButton.centerYAnchor),
-//            chevronRight.trailingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: -10),
-//            chevronRight.widthAnchor.constraint(equalToConstant: 7.66),
-//            chevronRight.heightAnchor.constraint(equalToConstant: 13.66),
-            
             editButton.leadingAnchor.constraint(equalTo: playButton.leadingAnchor),
             editButton.bottomAnchor.constraint(equalTo: preview.bottomAnchor),
             editButton.widthAnchor.constraint(equalToConstant: 85),
@@ -135,12 +130,7 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 30
         contentView.backgroundColor = SettingData().selectedTheme.white.uiColor
         
-        imageView.image = UIImage(named: "creative_plus")?.withRenderingMode(.alwaysTemplate)
-        imageView.tintColor = SettingData().selectedTheme.mainLight.uiColor
-        
         descriptions.font = UIFont(name: "TASAExplorer-Bold", size: 20)
-        descriptions.textColor = SettingData().selectedTheme.mainLight.uiColor
-        descriptions.text = "create your own journey!"
         
         title.font = UIFont(name: "TASAExplorer-Bold", size: 22)
         
@@ -181,9 +171,6 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
         playButton.titleEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 10)
         playButton.imageEdgeInsets = UIEdgeInsets(top: 0, left: 100, bottom: 0, right: 0)
         
-//        chevronRight.image = UIImage(named: "chevron_right")
-//        chevronRight.tintColor = SettingData().selectedTheme.white.uiColor
-        
         let editButtonString = NSAttributedString(string: "edit", attributes: attributes)
         editButton.setAttributedTitle(editButtonString, for: .normal)
         editButton.layer.cornerRadius = 5
@@ -195,11 +182,25 @@ class CreateModeSelectCollectionViewCell: UICollectionViewCell {
     func configure(item: [CreativeMapModel], section: Int, indexPath: IndexPath) {
         self.indexPath = indexPath
         if section == 0 {
-//            [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, deleteButton, chevronRight]
             [title,dateDescriptionLabel, lastEdited, editTitleButton, preview, playButton, editButton, solidLine, deleteButton]
                 .forEach {
                     $0.isHidden = true
                 }
+            if item.count < CELL_MAX_COUNT {
+                imageView.image = UIImage(named: "creative_plus")?.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = SettingData().selectedTheme.mainLight.uiColor
+                
+                descriptions.textColor = SettingData().selectedTheme.mainLight.uiColor
+                descriptions.text = "create your own journey!"
+            } else {
+                imageView.image = UIImage(named: "creative_xmark")?.withRenderingMode(.alwaysTemplate)
+                imageView.tintColor = UIColor(hex: 0xAFAFAF)
+                
+                descriptions.text = "you've reached max slot"
+                descriptions.textColor = UIColor(hex: 0xAFAFAF)
+            }
+            
+            
         } else {
             imageView.isHidden = true
             descriptions.isHidden = true

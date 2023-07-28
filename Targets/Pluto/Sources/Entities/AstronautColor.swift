@@ -94,5 +94,22 @@ extension AstronautColor {
             return 4
         }
     }
+    
+    var imageName: String {
+        switch self {
+        case .one:
+            return "greenAstronuat"
+        case .two:
+            return "redAstronuat"
+        case .none:
+            return "blueAstronuat"
+        case .combine:
+            return "yellowAstronuat"
+        }
+    }
 }
+
+
+
+
 
