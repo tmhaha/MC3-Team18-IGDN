@@ -9,7 +9,7 @@
 import SwiftUI
 
 let stages:[Stage] = [
-    Stage(level: 1, startStory: nil, endStory: nil, path: [
+    Stage(level: 1, startStory: [], endStory: nil, map: [
         Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
@@ -17,10 +17,17 @@ let stages:[Stage] = [
         Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 838.1666564941406, y: 211.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
     ]),
-    Stage(level: 2, startStory: nil, endStory: nil, path: []),
-    Stage(level: 3, startStory: nil, endStory: nil, path: []),
-    Stage(level: 4, startStory: nil, endStory: nil, path: []),
-    Stage(level: 5, startStory: nil, endStory: nil, path: [
+    Stage(level: 2, startStory: nil, endStory: nil, map: [
+        Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
+        Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
+        Object(CGPoint(x: 229.16665649414062, y: 162.5), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
+        Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 838.1666564941406, y: 211.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
+    ]),
+    Stage(level: 3, startStory: nil, endStory: nil, map: []),
+    Stage(level: 4, startStory: nil, endStory: nil, map: []),
+    Stage(level: 5, startStory: nil, endStory: nil, map: [
         Object(CGPoint(x: 330.1666564941406, y: 396.5), CGSize(width: 105.0, height: 105.0), .two, 4, "rectangle_70_red", true),
         Object(CGPoint(x: 325.8333231608073, y: 148.8333282470703), CGSize(width: 105.0, height: 105.0), .one, 4, "rectangle_70_green", true),
         Object(CGPoint(x: 653.5, y: 404.1666564941406), CGSize(width: 105.0, height: 105.0), .one, 7, "triangle_70_green", true),
@@ -64,7 +71,7 @@ let stages:[Stage] = [
         Object(CGPoint(x: 3675.8333333333335, y: 160.8333282470703), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
         Object(CGPoint(x: 915.6666615804037, y: 370.3333282470703), CGSize(width: 150.0, height: 150.0), .two, 2, "circle_100_red", false),
     ]),
-    Stage(level: 6, startStory: [], endStory: [], path:
+    Stage(level: 6, startStory: [], endStory: [], map:
     [
         Object(CGPoint(x: -20.166671752929688, y: 119.16665649414062), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
         Object(CGPoint(x: -21.166671752929688, y: 277.8333282470703), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
@@ -124,7 +131,7 @@ struct Stage {
     let level: Int
     let startStory: [(Image, [String])]?
     let endStory: [(Image, [String])]?
-    let path: [ObstacleProtocol] // 자료형 잘 모르겠음
+    let map: [ObstacleProtocol] // 자료형 잘 모르겠음
     // 속도 등...
     //    let speed: CGFloat
     //    let ...
