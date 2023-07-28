@@ -9,8 +9,8 @@ import SwiftUI
 
 struct SelectStageView: View {
     @EnvironmentObject var router: Router<Path>
-    @State var currentStage = 1
-    @State var selectedStage = 0
+    @State var currentStage = GameData.shared.currentStage
+    @State var selectedStage = GameData.shared.currentStage
 
     var body: some View {
         VStack(spacing: -10) {
@@ -74,9 +74,15 @@ struct PlayButton: View {
     var body: some View {
         Button {
             if (currentStage >= selectedStage) {
-//                router.push(.Story)
-                SoundManager.shared.playBackgroundMusic(allMusicCases[selectedStage])
-                SoundManager.shared.playAmbience(allAmbienceCases[selectedStage])
+                if stages[selectedStage].startStory != nil {
+                    router.push(.Story)
+                    GameData.shared.selectedStage = selectedStage
+                } else {
+                    // MARK: 여기서 게임 진입! (스토리X)
+                    SoundManager.shared.playBackgroundMusic(allMusicCases[selectedStage])
+                    SoundManager.shared.playAmbience(allAmbienceCases[selectedStage])
+                    GameData.shared.selectedStage = selectedStage
+                }
             } else {
                 isAnimating.toggle()
                 hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)

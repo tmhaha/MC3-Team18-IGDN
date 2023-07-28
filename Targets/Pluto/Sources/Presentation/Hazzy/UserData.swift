@@ -19,5 +19,9 @@ class SettingData: ObservableObject {
 }
 
 class GameData: ObservableObject {
-//    @AppStorage("currentStage") var currentStage: Int = 0
+    static let shared: GameData = GameData()
+    init() {}
+
+    @AppStorage("currentStage") var currentStage: Int = 3
+    @AppStorage("selectedStage") var selectedStage: Int = 1
 }

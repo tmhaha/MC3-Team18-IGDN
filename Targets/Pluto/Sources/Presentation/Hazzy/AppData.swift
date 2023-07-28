@@ -167,6 +167,17 @@ enum Theme: Int, CaseIterable {
         }
     }
     
+    var stageImage: [String] {
+        switch self {
+        case .blue:
+            return []
+        case .orange:
+            return []
+        case .gray:
+            return []
+        }
+    }
+
     var creativeColor: [String] {
         switch self {
         case .blue:
