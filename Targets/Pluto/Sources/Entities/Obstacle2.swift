@@ -16,7 +16,6 @@ protocol ObstacleProtocol {
     var path: Int { get set } // 궤도 path
     var imageName: String { get set } // image name
     var isClockWise: Bool { get set } // path가 시계방향이면 true, path가 반시계이면 false
-    var tutorails: [GameAlertType] { get set }
 }
 
 extension ObstacleProtocol {
