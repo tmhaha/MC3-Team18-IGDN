@@ -20,7 +20,7 @@ class TypewriterAnimationLabel: UILabel {
         self.text = ""
         textToAnimate = initText
         currentIndex = 0
-        animationTimer = Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateLabel), userInfo: nil, repeats: true)
+        animationTimer = Timer.scheduledTimer(timeInterval: 0.1, target: self, selector: #selector(updateLabel), userInfo: nil, repeats: true)
     }
     
     @objc private func updateLabel() {

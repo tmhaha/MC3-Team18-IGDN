@@ -22,6 +22,21 @@ class PlanetNode: SKSpriteNode {
     var directionNode: [SKShapeNode] = []
     var path: CGPath = CGPath(ellipseIn: .zero, transform: nil)
     var isClockWise = true
+    var tutorials: [TutorialView] = []
+    
+//    init(_ position: CGPoint,
+//         _ size: CGSize,
+//         _ imagename: String,
+//         _ color: AstronautColor,
+//         _ path: CGPath,
+//         _ isColockWise: Bool
+//    ) {
+//        super.init(
+//    }
+//    
+//    required init?(coder aDecoder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     func startDirectionNodesRotation() {
         

@@ -133,7 +133,7 @@ let page0 = [
 let page1 = [
     GameAlertType.tutorial(activate: [], bottomString: "성공! 안전하게 궤도에 올라탔어!", topString: "성공! 안전하게 궤도에 올라탔어!", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "방금 같은 색의 소행성에 닿으면 궤도에 탈 수 있다고 했지?", topString: "방금 같은 색의 소행성에 닿으면 궤도에 탈 수 있다고 했지?", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", topString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", imageName: "", isLast: true)
+    GameAlertType.tutorial(activate: [.turnCounterClockWise], bottomString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", topString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", imageName: "", isLast: true)
 ]
 
 // 초록색 소행성이 다가옴
