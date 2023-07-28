@@ -45,6 +45,8 @@ struct StoryView: View {
                 Rectangle()
                 Button {
                     // MARK: 여기서 게임 진입! (스토리O)
+                    router.pop()
+                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
                 } label: {
                     Image("Button_skip_white")
                         .resizable()
