@@ -125,8 +125,8 @@ class GameManager: ObservableObject {
         let backgroundNodes = backGround.timeLayer[index]
         scene?.addChilds(backgroundNodes.map { $0 })
         for node in backgroundNodes {
-            node.runAndRemove(SKAction.sequence([SKAction.fadeIn(withDuration: 1), SKAction.fadeOut(withDuration: 1)]).forever)
-            node.runAndRemove(SKAction.moveTo(x: -100, duration: node.duration), withKey: "moveBackground")
+            node.run(SKAction.sequence([SKAction.fadeIn(withDuration: 1.5), SKAction.fadeOut(withDuration: 1.5)]).forever)
+            node.runAndRemove(SKAction.moveTo(x: -10, duration: node.duration), withKey: "moveBackground")
         }
     }
     
@@ -539,12 +539,12 @@ extension GameManager {
             }
         }
         
-        var timeLayer: [[Node]] = Array(repeating: [], count: 31)
+        var timeLayer: [[Node]] = Array(repeating: [], count: 301)
         
         init(constants: GameConstants) {
             
-            for _ in 0 ... 20 {
-                let time = Int.random(in: 0 ... 30)
+            for _ in 0 ... 200 {
+                let time = Int.random(in: 0 ... 300)
                 let node = Node(
                     time: time,
                     duration: constants.backgroundFirstLayerDuration )
@@ -558,8 +558,8 @@ extension GameManager {
                 timeLayer[time].append(node)
             }
             
-            for _ in 0 ... 100 {
-                let time = Int.random(in: 0 ... 30)
+            for _ in 0 ... 1000 {
+                let time = Int.random(in: 0 ... 300)
                 let node = Node(time: time,
                                 duration: constants.backgroundSecondLayerDuration)
                 
@@ -571,8 +571,8 @@ extension GameManager {
                 timeLayer[time].append(node)
             }
             
-            for _ in 0 ... 200 {
-                let time = Int.random(in: 0 ... 30)
+            for _ in 0 ... 2000 {
+                let time = Int.random(in: 0 ... 300)
                 let node = Node(time: time,
                                 duration: constants.backgroundThirdLayerDuration)
                 
