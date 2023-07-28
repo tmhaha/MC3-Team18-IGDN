@@ -24,6 +24,7 @@ struct ContentView: View {
                         case .Home: HomeView().navigationBarBackButtonHidden()
                         case .Setting: SettingView().navigationBarBackButtonHidden()
                         case .Stage: SelectStageView().navigationBarBackButtonHidden()
+                        case .Story: StoryView().navigationBarBackButtonHidden()
                         }
                     }
                 }
@@ -65,6 +66,7 @@ enum Path {
     case Home
     case Setting
     case Stage
+    case Story
 }
 
 struct ContentView_Previews: PreviewProvider {
