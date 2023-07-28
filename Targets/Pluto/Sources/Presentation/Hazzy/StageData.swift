@@ -9,7 +9,7 @@
 import SwiftUI
 
 let stages:[Stage] = [
-    Stage(level: 1, startStory: [], endStory: nil, map: [
+    Stage(level: 1, startStory: Story(image: [], text: [], music: .Story1), endStory: nil, map: [
         Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
@@ -71,7 +71,7 @@ let stages:[Stage] = [
         Object(CGPoint(x: 3675.8333333333335, y: 160.8333282470703), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
         Object(CGPoint(x: 915.6666615804037, y: 370.3333282470703), CGSize(width: 150.0, height: 150.0), .two, 2, "circle_100_red", false),
     ]),
-    Stage(level: 6, startStory: [], endStory: [], map:
+    Stage(level: 6, startStory: Story(image: [], text: [], music: .Story2), endStory: Story(image: [], text: [], music: .Story3), map:
     [
         Object(CGPoint(x: -20.166671752929688, y: 119.16665649414062), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
         Object(CGPoint(x: -21.166671752929688, y: 277.8333282470703), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
@@ -129,10 +129,16 @@ let stages:[Stage] = [
 
 struct Stage {
     let level: Int
-    let startStory: [(Image, [String])]?
-    let endStory: [(Image, [String])]?
-    let map: [ObstacleProtocol] // 자료형 잘 모르겠음
+    let startStory: Story?
+    let endStory: Story?
+    let map: [ObstacleProtocol]
     // 속도 등...
     //    let speed: CGFloat
     //    let ...
+}
+
+struct Story {
+    let image: [Image]
+    let text: [String]
+    let music: Music
 }

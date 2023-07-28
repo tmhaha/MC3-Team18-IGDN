@@ -19,6 +19,9 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
     private var soundEffects: [AVAudioPlayer] = []
     private var thrustSound: AVAudioPlayer? = nil
 
+    let chaterMusics: [Music] = [.Chapter1, .Chapter2, .Chapter3, .Chapter4, .Chapter5, .Chapter6]
+    let allAmbienceCases: [Ambience] = Ambience.allCases
+    
     func playBackgroundMusic(_ music: Music) {
         guard let soundURL = Bundle.main.url(forResource: music.rawValue, withExtension: "mp3") else {
             print("Sound file not found.")
@@ -129,7 +132,7 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
     }
 }
 
-enum Music: String, CaseIterable {
+enum Music: String {
     case Chapter1 = "chapter 1"
     case Chapter2 = "chapter 2"
     case Chapter3 = "chapter 3"
@@ -141,7 +144,6 @@ enum Music: String, CaseIterable {
     case Story2 = "everything ends eventually"
     case Story3 = "main-green to blue"
 }
-let allMusicCases: [Music] = Music.allCases
 
 enum Ambience: String, CaseIterable {
     case Chapter1 = "chap1 neptune_1"
@@ -151,20 +153,14 @@ enum Ambience: String, CaseIterable {
     case Chapter5 = "chap5 mars"
     case Chapter6 = "chap6 earth"
 }
-let allAmbienceCases: [Ambience] = Ambience.allCases
 
-enum Effect: String, CaseIterable {
+enum Effect: String {
     case ChangeColor = "change color"
     case Fail = "fail"
     case Fail2 = "fail2"
     case Pause = "pause"
     case Play = "play"
     case Success = "success"
-//    case ThrustEmpty = "thrust_empty"
-//    case Thrust1 = "thrust1"
-//    case Thrust2 = "thrust2"
-//    case Thrust3 = "thrust3"
-//    case Thrust4 = "thrust4"
-//    case Thrust5 = "thrust5"
+    case ThrustEmpty = "thrust_empty"
+    case Thrust = "thrust"
 }
-let allEffectCases: [Effect] = Effect.allCases
