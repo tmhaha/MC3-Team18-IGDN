@@ -13,6 +13,7 @@ class ProgressBarNode: SKShapeNode {
     let totalWidth = 100.0
     var percent: CGFloat = 0.0 {
         willSet(newValue) {
+            print("@LOG \(newValue)")
             changeProgress(newValue * totalWidth)
             let text = newValue * 100
             label.text = "\(Int(text))%"
@@ -65,13 +66,15 @@ class ProgressBarNode: SKShapeNode {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func changeProgress(_ dx: CGFloat) {
-        let duration = (dx / totalWidth) * 3
+    func changeProgress(_ targetLength: CGFloat) {
+        directionNode.removeAllActions()
+        progress.removeAllActions()
+        let duration = (targetLength / totalWidth) * 3
         let currentPrograssLength = progress.size.width
-        directionNode.run(SKAction.move(by: CGVector(dx: dx, dy: 0), duration: duration))
+        directionNode.run(SKAction.move(by: CGVector(dx: targetLength - currentPrograssLength, dy: 0), duration: duration))
         let customAction = SKAction.customAction(withDuration: duration) { nodes, time in
             
-            let currentlength = currentPrograssLength + (dx * (time / duration))
+            let currentlength = currentPrograssLength + ((targetLength - currentPrograssLength) * (time / duration))
             let roundedRectTexture = self.createRoundedRectTexture(size: CGSize(width: currentlength, height: 6),
                                                               cornerRadius: 3,
                                                               fillColor: UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 1))
