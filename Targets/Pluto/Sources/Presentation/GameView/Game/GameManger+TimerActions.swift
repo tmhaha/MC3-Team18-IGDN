@@ -35,10 +35,10 @@ extension GameManager {
                 }
                 if ObstacleIndex > 0 {
 
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                        self.scene?.isUserInteractionEnabled = true
-                        self.nodes.astronaut.startGame()
-                    }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+//                        self.scene?.isUserInteractionEnabled = true
+//                        self.nodes.astronaut.startGame()
+//                    }
                 }
             }
         }

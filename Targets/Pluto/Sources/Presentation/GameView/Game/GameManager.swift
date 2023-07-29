@@ -74,7 +74,17 @@ class GameManager: ObservableObject {
         nodes.leftThroat.delegate = self
     }
     
+    func planetSetting() {
+        for item in map {
+            
+        }
+    }
+    
     func startGame() {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+            self.scene?.isUserInteractionEnabled = true
+            self.nodes.astronaut.startGame()
+        }
         gameTimer.startTimer(completion: gameTimerAction)
         backgroundTimer.startTimer(completion: backgroundTimerAction)
     }
