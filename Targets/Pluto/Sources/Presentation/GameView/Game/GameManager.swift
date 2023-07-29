@@ -165,6 +165,8 @@ class GameManager: ObservableObject {
             .sink { gague in
                 if gague <= 0 {
                     self.stopGagueForce()
+                    self.nodes.leftThroat.percent = .zero
+                    self.nodes.rightThroat.percent = .zero
                 }
             }
             .store(in: &bag)
