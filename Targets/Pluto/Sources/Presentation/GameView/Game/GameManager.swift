@@ -103,7 +103,7 @@ class GameManager: ObservableObject {
                     }
                     
                     if self.nodes.changeColorOne.contains(location) {
-                        changeColor(color: .two)
+                        changeColor(color: .one)
                     }
                     if self.nodes.changeColorTwo.contains(location) {
                         changeColor(color: .two)
