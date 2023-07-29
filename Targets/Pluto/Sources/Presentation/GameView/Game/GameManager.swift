@@ -74,18 +74,25 @@ class GameManager: ObservableObject {
         nodes.leftThroat.delegate = self
     }
     
-    func planetSetting() {
-        for item in map {
-            
-        }
-    }
-    
     func startGame() {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
             self.scene?.isUserInteractionEnabled = true
             self.nodes.astronaut.startGame()
         }
-        gameTimer.startTimer(completion: gameTimerAction)
+        for item in map {
+            let currentData = item
+            let planet = currentData.makePlanetNode()
+            planet.delegate = self
+            scene?.addChild(planet)
+            planet.startDirectionNodesRotation()
+            
+            let moveAction = SKAction.moveBy(x: -32.5, y: 0, duration: 1).forever
+            planet.run(moveAction)
+
+            ObstacleIndex += 1
+        }
+        
+        gameTimer.startTimer(completion: { _ in})
         backgroundTimer.startTimer(completion: backgroundTimerAction)
     }
     
@@ -247,20 +254,22 @@ extension GameManager {
             background.size = size
             background.zPosition = -100
             
+            topProgressBar.zPosition = 3
+            bottomProgressBar.zPosition = 3
             astronaut.position = CGPoint(x: 70, y: size.height / 2)
             astronaut.zPosition = 1
             
             pauseButton.positionFromLeftMiddle(0, size.height / 2)
-            pauseButton.zPosition = 2
+            pauseButton.zPosition = 100
             
             leftButton.positionFromLeftBottom(46, 69.5)
             leftThroat.position = leftButton.position
             bottomProgressBar.position = CGPoint(x: 320, y: 192.5)
             
             changeColorOne.positionFromLeftBottom(259, 69.5)
-            changeColorOne.zPosition = 2
-            leftButton.zPosition = 2
-            leftThroat.zPosition = 2
+            changeColorOne.zPosition = 100
+            leftButton.zPosition = 100
+            leftThroat.zPosition = 100
             
             changeColorTwo.positionFromLeftBottom(46, 689.5)
             rightButton.positionFromLeftBottom(259, 689.5)
@@ -268,9 +277,9 @@ extension GameManager {
             topProgressBar.zRotation = CGFloat.pi
             rightThroat.position = rightButton.position
             rightThroat.zRotation = CGFloat.pi
-            rightThroat.zPosition = 2
-            rightButton.zPosition = 2
-            changeColorTwo.zPosition = 2
+            rightThroat.zPosition = 100
+            rightButton.zPosition = 100
+            changeColorTwo.zPosition = 100
             
             leftWall.size = CGSize(width: 1, height: size.height * 2)
             rightWall.size = CGSize(width: 1, height: size.height * 2)
@@ -294,16 +303,26 @@ extension GameManager {
         
         func setAstronuat() {
             astronaut.name = "astronaut"
-            astronaut.physicsBody = SKPhysicsBody(rectangleOf: astronaut.frame.size)
             astronaut.physicsBody?.categoryBitMask = 1
             astronaut.physicsBody?.contactTestBitMask = 4 | 2
             astronaut.physicsBody?.collisionBitMask = 2
         }
         
         func setEachPhisicalBody() {
-            for node in [leftWall, rightWall, topWall, bottomWall, astronaut] {
+            for node in [leftWall, rightWall, topWall, bottomWall] {
                 node.physicsBody = SKPhysicsBody(rectangleOf: node.frame.size)
             }
+            
+            let astronautPath = UIBezierPath()
+            
+            astronautPath.move(to: CGPoint(x: -7.49, y: 0))
+            astronautPath.addLine(to: CGPoint(x: -9.49, y: 7.12))
+            astronautPath.addLine(to: CGPoint(x: 8.41, y: 0))
+            astronautPath.addLine(to: CGPoint(x: -9.49, y: -7.12))
+            
+            astronautPath.close()
+            
+            astronaut.physicsBody = SKPhysicsBody(polygonFrom: astronautPath.cgPath)
             
             leftWall.physicsBody?.categoryBitMask = 2
             rightWall.physicsBody?.categoryBitMask = 2

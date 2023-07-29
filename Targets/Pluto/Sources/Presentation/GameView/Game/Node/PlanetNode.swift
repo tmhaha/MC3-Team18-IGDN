@@ -24,6 +24,13 @@ class PlanetNode: SKSpriteNode {
     var isClockWise = true
     var tutorials: [TutorialView] = []
     var checkposition = false
+    override var position: CGPoint {
+        willSet(newVlaue) {
+            if position.x < -150.0 {
+                removeFromParent()
+            }
+        }
+    }
     
 //    init(_ position: CGPoint,
 //         _ size: CGSize,
@@ -89,6 +96,18 @@ class PlanetNode: SKSpriteNode {
         astronaut.zRotation += CGFloat.pi / 2
         astronaut.position = CGPoint(x: position.x + astronaut.position.x, y: position.y + astronaut.position.y )
         astronaut.id = id
+        
+        let astronautPath = UIBezierPath()
+        astronautPath.move(to: CGPoint(x: -7.49, y: 0))
+        astronautPath.addLine(to: CGPoint(x: -9.49, y: 7.12))
+        astronautPath.addLine(to: CGPoint(x: 8.41, y: 0))
+        astronautPath.addLine(to: CGPoint(x: -9.49, y: -7.12))
+        astronautPath.close()
+        
+        astronaut.physicsBody = SKPhysicsBody(polygonFrom: astronautPath.cgPath)
+        astronaut.physicsBody?.categoryBitMask = 1
+        astronaut.physicsBody?.contactTestBitMask = 4 | 2
+        
         
         return astronaut
     }

@@ -23,7 +23,7 @@ extension ObstacleProtocol {
     func makePlanetNode() -> PlanetNode {
 
         let planet = PlanetNode()
-        planet.position = CGPoint(x: 500, y: 674 - (point.y - 80))
+        planet.position = CGPoint(x: 450 + point.x, y: 674 - (point.y - 80))
         planet.size = size
         let image = UIImage(named: imageName)
         let texture = SKTexture(image: image!)
