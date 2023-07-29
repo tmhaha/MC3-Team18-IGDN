@@ -130,13 +130,13 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
 }
 
 enum Music: String, CaseIterable {
-    case Chapter1 = "chapter 1"
+    case Chapter1 = "Chapter1"
     case Chapter2 = "chapter 2"
     case Chapter3 = "chapter 3"
     case Chapter4 = "chapter 4"
     case Chapter5 = "chapter 5"
     case Chapter6 = "chapter 6"
-    case Lobby = "lobby"
+    case Lobby = "main"
     case Story1 = "Driving Wings"
     case Story2 = "everything ends eventually"
     case Story3 = "main-green to blue"

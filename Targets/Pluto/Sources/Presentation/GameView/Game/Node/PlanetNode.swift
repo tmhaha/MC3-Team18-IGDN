@@ -23,6 +23,7 @@ class PlanetNode: SKSpriteNode {
     var path: CGPath = CGPath(ellipseIn: .zero, transform: nil)
     var isClockWise = true
     var tutorials: [TutorialView] = []
+    var checkposition = false
     
 //    init(_ position: CGPoint,
 //         _ size: CGSize,
@@ -33,7 +34,7 @@ class PlanetNode: SKSpriteNode {
 //    ) {
 //        super.init(
 //    }
-//    
+//
 //    required init?(coder aDecoder: NSCoder) {
 //        fatalError("init(coder:) has not been implemented")
 //    }
@@ -97,11 +98,11 @@ extension PlanetNode {
     
     private func timingFunc(_ timing: Float) -> Float {
         
-        if astronaut.color == astronautNode!.color {
+        if checkposition && astronaut.color == astronautNode!.color {
             delegate?.passAstronautPoint(at: CGPoint(x: position.x + astronaut.position.x, y: position.y + astronaut.position.y))
         }
         if contactNode.path!.contains(astronaut.position) {
-            
+            checkposition = true
             let newTexture = SKTexture(imageNamed: astronautColor.imageName + "CW")
             astronaut.texture = newTexture
             astronaut.speed = gameConstants.planetOrbitDuration

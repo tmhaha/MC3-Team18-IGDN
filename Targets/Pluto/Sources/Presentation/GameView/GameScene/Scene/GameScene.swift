@@ -27,7 +27,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
     
-        gameManager.settingGame(scene: self)
+        gameManager.settingForNewGame(scene: self)
         gameManager.startGame()
     }
     
