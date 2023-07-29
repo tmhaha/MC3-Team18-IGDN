@@ -13,7 +13,6 @@ class ProgressBarNode: SKShapeNode {
     let totalWidth = 100.0
     var percent: CGFloat = 0.0 {
         willSet(newValue) {
-            print("@LOG \(newValue)")
             changeProgress(newValue * totalWidth)
             let text = newValue * 100
             label.text = "\(Int(text))%"

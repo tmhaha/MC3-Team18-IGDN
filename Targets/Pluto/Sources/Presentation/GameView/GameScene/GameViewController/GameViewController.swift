@@ -14,7 +14,7 @@ class GameViewController: UIViewController {
     var scene: GameScene?
     var gameConstants: GameConstants
     var map: [ObstacleProtocol]
-    var gameManager: GameManager
+    var gameManager: GameManager?
     var gameAlertView = GameAlertView(frame: .zero, alertType: .pause)
     var tutorialView = UIView()
     
@@ -47,8 +47,8 @@ class GameViewController: UIViewController {
     func setupScene() {
         if let view = self.view as? SKView, scene == nil {
             
-            gameManager.delegate = self
-            let scene = gameManager.generateScene(size: view.bounds.size)
+            gameManager?.delegate = self
+            let scene = gameManager?.generateScene(size: view.bounds.size)
             view.presentScene(scene)
             self.scene = scene
         }
@@ -127,14 +127,14 @@ extension GameViewController: ShowAlertDelegate {
             break
         case .fail:
             gameAlertView = GameAlertView(frame: .zero, alertType: .fail)
-            gameManager.gameTimer.stopTimer()
+            gameManager?.gameTimer.stopTimer()
             gameAlertView.upCompletion = restartGame
             gameAlertView.downCompletion = backToList
             addAlertView()
             
         case .pause:
             gameAlertView = GameAlertView(frame: .zero, alertType: .pause)
-            gameManager.gameTimer.stopTimer()
+            gameManager?.gameTimer.stopTimer()
             gameAlertView.upCompletion = pauseUpButtonAction
             gameAlertView.downCompletion = backToList
             addAlertView()
@@ -142,25 +142,23 @@ extension GameViewController: ShowAlertDelegate {
         default:
             break
         }
-        
-        
     }
     
     func backToList() {
-        gameManager.gameTimer.resetTimer()
+        gameManager?.finishGame()
+        gameManager = nil
         navigationController?.popViewController(animated: false)
     }
     
     func pauseUpButtonAction() {
-        gameManager.gameTimer.restartTimer()
         gameAlertView.removeFromSuperview()
-        gameManager.scene?.isPaused = false
-        scene?.isUserInteractionEnabled = true
+        gameManager?.restartGame()
     }
     
     func restartGame() {
         
         gameAlertView.removeFromSuperview()
+        gameManager = nil
         
         if let view = self.view as? SKView {
             gameManager = GameManager(constants: self.gameConstants, map: stages[GameData.shared.selectedStage + 1].map)
@@ -169,7 +167,6 @@ extension GameViewController: ShowAlertDelegate {
             view.presentScene(scene)
             self.scene = scene
             setupScene()
-            scene.isUserInteractionEnabled = true
         }
     }
 }
@@ -177,26 +174,26 @@ extension GameViewController: ShowAlertDelegate {
 extension GameViewController: ViewDismissDelegate {
     
     func dismiss() {
-        gameManager.gameTimer.restartTimer()
+      
         tutorialView.removeFromSuperview()
-        gameManager.scene?.isPaused = false
-        scene?.isUserInteractionEnabled = true
+        gameManager = nil
+        gameManager?.finishGame()
     }
 }
 
 extension GameViewController: TutorialFinishDelegate {
     func finish(_ touches: Set<UITouch>, with event: UIEvent?, endedType: Int) {
         if endedType == 1 {
-            gameManager.gameTimer.restartTimer()
-            gameManager.scene?.isPaused = false
+            gameManager?.gameTimer.restartTimer()
+            gameManager?.scene?.isPaused = false
             scene?.isUserInteractionEnabled = true
-            gameManager.touchesBegin = (touches, scene!)
+            gameManager?.touchesBegin = (touches, scene!)
         }
         else if endedType == 2{
-            gameManager.touchesBegin = (touches, scene!)
+            gameManager?.touchesBegin = (touches, scene!)
         }
         else {
-            gameManager.touchesEnd = (touches, scene!)
+            gameManager?.touchesEnd = (touches, scene!)
         }
     }
 }
