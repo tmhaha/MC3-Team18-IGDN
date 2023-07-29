@@ -161,9 +161,9 @@ extension GameViewController: ShowAlertDelegate {
         gameManager = nil
         
         if let view = self.view as? SKView {
-            gameManager = GameManager(constants: self.gameConstants, map: map)
-            gameManager?.delegate = self
-            let scene = gameManager?.generateScene(size: view.bounds.size)
+            gameManager = GameManager(constants: self.gameConstants, map: stages[GameData.shared.selectedStage + 1].map)
+            gameManager.delegate = self
+            let scene = gameManager.generateScene(size: view.bounds.size)
             view.presentScene(scene)
             self.scene = scene
             setupScene()
