@@ -16,6 +16,7 @@ struct Object: ObstacleProtocol {
     var imageName: String
     var isClockWise: Bool
     var tutorails: [GameAlertType] = []
+    var isEmpty: Bool = true
     
     // 초기화
     init(creativeObject: CreativeObject) {

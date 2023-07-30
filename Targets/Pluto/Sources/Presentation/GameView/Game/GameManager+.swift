@@ -55,7 +55,6 @@ extension GameManager {
     // 게임을 멈춤
     func stopGame(for alert: GameAlertType) {
         self.scene?.isPaused = true
-        gameTimer.stopTimer()
         backgroundTimer.stopTimer()
         delegate?.showAlert(alertType: alert)
     }
@@ -63,13 +62,11 @@ extension GameManager {
     // 게임 리스타트
     func restartGame() {
         self.scene?.isHidden = false
-        gameTimer.restartTimer()
         backgroundTimer.restartTimer()
         scene?.isUserInteractionEnabled = true
     }
     // 게임 종료
     func finishGame() {
-        gameTimer.resetTimer()
         backgroundTimer.resetTimer()
         scene = nil
         

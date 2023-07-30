@@ -10,6 +10,7 @@ import SpriteKit
 
 class PlanetNode: SKSpriteNode {
     
+    var isInScreen = false
     var id: String = UUID().uuidString
     var gameConstants = GameConstants()
     var delegate: PassRotationingAstronautPointDelegate? = nil
@@ -22,29 +23,8 @@ class PlanetNode: SKSpriteNode {
     var directionNode: [SKShapeNode] = []
     var path: CGPath = CGPath(ellipseIn: .zero, transform: nil)
     var isClockWise = true
-    var tutorials: [TutorialView] = []
+    var tutorials: [GameAlertType] = []
     var checkposition = false
-    override var position: CGPoint {
-        willSet(newVlaue) {
-            if position.x < -150.0 {
-                removeFromParent()
-            }
-        }
-    }
-    
-//    init(_ position: CGPoint,
-//         _ size: CGSize,
-//         _ imagename: String,
-//         _ color: AstronautColor,
-//         _ path: CGPath,
-//         _ isColockWise: Bool
-//    ) {
-//        super.init(
-//    }
-//
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
     
     func startDirectionNodesRotation() {
         

@@ -83,6 +83,9 @@ class GameViewController: UIViewController {
 extension GameViewController: ShowAlertDelegate {
     
     func showTutorial(tutorials: [GameAlertType]) {
+        scene?.isPaused = true
+        scene?.isUserInteractionEnabled = false
+        gameManager?.backgroundTimer.stopTimer()
         var tutorial = TutorialView()
         var activates: [[TutorialView.Activate]] = []
         var topText: [String] = []
@@ -124,17 +127,21 @@ extension GameViewController: ShowAlertDelegate {
         scene?.isUserInteractionEnabled = false
         switch alertType {
         case .success:
+            gameAlertView = GameAlertView(frame: .zero, alertType: .success)
+            gameAlertView.upCompletion = restartGame
+            gameAlertView.downCompletion = backToList
+            scene?.isPaused = true
+            scene?.isUserInteractionEnabled = false
+            addAlertView()
             break
         case .fail:
             gameAlertView = GameAlertView(frame: .zero, alertType: .fail)
-            gameManager?.gameTimer.stopTimer()
             gameAlertView.upCompletion = restartGame
             gameAlertView.downCompletion = backToList
             addAlertView()
             
         case .pause:
             gameAlertView = GameAlertView(frame: .zero, alertType: .pause)
-            gameManager?.gameTimer.stopTimer()
             gameAlertView.upCompletion = pauseUpButtonAction
             gameAlertView.downCompletion = backToList
             addAlertView()
@@ -162,8 +169,8 @@ extension GameViewController: ShowAlertDelegate {
         
         if let view = self.view as? SKView {
             gameManager = GameManager(constants: self.gameConstants, map: stages[GameData.shared.selectedStage + 1].map)
-            gameManager.delegate = self
-            let scene = gameManager.generateScene(size: view.bounds.size)
+            gameManager?.delegate = self
+            let scene = gameManager?.generateScene(size: view.bounds.size)
             view.presentScene(scene)
             self.scene = scene
             setupScene()
@@ -184,7 +191,7 @@ extension GameViewController: ViewDismissDelegate {
 extension GameViewController: TutorialFinishDelegate {
     func finish(_ touches: Set<UITouch>, with event: UIEvent?, endedType: Int) {
         if endedType == 1 {
-            gameManager?.gameTimer.restartTimer()
+            gameManager?.backgroundTimer.restartTimer()
             gameManager?.scene?.isPaused = false
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)

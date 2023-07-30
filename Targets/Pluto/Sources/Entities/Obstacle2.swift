@@ -16,27 +16,38 @@ protocol ObstacleProtocol {
     var path: Int { get set } // 궤도 path
     var imageName: String { get set } // image name
     var isClockWise: Bool { get set } // path가 시계방향이면 true, path가 반시계이면 false
+    var tutorails: [GameAlertType] { get set }
+    var isEmpty: Bool { get set }
 }
 
 extension ObstacleProtocol {
     
     func makePlanetNode() -> PlanetNode {
 
-        let planet = PlanetNode()
-        planet.position = CGPoint(x: 450 + point.x, y: 674 - (point.y - 80))
-        planet.size = size
-        let image = UIImage(named: imageName)
-        let texture = SKTexture(image: image!)
-        planet.texture = texture
-        planet.astronautColor = color
-        planet.path = CreativeObject.pathList[path]
-        planet.isClockWise = isClockWise
-        planet.physicsBody = SKPhysicsBody(polygonFrom: CreativeObject.pathList[path])
-        planet.name = "planet"
-        planet.physicsBody?.categoryBitMask = 4
-        planet.physicsBody?.contactTestBitMask = 1
-        planet.physicsBody?.collisionBitMask = 0
-        
-        return planet
+        if isEmpty {
+            let planet = PlanetNode()
+            planet.position = CGPoint(x: 450 + point.x, y: 674 - (point.y - 80))
+            planet.size = size
+            let image = UIImage(named: imageName)
+            let texture = SKTexture(image: image!)
+            planet.texture = texture
+            planet.astronautColor = color
+            planet.path = CreativeObject.pathList[path]
+            planet.isClockWise = isClockWise
+            planet.physicsBody = SKPhysicsBody(polygonFrom: CreativeObject.pathList[path])
+            planet.name = "planet"
+            planet.physicsBody?.categoryBitMask = 4
+            planet.physicsBody?.contactTestBitMask = 1
+            planet.physicsBody?.collisionBitMask = 0
+            planet.tutorials = tutorails
+            
+            return planet
+        }
+        else {
+            let planet = PlanetNode()
+            planet.tutorials = tutorails
+            
+            return planet
+        }
     }
 }

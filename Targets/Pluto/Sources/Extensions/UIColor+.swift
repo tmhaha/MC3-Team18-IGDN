@@ -15,4 +15,8 @@ extension UIColor {
         let blue = CGFloat(hex & 0xFF) / 255.0
         self.init(red: red, green: green, blue: blue, alpha: 1.0)
     }
+    
+    func opacity(_ number: CGFloat) -> UIColor {
+        self.withAlphaComponent(number)
+    }
 }
