@@ -30,7 +30,6 @@ class GameManager: ObservableObject {
     var nodeActionDictionary: [String : SKAction] = [:]
     
     // MARK: Timer
-    let gameTimer = GameTimer(timeInterval: 0.02)
     let backgroundTimer = GameTimer(timeInterval: 1.0)
     
     // MARK: Delegate
@@ -79,6 +78,10 @@ class GameManager: ObservableObject {
             self.scene?.isUserInteractionEnabled = true
             self.nodes.astronaut.startGame()
         }
+        map.sort(by: { $0.point.x < $1.point.x })
+        
+        var lastPosition = CGPoint()
+        let moveAction = SKAction.moveBy(x: -32.5, y: 0, duration: 1)
         for item in map {
             let currentData = item
             let planet = currentData.makePlanetNode()
@@ -86,13 +89,41 @@ class GameManager: ObservableObject {
             scene?.addChild(planet)
             planet.startDirectionNodesRotation()
             
-            let moveAction = SKAction.moveBy(x: -32.5, y: 0, duration: 1).forever
-            planet.run(moveAction)
-
-            ObstacleIndex += 1
+            let runPassPosition = SKAction.run {
+                if planet.position.x <= 400 && !planet.isInScreen {
+                    self.ObstacleIndex += 1
+                    planet.isInScreen = true
+                    let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
+                    self.nodes.topProgressBar.percent = percent
+                    self.nodes.bottomProgressBar.percent = percent
+                    if !planet.tutorials.isEmpty {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                            self.delegate?.showTutorial(tutorials: planet.tutorials)
+                        }
+                    }
+                }
+                if planet.position.x <= -100 {
+                    planet.removeAllActions()
+                    planet.removeFromParent()
+                }
+            }
+            let sequence = SKAction.sequence([moveAction, runPassPosition]).forever
+            planet.run(sequence)
+            lastPosition = planet.position
         }
+        print("@LOG haha \(lastPosition)")
+        let lastPlanet = SKSpriteNode(color: .brown.opacity(0.3), size: CGSize(width: 800, height: 800))
+        lastPlanet.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 800, height: 800))
+        lastPlanet.position = CGPoint(x: lastPosition.x + 600, y: 422)
+        lastPlanet.physicsBody?.categoryBitMask = 8
+        lastPlanet.physicsBody?.contactTestBitMask = 1
+        lastPlanet.physicsBody?.collisionBitMask = 0
+        lastPlanet.name = "lastPlanet"
+        lastPlanet.zPosition = -1
         
-        gameTimer.startTimer(completion: { _ in})
+        scene?.addChild(lastPlanet)
+        lastPlanet.run(moveAction.forever)
+        
         backgroundTimer.startTimer(completion: backgroundTimerAction)
     }
     
@@ -100,7 +131,7 @@ class GameManager: ObservableObject {
         
         $touchesBegin
             .sink { [weak self] (touches, scene) in
-                
+            
                 guard let self = self else { return }
                 
                 for touch in touches {
@@ -154,6 +185,7 @@ class GameManager: ObservableObject {
         
         $contact
             .sink { [weak self] contact in
+                
                 guard let self = self else { return }
                 
                 let nodeA = contact.bodyA.node
@@ -172,6 +204,38 @@ class GameManager: ObservableObject {
                     else if let astronaut = nodeA as? AstronautNode, let planet = nodeB as? PlanetNode {
                         if !astronautContact(astronaut: astronaut, planet: planet, contact: contact) {
                             stopGame(for: .fail)
+                        }
+                    }
+                }
+                if (nodeA?.name == "astronaut" && nodeB?.name == "lastPlanet") || (nodeA?.name == "lastPlanet" && nodeB?.name == "astronaut") {
+                    
+                    scene?.isUserInteractionEnabled = false
+                    let roatationAction = SKAction.rotate(byAngle: CGFloat.pi * 4, duration: 5).forever
+                    let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
+                                                   duration: 18)
+                    let checkFinish = SKAction.run {
+                        print("@FINISH")
+                        self.delegate?.showAlert(alertType: .success)
+                    }
+                    let sequence = SKAction.sequence([moveAction, checkFinish])
+                    nodes.astronaut.removeAllActions()
+                    let group = SKAction.group([roatationAction, sequence])
+                    
+                    nodes.astronaut.run(group)
+                    if nodeA?.name == "lastPlanet" {
+                        if let lastPlanet = nodeA as? SKSpriteNode {
+                            lastPlanet.removeAllActions()
+                            let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
+                                                           duration: 9)
+                            lastPlanet.run(moveAction)
+                        }
+                    }
+                    else {
+                        if let lastPlanet = nodeB as? SKSpriteNode {
+                            lastPlanet.removeAllActions()
+                            let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
+                                                           duration: 18)
+                            lastPlanet.run(moveAction)
                         }
                     }
                 }
@@ -331,7 +395,7 @@ extension GameManager {
             
             astronaut.physicsBody?.categoryBitMask = 1
             
-            astronaut.physicsBody?.contactTestBitMask = 4 | 2
+            astronaut.physicsBody?.contactTestBitMask = 4 | 2 | 8
             
             leftWall.physicsBody?.contactTestBitMask = 1
             leftWall.physicsBody?.collisionBitMask = 1

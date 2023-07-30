@@ -10,7 +10,7 @@ import SwiftUI
 
 let stages:[Stage] = [
     Stage(level: 1, startStory: Story(image: [], text: [], music: .Story1), endStory: nil, map: [
-        Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page0),
         Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
         Object(CGPoint(x: 229.16665649414062, y: 162.5), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
