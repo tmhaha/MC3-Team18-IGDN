@@ -9,24 +9,19 @@ import SwiftUI
 
 struct StoryView: View {
     @EnvironmentObject var router: Router<Path>
-    let story1P: [(String, String)] = story
-    let story2P: [(String, String)] = story
+    let story1P: [String] = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
+    let story2P: [String] = ["qwertyuiop", "asdfghjkl", "zxcvbnm"]
     @State var idx1P: Int = 0
     @State var idx2P: Int = 0
     
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                VStack(alignment: .leading) {
-                    Text(story1P[idx1P].0)
-                        .font(.title)
-                        .bold()
-                    Text(story1P[idx1P].1)
-                }
-                .rotationEffect(Angle(degrees: 180))
-                .frame(width: 330, height: 170, alignment: .trailing)
-                .foregroundColor(.black)
-                .padding(.horizontal)
+                Text(story1P[idx1P])
+                    .rotationEffect(Angle(degrees: 180))
+                    .frame(width: 330, height: 130, alignment: .trailing)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
                 
                 Button {
                     if (idx1P < story1P.count - 1) {
@@ -43,6 +38,8 @@ struct StoryView: View {
 
             ZStack(alignment: .bottomTrailing) {
                 Rectangle()
+                    .frame(height: 504)
+                    .foregroundColor(SettingData.shared.selectedTheme.main)
                 Button {
                     // MARK: 여기서 게임 진입! (스토리O)
                     router.pop()
@@ -56,15 +53,10 @@ struct StoryView: View {
             }
             
             ZStack(alignment: .bottomTrailing) {
-                VStack(alignment: .leading) {
-                    Text(story2P[idx2P].0)
-                        .font(.title)
-                        .bold()
-                    Text(story2P[idx2P].1)
-                }
-                .frame(width: 330, height: 170, alignment: .leading)
-                .foregroundColor(.black)
-                .padding(.horizontal)
+                Text(story2P[idx2P])
+                    .frame(width: 330, height: 130, alignment: .leading)
+                    .foregroundColor(.black)
+                    .padding(.horizontal)
                 
                 Button {
                     if (idx2P < story2P.count - 1) {
