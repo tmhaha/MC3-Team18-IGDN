@@ -90,17 +90,13 @@ class GameManager: ObservableObject {
             planet.startDirectionNodesRotation()
             
             let runPassPosition = SKAction.run {
-                if planet.position.x <= 400 && !planet.isInScreen {
+                if planet.position.x <= 350 && !planet.isInScreen {
                     self.ObstacleIndex += 1
                     planet.isInScreen = true
                     let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
                     self.nodes.topProgressBar.percent = percent
                     self.nodes.bottomProgressBar.percent = percent
-                    if !planet.tutorials.isEmpty {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            self.delegate?.showTutorial(tutorials: planet.tutorials)
-                        }
-                    }
+                    self.delegate?.showTutorial(tutorials: planet.tutorials)
                 }
                 if planet.position.x <= -100 {
                     planet.removeAllActions()
