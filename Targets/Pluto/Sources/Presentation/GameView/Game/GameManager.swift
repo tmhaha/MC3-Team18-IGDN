@@ -91,18 +91,15 @@ class GameManager: ObservableObject {
             planet.isInScreen = false
             
             let runPassPosition = SKAction.run {
-                print("@HAZZY \(planet.position.x)")
-                if planet.position.x <= 340 && !planet.isInScreen {
+                
+                if planet.position.x <= 390 && !planet.isInScreen {
                     self.ObstacleIndex += 1
                     planet.isInScreen = true
                     let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
                     self.nodes.topProgressBar.percent = percent
                     self.nodes.bottomProgressBar.percent = percent
-                    //self.delegate?.showTutoral(tutorials: planet.tutorials)
-                    print("@HAZZY IN \(planet.position.x)")
                     if !planet.tutorials.isEmpty {
-                        print("@HAZZY \(planet.tutorials)")
-                        //self.delegate?.showTutorial(tutorials: planet.tutorials)
+                        self.delegate?.showTutorial(tutorials: planet.tutorials)
                     }
                 }
                 if planet.position.x <= -100 {
