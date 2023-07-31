@@ -45,7 +45,7 @@ struct Object: ObstacleProtocol {
         }
     }
     
-    init(_ point: CGPoint, _ size: CGSize, _ color: AstronautColor, _ path: Int, _ imageName: String, _ isColockWise: Bool, _ tutorails: [GameAlertType] = []){
+    init(_ point: CGPoint, _ size: CGSize, _ color: AstronautColor, _ path: Int, _ imageName: String, _ isColockWise: Bool, _ tutorails: [GameAlertType] = [], _ isEmpty: Bool = true){
         
         self.point = point
         self.size = size
@@ -54,6 +54,7 @@ struct Object: ObstacleProtocol {
         self.imageName = imageName
         self.isClockWise = isColockWise
         self.tutorails = tutorails
+        self.isEmpty = isEmpty
     }
 }
 
