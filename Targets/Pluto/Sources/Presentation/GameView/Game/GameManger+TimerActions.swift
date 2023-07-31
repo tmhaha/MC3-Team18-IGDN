@@ -12,12 +12,16 @@ extension GameManager {
     
     func backgroundTimerAction(_ x: Double) {
         let index = Int(x) % 30
-        print("@LOG \(x)")
         let backgroundNodes = backGround.timeLayer[index]
         scene?.addChilds(backgroundNodes.map { $0 })
         for node in backgroundNodes {
             node.run(SKAction.sequence([SKAction.fadeIn(withDuration: 1.5), SKAction.fadeOut(withDuration: 1.5)]).forever)
-            node.runAndRemove(SKAction.moveTo(x: -10, duration: node.duration), withKey: "moveBackground")
+            let removeAction = SKAction.run {
+                node.removeFromParent()
+            }
+            let sequence = SKAction.sequence([SKAction.moveTo(x: -10, duration: node.duration), removeAction])
+            node.run(sequence, withKey: "moveBackground")
         }
+
     }
 }
