@@ -90,7 +90,7 @@ enum GameAlertType {
     var titleImage: UIImage {
         switch self {
         case .success:
-            return UIImage(named: "SuccessImage")!
+            return UIImage(named: SettingData.shared.selectedTheme.successAlertImage)!
         case .fail:
             return UIImage(named: "FailImage")!
         case .pause:

@@ -39,7 +39,7 @@ class ThroatProgressNode: SKShapeNode {
         path.close()
         
         self.path = path.cgPath
-        self.strokeColor = SettingData().selectedTheme.mainLight.uiColor
+        self.strokeColor = SettingData.shared.selectedTheme.mainLight.uiColor
         self.lineWidth = 2
     }
     

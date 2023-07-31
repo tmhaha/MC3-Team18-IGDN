@@ -295,7 +295,7 @@ extension GameManager {
             let texture1 = SKTexture(imageNamed: "ClockWiseButton")
             leftButton.texture = texture1
             
-            let pauseButtonTexture = SKTexture(imageNamed: "buttonPause")
+            let pauseButtonTexture = SKTexture(imageNamed: SettingData.shared.selectedTheme.pauseButtonImage)
             pauseButton.texture = pauseButtonTexture
             
             let redButtonTexture = SKTexture(imageNamed: "RedButton")
@@ -311,7 +311,7 @@ extension GameManager {
             let bgTexture = SKTexture(imageNamed: "BackGround")
             background.texture = bgTexture
             
-            let texture = SKTexture(imageNamed: "ButtonArea")
+            let texture = SKTexture(imageNamed: SettingData.shared.selectedTheme.buttonAreaImage)
             bottomWall.texture = texture
             topWall.texture = texture
         }
