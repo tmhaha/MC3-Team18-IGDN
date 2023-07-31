@@ -112,13 +112,15 @@ class GameManager: ObservableObject {
             lastPosition = planet.position
         }
         
-        let lastPlanet = SKSpriteNode(color: .brown.opacity(0.3), size: CGSize(width: 800, height: 800))
-        lastPlanet.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 800, height: 800))
-        lastPlanet.position = CGPoint(x: lastPosition.x + 600, y: 422)
+        let lastPlanet = SKSpriteNode(color: .clear, size: CGSize(width: 600, height: 600))
+        lastPlanet.physicsBody = SKPhysicsBody(circleOfRadius: 300)
+        lastPlanet.position = CGPoint(x: lastPosition.x + 450, y: 422)
         lastPlanet.physicsBody?.categoryBitMask = 8
         lastPlanet.physicsBody?.contactTestBitMask = 1
         lastPlanet.physicsBody?.collisionBitMask = 0
         lastPlanet.name = "lastPlanet"
+        let texture = SKTexture(imageNamed: "SuccessPlanet")
+        lastPlanet.texture = texture
         lastPlanet.zPosition = -1
         
         scene?.addChild(lastPlanet)
@@ -215,10 +217,11 @@ class GameManager: ObservableObject {
                     let roatationAction = SKAction.rotate(byAngle: CGFloat.pi * 4, duration: 5).forever
                     let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
                                                    duration: 18)
-                    let checkFinish = SKAction.run {
-                        self.delegate?.showAlert(alertType: .success)
-                    }
-                    let sequence = SKAction.sequence([moveAction, checkFinish])
+                    self.delegate?.showAlert(alertType: .success)
+//                    let checkFinish = SKAction.run {
+//                        self.delegate?.showAlert(alertType: .success)
+//                    }
+                    let sequence = SKAction.sequence([moveAction])
                     nodes.astronaut.removeAllActions()
                     let group = SKAction.group([roatationAction, sequence])
                     
@@ -235,7 +238,7 @@ class GameManager: ObservableObject {
                         if let lastPlanet = nodeB as? SKSpriteNode {
                             lastPlanet.removeAllActions()
                             let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
-                                                           duration: 18)
+                                                           duration: 9)
                             lastPlanet.run(moveAction)
                         }
                     }

@@ -130,8 +130,6 @@ extension GameViewController: ShowAlertDelegate {
             gameAlertView = GameAlertView(frame: .zero, alertType: .success)
             gameAlertView.upCompletion = restartGame
             gameAlertView.downCompletion = backToList
-            scene?.isPaused = true
-            scene?.isUserInteractionEnabled = false
             addAlertView()
             
         case .fail:
