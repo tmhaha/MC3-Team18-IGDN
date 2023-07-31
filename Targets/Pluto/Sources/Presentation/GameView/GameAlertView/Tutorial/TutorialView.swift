@@ -128,7 +128,7 @@ class TutorialView: UIView {
     }()
     
     private var centerImageView: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "diamond_100_yellow")!)
+        let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         
         return imageView

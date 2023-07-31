@@ -81,22 +81,29 @@ class GameManager: ObservableObject {
         map.sort(by: { $0.point.x < $1.point.x })
         
         var lastPosition = CGPoint()
-        let moveAction = SKAction.moveBy(x: -32.5, y: 0, duration: 1)
+        let moveAction = SKAction.move(by: CGVector(dx: -32.5, dy: 0), duration: 1)
         for item in map {
             let currentData = item
             let planet = currentData.makePlanetNode()
             planet.delegate = self
             scene?.addChild(planet)
             planet.startDirectionNodesRotation()
+            planet.isInScreen = false
             
             let runPassPosition = SKAction.run {
-                if planet.position.x <= 350 && !planet.isInScreen {
+                print("@HAZZY \(planet.position.x)")
+                if planet.position.x <= 340 && !planet.isInScreen {
                     self.ObstacleIndex += 1
                     planet.isInScreen = true
                     let percent = CGFloat(self.ObstacleIndex) / CGFloat(self.map.count)
                     self.nodes.topProgressBar.percent = percent
                     self.nodes.bottomProgressBar.percent = percent
-                    self.delegate?.showTutorial(tutorials: planet.tutorials)
+                    //self.delegate?.showTutoral(tutorials: planet.tutorials)
+                    print("@HAZZY IN \(planet.position.x)")
+                    if !planet.tutorials.isEmpty {
+                        print("@HAZZY \(planet.tutorials)")
+                        //self.delegate?.showTutorial(tutorials: planet.tutorials)
+                    }
                 }
                 if planet.position.x <= -100 {
                     planet.removeAllActions()
