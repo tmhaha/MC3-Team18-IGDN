@@ -55,12 +55,16 @@ extension GameManager {
     // 게임을 멈춤
     func stopGame(for alert: GameAlertType) {
         self.scene?.isPaused = true
+        self.scene?.isRealPause = true
         backgroundTimer.stopTimer()
         delegate?.showAlert(alertType: alert)
     }
     
     // 게임 리스타트
     func restartGame() {
+        self.scene?.isRealPause = false
+        self.scene?.firstTouch = false
+        self.scene?.isPaused = false
         self.scene?.isHidden = false
         backgroundTimer.restartTimer()
         scene?.isUserInteractionEnabled = true

@@ -13,7 +13,7 @@ class GameManager: ObservableObject {
     // MARK: CancellableBag
     var bag = Set<AnyCancellable>()
     
-    var scene: SKScene?
+    var scene: GameScene?
     // MARK: Input
     @Published var touchesBegin: (Set<UITouch>, SKScene)
     @Published var touchesEnd: (Set<UITouch>, SKScene)
@@ -60,7 +60,7 @@ class GameManager: ObservableObject {
         binding()
     }
 
-    func settingForNewGame(scene: SKScene) {
+    func settingForNewGame(scene: GameScene) {
         scene.isUserInteractionEnabled = false
         self.scene = scene
         
@@ -111,14 +111,16 @@ class GameManager: ObservableObject {
             planet.run(sequence)
             lastPosition = planet.position
         }
-        print("@LOG haha \(lastPosition)")
-        let lastPlanet = SKSpriteNode(color: .brown.opacity(0.3), size: CGSize(width: 800, height: 800))
-        lastPlanet.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 800, height: 800))
-        lastPlanet.position = CGPoint(x: lastPosition.x + 600, y: 422)
+        
+        let lastPlanet = SKSpriteNode(color: .clear, size: CGSize(width: 600, height: 600))
+        lastPlanet.physicsBody = SKPhysicsBody(circleOfRadius: 300)
+        lastPlanet.position = CGPoint(x: lastPosition.x + 450, y: 422)
         lastPlanet.physicsBody?.categoryBitMask = 8
         lastPlanet.physicsBody?.contactTestBitMask = 1
         lastPlanet.physicsBody?.collisionBitMask = 0
         lastPlanet.name = "lastPlanet"
+        let texture = SKTexture(imageNamed: "SuccessPlanet")
+        lastPlanet.texture = texture
         lastPlanet.zPosition = -1
         
         scene?.addChild(lastPlanet)
@@ -131,19 +133,21 @@ class GameManager: ObservableObject {
         
         $touchesBegin
             .sink { [weak self] (touches, scene) in
-            
+                print("@DEBUG hahah")
                 guard let self = self else { return }
                 
                 for touch in touches {
                     let location = touch.location(in: scene)
                     
                     if self.nodes.rightButton.contains(location) {
+                        print("@DEBUG hahah")
                         if throatGauge > 0 && nodes.astronaut.status != .inOribt {
                             nodes.astronaut.startTurnCounterClockwise()
                             useGague()
                         }
                     }
                     else if self.nodes.leftButton.contains(location){
+                        print("@DEBUG hahah")
                         if throatGauge > 0  && nodes.astronaut.status != .inOribt {
                             nodes.astronaut.startTurnClockwise()
                             useGague()
@@ -213,11 +217,11 @@ class GameManager: ObservableObject {
                     let roatationAction = SKAction.rotate(byAngle: CGFloat.pi * 4, duration: 5).forever
                     let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
                                                    duration: 18)
-                    let checkFinish = SKAction.run {
-                        print("@FINISH")
-                        self.delegate?.showAlert(alertType: .success)
-                    }
-                    let sequence = SKAction.sequence([moveAction, checkFinish])
+                    self.delegate?.showAlert(alertType: .success)
+//                    let checkFinish = SKAction.run {
+//                        self.delegate?.showAlert(alertType: .success)
+//                    }
+                    let sequence = SKAction.sequence([moveAction])
                     nodes.astronaut.removeAllActions()
                     let group = SKAction.group([roatationAction, sequence])
                     
@@ -234,7 +238,7 @@ class GameManager: ObservableObject {
                         if let lastPlanet = nodeB as? SKSpriteNode {
                             lastPlanet.removeAllActions()
                             let moveAction = SKAction.move(to: CGPoint(x: 195, y: 422),
-                                                           duration: 18)
+                                                           duration: 9)
                             lastPlanet.run(moveAction)
                         }
                     }
