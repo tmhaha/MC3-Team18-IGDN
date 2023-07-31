@@ -74,17 +74,9 @@ struct PlayButton: View {
     var body: some View {
         Button {
             if (currentStage >= selectedStage) {
-                if stages[selectedStage].startStory != nil {
-                    router.push(.Story)
-                    GameData.shared.selectedStage = selectedStage
-                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
-                } else {
-                    // MARK: 여기서 게임 진입! (스토리X)
-                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
-                    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[selectedStage])
-                    GameData.shared.selectedStage = selectedStage
-                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
-                }
+                router.push(.Story)
+                SoundManager.shared.playBackgroundMusic(stages[selectedStage].startStory?.music ?? Music.Story1)
+                GameData.shared.selectedStage = selectedStage
             } else {
                 isAnimating.toggle()
                 hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)
