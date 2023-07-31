@@ -101,7 +101,13 @@ extension GameViewController: ShowAlertDelegate {
                 activates.append(activate)
                 topText.append(topString)
                 bottomText.append(bottomString)
-                image.append(UIImage(named: "diamond_100_yellow")!)
+                if imageName == "" {
+                    image.append(UIImage())
+                }
+                else {
+                    image.append(UIImage(named: imageName)!)
+                    
+                }
             default:
                 break
             }
