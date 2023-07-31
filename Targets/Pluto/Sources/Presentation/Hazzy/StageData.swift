@@ -9,7 +9,7 @@
 import SwiftUI
 
 let stages:[Stage] = [
-    Stage(level: 1, startStory: Story(image: [], text: [], music: .Story1), endStory: nil, map: [
+    Stage(level: 1, startStory: story1, endStory: nil, map: [
         Object(CGPoint(x: 0, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page0, false),
         Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
 //        Object(CGPoint(x: 500, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page1, false),
@@ -20,7 +20,7 @@ let stages:[Stage] = [
         Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 838.1666564941406, y: 211.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
     ]),
-    Stage(level: 2, startStory: nil, endStory: nil, map: [
+    Stage(level: 2, startStory: story2, endStory: nil, map: [
         Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
         Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
@@ -28,9 +28,9 @@ let stages:[Stage] = [
         Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 838.1666564941406, y: 211.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
     ]),
-    Stage(level: 3, startStory: nil, endStory: nil, map: []),
-    Stage(level: 4, startStory: nil, endStory: nil, map: []),
-    Stage(level: 5, startStory: nil, endStory: nil, map: [
+    Stage(level: 3, startStory: story3, endStory: nil, map: []),
+    Stage(level: 4, startStory: story4, endStory: nil, map: []),
+    Stage(level: 5, startStory: story5, endStory: nil, map: [
         Object(CGPoint(x: 330.1666564941406, y: 396.5), CGSize(width: 105.0, height: 105.0), .two, 4, "rectangle_70_red", true),
         Object(CGPoint(x: 325.8333231608073, y: 148.8333282470703), CGSize(width: 105.0, height: 105.0), .one, 4, "rectangle_70_green", true),
         Object(CGPoint(x: 653.5, y: 404.1666564941406), CGSize(width: 105.0, height: 105.0), .one, 7, "triangle_70_green", true),
@@ -74,7 +74,7 @@ let stages:[Stage] = [
         Object(CGPoint(x: 3675.8333333333335, y: 160.8333282470703), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
         Object(CGPoint(x: 915.6666615804037, y: 370.3333282470703), CGSize(width: 150.0, height: 150.0), .two, 2, "circle_100_red", false),
     ]),
-    Stage(level: 6, startStory: Story(image: [], text: [], music: .Story2), endStory: Story(image: [], text: [], music: .Story3), map: [
+    Stage(level: 6, startStory: story6, endStory: story7, map: [
     Object(CGPoint(x: -20.166671752929688, y: 119.16665649414062), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
     Object(CGPoint(x: -21.166671752929688, y: 277.8333282470703), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
     Object(CGPoint(x: -18.5, y: 415.8333282470703), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
@@ -144,3 +144,55 @@ struct Story {
     let text: [String]
     let music: Music
 }
+
+let story1 = Story(
+    image: [],
+    text: ["시스템: 명왕성 궤도로 진입합니다.",
+            "A: (구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+            "B: 그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+            "A: 예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+            "B: 그래도 이게 우리가 가진 전부니까요.",
+            "시스템: 삐비빅 삐비빅",
+            "B: 어? 명왕성에서 약하지만 생체신호가 잡히기 시작했어요!",
+            "A: 그럴리가.. 농담하는 거지? 하하하",
+            "제이슨: 매뉴얼대로 명왕성 착륙을 진행할게요. 첫 착륙부터 행운이 따랐으면 좋겠는데.",
+            "일러스트 : 캡슐 안에 잠들어있는 플루토를 발견한 플레이어. 캡슐엔 지구모양의 로고가 박혀있다."],
+    music: Music.Story1
+)
+
+let story2 = Story(
+    image: [],
+    text: ["story2"],
+    music: Music.Story1
+)
+
+let story3 = Story(
+    image: [],
+    text: ["story3"],
+    music: Music.Story1
+)
+
+let story4 = Story(
+    image: [],
+    text: ["story4"],
+    music: Music.Story1
+)
+
+let story5 = Story(
+    image: [],
+    text: ["story5"],
+    music: Music.Story1
+)
+
+let story6 = Story(
+    image: [],
+    text: ["story6"],
+    music: Music.Story1
+)
+
+let story7 = Story(
+    image: [],
+    text: ["story7"],
+    music: Music.Story1
+)
+
