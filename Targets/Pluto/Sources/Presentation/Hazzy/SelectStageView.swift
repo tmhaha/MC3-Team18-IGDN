@@ -127,7 +127,7 @@ struct CardView: View {
     @Binding var selectedStage: Int
     @State private var offset = CGFloat.zero
     let spacing: CGFloat = 15
-    let images = [Image("Stage"), Image("Stage"), Image("Stage"), Image("Stage"), Image("Stage"), Image("Stage")]
+    let images = SettingData.shared.selectedTheme.stageImage
     var viewCount: Int { images.count }
 
     var body: some View {

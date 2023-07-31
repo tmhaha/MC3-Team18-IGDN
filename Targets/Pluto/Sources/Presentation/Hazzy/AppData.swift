@@ -167,14 +167,14 @@ enum Theme: Int, CaseIterable {
         }
     }
     
-    var stageImage: [String] {
+    var stageImage: [Image] {
         switch self {
         case .blue:
-            return []
+            return [Image("stage_blue_1"), Image("stage_blue_2"), Image("stage_blue_3"), Image("stage_blue_4"), Image("stage_blue_5"), Image("stage_blue_6")]
         case .orange:
-            return []
+            return [Image("stage_orange_1"), Image("stage_orange_2"), Image("stage_orange_3"), Image("stage_orange_4"), Image("stage_orange_5"), Image("stage_orange_6")]
         case .gray:
-            return []
+            return [Image("stage_gray_1"), Image("stage_gray_2"), Image("stage_gray_3"), Image("stage_gray_4"), Image("stage_gray_5"), Image("stage_gray_6")]
         }
     }
 
@@ -252,28 +252,44 @@ enum Theme: Int, CaseIterable {
             ]
         }
     }
-    
-//    var pauseButtonImage: String { // todo
-//        switch self {
-//        case .blue:
-//            return
-//        case .orange:
-//            return
-//        case .lime:
-//            return
-//        }
-//    }
-//
+
+    // MARK: @KIO - In Game Image
+    var buttonAreaImage: String {
+        switch self {
+        case .blue:
+            return "button_area_blue"
+        case .orange:
+            return "button_area_orange"
+        case .gray:
+            return "button_area_gray"
+        }
+    }
+
+    var pauseButtonImage: String {
+        switch self {
+        case .blue:
+            return "pause_button_blue"
+        case .orange:
+            return "pause_button_orange"
+        case .gray:
+            return "pause_button_gray"
+        }
+    }
+
+    var successAlertImage: String {
+        switch self {
+        case .blue:
+            return "success_alert_blue"
+        case .orange:
+            return "success_alert_orange"
+        case .gray:
+            return "success_alert_gray"
+        }
+    }
+
 }
 
 let allThemeCases: [Theme] = Theme.allCases
-
-// Onboarding
-let story: [(String, String)] = [
-    ("Title 1", "Lorem ipsum dolor sit amet, cons ecteadipiscing elit. Nulla sagittis bibe ndum vulputate. Donec pul yayaya."),
-    ("Title 2", "story 2"),
-    ("Title 3", "story 3")
-]
 
 // Font
 let tasaExplorerBlack = "TASAExplorer-Black"
