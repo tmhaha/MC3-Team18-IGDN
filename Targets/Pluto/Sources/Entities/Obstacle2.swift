@@ -45,6 +45,7 @@ extension ObstacleProtocol {
         }
         else {
             let planet = PlanetNode()
+            planet.position = CGPoint(x: 450 + point.x, y: 674 - (point.y - 80))
             planet.tutorials = tutorails
             
             return planet

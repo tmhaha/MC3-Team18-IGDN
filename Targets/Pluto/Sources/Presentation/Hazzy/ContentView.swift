@@ -24,7 +24,8 @@ struct ContentView: View {
                         case .Home: HomeView().navigationBarBackButtonHidden()
                         case .Setting: SettingView().navigationBarBackButtonHidden()
                         case .Stage: SelectStageView().navigationBarBackButtonHidden()
-                        case .Story: StoryView().navigationBarBackButtonHidden()
+                        case .Story:
+                            StoryView().navigationBarBackButtonHidden()
                         }
                     }
                 }

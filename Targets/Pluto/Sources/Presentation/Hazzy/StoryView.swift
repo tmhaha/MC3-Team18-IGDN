@@ -1,9 +1,4 @@
-//
-//  StoryView.swift
-//  MC3_Hazzy
-//
-//  Created by 고혜지 on 2023/07/14.
-//
+
 
 import SwiftUI
 

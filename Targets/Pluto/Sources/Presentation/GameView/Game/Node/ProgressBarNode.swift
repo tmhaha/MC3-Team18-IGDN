@@ -76,7 +76,7 @@ class ProgressBarNode: SKShapeNode {
             let currentlength = currentPrograssLength + ((targetLength - currentPrograssLength) * (time / duration))
             let roundedRectTexture = self.createRoundedRectTexture(size: CGSize(width: currentlength, height: 6),
                                                               cornerRadius: 3,
-                                                              fillColor: UIColor(red: 0, green: 46 / 255, blue: 254 / 255, alpha: 1))
+                                                                   fillColor: SettingData.shared.selectedTheme.main.uiColor )
             self.progress = SKSpriteNode(texture: roundedRectTexture)
             self.addChild(self.progress)
             self.progress.positionFromLeftMiddle(-CGFloat(self.totalWidth) / 2.0, 0)
