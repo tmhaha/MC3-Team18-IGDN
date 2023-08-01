@@ -7,19 +7,25 @@ struct StoryView: View {
     let story = stages[GameData.shared.selectedStage].startStory?.text ?? []
     @State var idx1P: Int = 0
     @State var idx2P: Int = 0
+    @State var buttonOn1P: Bool = false
+    @State var buttonOn2P: Bool = false
     
     var body: some View {
         VStack {
             ZStack(alignment: .topLeading) {
-                TypingEffectTextView(messages: story, index: idx1P)
+                TypingEffectTextView(messages: story, index: idx1P, buttonOn: $buttonOn1P)
                     .rotationEffect(Angle(degrees: 180))
                     .frame(width: 330, height: 130, alignment: .trailing)
                     .foregroundColor(.black)
+                    .font(.custom(dungGeunMo, size: 18))
                     .padding(.horizontal)
 
                 Button {
-                    if (idx1P < story.count - 1) {
-                        idx1P += 1
+                    if buttonOn1P {
+                        if (idx1P < story.count - 1) {
+                            idx1P += 1
+                        }
+                        buttonOn1P = false
                     }
                 } label: {
                     Image("PolygonUp")
@@ -27,6 +33,7 @@ struct StoryView: View {
                         .resizable()
                         .frame(width: 20, height: 15)
                         .padding()
+                        .opacity(buttonOn1P ? 1 : 0.3)
                 }
             }
 
@@ -48,14 +55,18 @@ struct StoryView: View {
             }
 
             ZStack(alignment: .bottomTrailing) {
-                TypingEffectTextView(messages: story, index: idx2P)
+                TypingEffectTextView(messages: story, index: idx2P, buttonOn: $buttonOn2P)
                     .frame(width: 330, height: 130, alignment: .leading)
+                    .font(.custom(dungGeunMo, size: 18))
                     .foregroundColor(.black)
                     .padding(.horizontal)
 
                 Button {
-                    if (idx2P < story.count - 1) {
-                        idx2P += 1
+                    if buttonOn2P {
+                        if (idx2P < story.count - 1) {
+                            idx2P += 1
+                        }
+                        buttonOn2P = false
                     }
                 } label: {
                     Image("PolygonDown")
@@ -63,6 +74,7 @@ struct StoryView: View {
                         .resizable()
                         .frame(width: 20, height: 15)
                         .padding()
+                        .opacity(buttonOn2P ? 1 : 0.3)
                 }
             }
         }
@@ -81,7 +93,8 @@ struct TypingEffectTextView: View {
     let index: Int
     @State private var animateTitle: String = ""
     @State private var indexValue: Int = 0
-    @State private var timeInterval: TimeInterval = 0.1
+    @State private var timeInterval: TimeInterval = 0.05
+    @Binding var buttonOn: Bool
 
     var body: some View {
         VStack {
@@ -95,6 +108,7 @@ struct TypingEffectTextView: View {
                             indexValue += 1
                         } else  {
                             timer.invalidate()
+                            buttonOn = true
                         }
                     }
                 }
@@ -108,6 +122,7 @@ struct TypingEffectTextView: View {
                     indexValue += 1
                 } else  {
                     timer.invalidate()
+                    buttonOn = true
                 }
             }
         }
