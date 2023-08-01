@@ -150,9 +150,10 @@ class TutorialView: UIView {
             if changeGreenButton.isTouch(in: touchPoint) {
                 changeGreenButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .changeGreen })
-                if isFinished {
-                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-                }
+                tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                if isFinished {
+//                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                }
             }
             if clockWiseButton.isTouch(in: touchPoint) {
                 clockWiseButton.backgroundColor = bgColor
@@ -161,9 +162,10 @@ class TutorialView: UIView {
             if changeRedButton.isTouch(in: touchPoint) {
                 changeRedButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .changeRed })
-                if isFinished {
-                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-                }
+                tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                if isFinished {
+//                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                }
             }
             if pauseButton.isTouch(in: touchPoint) {
                 pauseButton.backgroundColor = bgColor
