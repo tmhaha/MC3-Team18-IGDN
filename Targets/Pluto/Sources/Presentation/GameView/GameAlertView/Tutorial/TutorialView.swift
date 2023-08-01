@@ -142,7 +142,7 @@ class TutorialView: UIView {
         for touch in touches {
             
             let touchPoint = touch.location(in: self)
-    
+            print("@SEO TOUCHE")
             if counterColockWiseButton.isTouch(in: touchPoint) {
                 counterColockWiseButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .turnCounterClockWise })
@@ -189,6 +189,7 @@ class TutorialView: UIView {
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 1)
                 isFinished = true
                 lastPoint = touchPoint
+                removeFromSuperview()
                 for view in subviews {
                     view.alpha = 0
                 }
