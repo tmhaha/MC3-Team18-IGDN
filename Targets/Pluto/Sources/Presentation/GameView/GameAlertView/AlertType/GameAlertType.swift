@@ -138,20 +138,19 @@ let page0 = [
 let page1 = [
     GameAlertType.tutorial(activate: [], bottomString: "성공! 안전하게 궤도에 올라탔어!", topString: "성공! 안전하게 궤도에 올라탔어!", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "방금 같은 색의 소행성에 닿으면 궤도에 탈 수 있다고 했지?", topString: "방금 같은 색의 소행성에 닿으면 궤도에 탈 수 있다고 했지?", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [.turnCounterClockWise], bottomString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", topString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", imageName: "", isLast: true)
+    GameAlertType.tutorial(activate: [], bottomString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", topString: "색을 바꾸면 소행성의 궤도에서 벗어날 수 있어.", imageName: "", isLast: true)
 ]
 
 // 초록색 소행성이 다가옴
 
 let page2 = [
-    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen], bottomString: "그럼 지금 초록 버튼을 눌러볼까?", topString: "", imageName: "diamond_70_green", isLast: true)
+    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen], bottomString: "그럼 지금 초록 버튼을 눌러볼까?", topString: "", imageName: "circle_70_green", isLast: true)
 ]
 
 // 초록색 소행성에 올라탐
 
 let page3 = [
     GameAlertType.tutorial(activate: [], bottomString: "잘했어!", topString: "", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "다른 색인 상태로 소행성에 닿으면 게임이 끝나니까 주의해야해!", topString: "다른 색인 상태로 소행성에 닿으면 게임이 끝나니까 주의해야해!", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "다시 흰색 소행성 궤도에 타기 위해서, 초록 버튼을 눌러서 색을 원상태로 돌려보자.", topString: "", imageName: "", isLast: true),
 ]
 

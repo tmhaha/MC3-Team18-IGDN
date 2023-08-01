@@ -10,15 +10,29 @@ import SwiftUI
 
 let stages:[Stage] = [
     Stage(level: 1, startStory: story1, endStory: nil, map: [
-        Object(CGPoint(x: 0, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page0, false),
-        Object(CGPoint(x: -5.1666717529296875, y: 322.8333282470703), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 100, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page1, false),
-        Object(CGPoint(x: 1088.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 1988.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 1318.1666666666667, y: 233.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
-        Object(CGPoint(x: 229.16665649414062, y: 162.5), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
+//        Object(CGPoint(x: 0, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page0, false), //empty
+        Object(CGPoint(x: -5, y: 323), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 100, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page1, false), //empty
+        Object(CGPoint(x: 230, y: 230), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
+        Object(CGPoint(x: 235.5, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page2, false), //empty
+        Object(CGPoint(x: 330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page3, false), //empty
         Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 838.1666564941406, y: 211.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
+        Object(CGPoint(x: 540, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page4, false), //empty
+        
+        
+        Object(CGPoint(x: 670, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page5, false), //empty
+        Object(CGPoint(x: 770, y: 231.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
+        Object(CGPoint(x: 790, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page6, false), //empty
+        
+        Object(CGPoint(x: 910, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page7, false), //empty
+        Object(CGPoint(x: 1020, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 1112, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page8, false), //empty
+        
+        Object(CGPoint(x: 1218.1666666666667, y: 453.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
+        Object(CGPoint(x: 1252, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page9, false), //empty
+        Object(CGPoint(x: 1272, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page10, false), //empty
+        
+//        Object(CGPoint(x: 1988.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
     ]),
     Stage(level: 2, startStory: story2, endStory: nil, map: [
         Object(CGPoint(x: -28.833343505859375, y: 308.1666564941406), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
