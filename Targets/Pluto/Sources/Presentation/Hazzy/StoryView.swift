@@ -4,87 +4,114 @@ import SwiftUI
 
 struct StoryView: View {
     @EnvironmentObject var router: Router<Path>
-    let story = stages[GameData.shared.selectedStage].startStory?.text ?? []
-    @State var idx1P: Int = 0
-    @State var idx2P: Int = 0
-    @State var buttonOn1P: Bool = false
-    @State var buttonOn2P: Bool = false
+    @State var isDone: Int = 0
     
     var body: some View {
-        VStack {
-            ZStack(alignment: .topLeading) {
-                TypingEffectTextView(messages: story, index: idx1P, buttonOn: $buttonOn1P)
-                    .rotationEffect(Angle(degrees: 180))
-                    .frame(width: 330, height: 130, alignment: .trailing)
-                    .foregroundColor(.black)
-                    .font(.custom(dungGeunMo, size: 18))
-                    .padding(.horizontal)
+        ZStack {
+            StoryImageView()
+            
+            VStack {
+                StoryTextView(player: 2, isDone: $isDone)
+                
+                Spacer()
+                
+                SkipButtonView()
 
-                Button {
-                    if buttonOn1P {
-                        if (idx1P < story.count - 1) {
-                            idx1P += 1
-                        }
-                        buttonOn1P = false
-                    }
-                } label: {
-                    Image("PolygonUp")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 20, height: 15)
-                        .padding()
-                        .opacity(buttonOn1P ? 1 : 0.3)
-                }
+                StoryTextView(player: 1, isDone: $isDone)
             }
-
-            ZStack(alignment: .bottomTrailing) {
-                Rectangle()
-                    .frame(height: 504)
-                    .foregroundColor(SettingData.shared.selectedTheme.main)
-                Button {
+            .padding(.vertical)
+        }
+        .onChange(of: isDone) { newValue in
+            if newValue == 2 {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     router.pop()
-                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[GameData.shared.selectedStage])
-                    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[GameData.shared.selectedStage])
-                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
-                } label: {
-                    Image("Button_skip_white")
-                        .resizable()
-                        .frame(width: 25, height: 20)
-                        .padding()
-                }
-            }
-
-            ZStack(alignment: .bottomTrailing) {
-                TypingEffectTextView(messages: story, index: idx2P, buttonOn: $buttonOn2P)
-                    .frame(width: 330, height: 130, alignment: .leading)
-                    .font(.custom(dungGeunMo, size: 18))
-                    .foregroundColor(.black)
-                    .padding(.horizontal)
-
-                Button {
-                    if buttonOn2P {
-                        if (idx2P < story.count - 1) {
-                            idx2P += 1
-                        }
-                        buttonOn2P = false
-                    }
-                } label: {
-                    Image("PolygonDown")
-                        .renderingMode(.template)
-                        .resizable()
-                        .frame(width: 20, height: 15)
-                        .padding()
-                        .opacity(buttonOn2P ? 1 : 0.3)
+                    StartGame()
                 }
             }
         }
-        .foregroundColor(SettingData.shared.selectedTheme.main)
     }
 }
 
-struct StoryView_Previews: PreviewProvider {
-    static var previews: some View {
-        StoryView()
+struct StoryImageView: View {
+    var body: some View {
+        Image("StorySampleImage")
+            .resizable()
+            .ignoresSafeArea()
+    }
+}
+
+struct StoryTextView: View {
+    let story = stages[GameData.shared.selectedStage].startStory?.text ?? []
+    var player: Int
+    @State var idx: Int = 0
+    @State var buttonOn: Bool = false
+    @Binding var isDone: Int
+    
+    var body: some View {
+        ZStack {
+            backgroundLayer
+            textLayer
+            buttonLayer
+        }
+        .frame(width:390, height: 110)
+    }
+    
+    private var backgroundLayer: some View {
+        Image(player == 1 ? "StoryTextBackground" : "StoryTextBackgroundReverse")
+    }
+    
+    private var textLayer: some View {
+        VStack {
+            Text(stages[GameData.shared.selectedStage].startStory?.character[idx] ?? "")
+                .frame(width: 345, height: 20, alignment: .leading)
+                .font(.custom(tasaExplorerBold, size: 18))
+                .opacity(0.7)
+                .padding(.top)
+            TypingEffectTextView(messages: story, index: idx, buttonOn: $buttonOn, isDone: $isDone)
+                .frame(width: 345, alignment: .leading)
+                .multilineTextAlignment(.leading)
+                .font(.custom(notoSansMedium, size: 12))
+            Spacer()
+        }
+        .rotationEffect(Angle(degrees: player == 1 ? 0 : 180))
+        .foregroundColor(.white)
+    }
+    
+    private var buttonLayer: some View {
+        Button {
+            if buttonOn {
+                if (idx < story.count - 1) {
+                    idx += 1
+                }
+                buttonOn = false
+            }
+        } label: {
+            Image(player == 1 ? "PolygonDown" : "PolygonUp")
+                .resizable()
+                .frame(width: 20, height: 13)
+                .opacity(buttonOn ? 1 : 0.3)
+                .padding()
+        }
+        .frame(width: 390, height: 110, alignment: player == 1 ? .bottomTrailing : .topLeading)
+    }
+}
+
+struct SkipButtonView: View {
+    @EnvironmentObject var router: Router<Path>
+    
+    var body: some View {
+        HStack {
+            Spacer()
+            Button {
+                router.pop()
+                StartGame()
+            } label: {
+                Image("Button_skip_white")
+                    .resizable()
+                    .frame(width: 25, height: 20)
+                    .padding(.horizontal)
+            }
+        }
     }
 }
 
@@ -95,6 +122,7 @@ struct TypingEffectTextView: View {
     @State private var indexValue: Int = 0
     @State private var timeInterval: TimeInterval = 0.05
     @Binding var buttonOn: Bool
+    @Binding var isDone: Int
 
     var body: some View {
         VStack {
@@ -109,6 +137,9 @@ struct TypingEffectTextView: View {
                         } else  {
                             timer.invalidate()
                             buttonOn = true
+                            if newIndex == messages.count - 1 {
+                                isDone += 1
+                            }
                         }
                     }
                 }
@@ -126,5 +157,17 @@ struct TypingEffectTextView: View {
                 }
             }
         }
+    }
+}
+
+private func StartGame() {
+    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[GameData.shared.selectedStage])
+    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[GameData.shared.selectedStage])
+    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
+}
+
+struct StoryView_Previews: PreviewProvider {
+    static var previews: some View {
+        StoryView()
     }
 }

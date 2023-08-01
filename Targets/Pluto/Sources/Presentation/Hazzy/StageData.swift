@@ -10,29 +10,26 @@ import SwiftUI
 
 let stages:[Stage] = [
     Stage(level: 1, startStory: story1, endStory: nil, map: [
-//        Object(CGPoint(x: 0, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page0, false), //empty
+        Object(CGPoint(x: 0, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page0, false), // tutorial
         Object(CGPoint(x: -5, y: 323), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 100, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false, page1, false), //empty
+        Object(CGPoint(x: 100, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page1, false), // tutorial
         Object(CGPoint(x: 230, y: 230), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
-        Object(CGPoint(x: 235.5, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page2, false), //empty
-        Object(CGPoint(x: 330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page3, false), //empty
-        Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 540, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page4, false), //empty
+        Object(CGPoint(x: 235.5, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page2, false), // tutorial
+        Object(CGPoint(x: 330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page3, false), // tutorial
+        Object(CGPoint(x: 510.5, y: 410), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 540, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page4, false), // tutorial
+        Object(CGPoint(x: 670, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page5, false), // tutorial
+        Object(CGPoint(x: 770, y: 400), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
+        Object(CGPoint(x: 790, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page6, false), // tutorial
+        Object(CGPoint(x: 910, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page7, false), // tutorial
+        Object(CGPoint(x: 1020, y: 430), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 1112, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page8, false), // tutorial
+        Object(CGPoint(x: 1200, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page9, false), // tutorial
+        Object(CGPoint(x: 1218, y: 453.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
+        Object(CGPoint(x: 1272, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page10, false), // tutorial
         
-        
-        Object(CGPoint(x: 670, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page5, false), //empty
-        Object(CGPoint(x: 770, y: 231.8333282470703), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
-        Object(CGPoint(x: 790, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page6, false), //empty
-        
-        Object(CGPoint(x: 910, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page7, false), //empty
-        Object(CGPoint(x: 1020, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 1112, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page8, false), //empty
-        
-        Object(CGPoint(x: 1218.1666666666667, y: 453.5), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
-        Object(CGPoint(x: 1252, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page9, false), //empty
-        Object(CGPoint(x: 1272, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false, page10, false), //empty
-        
-//        Object(CGPoint(x: 1988.8333231608071, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 1350, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page11, false), // tutorial
+        Object(CGPoint(x: 1500, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page12, false), // tutorial
     ]),
     Stage(level: 2, startStory: story2, endStory: nil, map: [
         Object(CGPoint(x: -28.833343505859375, y: 308.1666564941406), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
@@ -318,60 +315,98 @@ struct Stage {
 
 struct Story {
     let image: [Image]
+    let character: [String]
     let text: [String]
     let music: Music
 }
 
 let story1 = Story(
     image: [],
+    character: ["System", "A", "B", "A", "B"],
     text: [
-        "시스템: 명왕성 궤도로 진입합니다.",
-        "A: (구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
-        "B: 그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
-        "A: 예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
-        "B: 그래도 이게 우리가 가진 전부니까요.",
-        "시스템: 삐비빅 삐비빅",
-        "B: 어? 명왕성에서 약하지만 생체신호가 잡히기 시작했어요!",
-        "A: 그럴리가.. 농담하는 거지? 하하하",
-        "제이슨: 매뉴얼대로 명왕성 착륙을 진행할게요. 첫 착륙부터 행운이 따랐으면 좋겠는데.",
-        "일러스트 : 캡슐 안에 잠들어있는 플루토를 발견한 플레이어. 캡슐엔 지구모양의 로고가 박혀있다."
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
     ],
     music: Music.Story1
 )
 
 let story2 = Story(
     image: [],
-    text: ["story2"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
 
 let story3 = Story(
     image: [],
-    text: ["story3"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
 
 let story4 = Story(
     image: [],
-    text: ["story4"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
 
 let story5 = Story(
     image: [],
-    text: ["story5"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
 
 let story6 = Story(
     image: [],
-    text: ["story6"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
 
 let story7 = Story(
     image: [],
-    text: ["story7"],
+    character: ["System", "A", "B", "A", "B"],
+    text: [
+        "명왕성 궤도로 진입합니다.",
+        "(구웨엑..) 이런 고물 비행선을 주고 탐색 임무라니..",
+        "그거 아세요? 기록에 따르면 예전에는 여기부터가 태양계였다고 하네요.",
+        "예전보다 더 ‘예전’에 말이야? 그런 기록이 의미 있을 리가 없잖아.",
+        "그래도 이게 우리가 가진 전부니까요."
+    ],
     music: Music.Story1
 )
-
