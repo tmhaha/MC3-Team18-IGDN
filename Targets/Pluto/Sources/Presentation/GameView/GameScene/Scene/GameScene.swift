@@ -21,6 +21,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
+    func pause() {
+        print("@SEO ha")
+        isUserInteractionEnabled = false
+        isRealPause = true
+        firstTouch = false
+        isPaused = true
+    }
+    
+    func restart() {
+        print("@SEO hi")
+        isUserInteractionEnabled = true
+        firstTouch = false
+        isRealPause = false
+        isPaused = false
+    }
+    
     init(gameManager: GameManager, size: CGSize) {
         self.gameManager = gameManager
         super.init(size: size)

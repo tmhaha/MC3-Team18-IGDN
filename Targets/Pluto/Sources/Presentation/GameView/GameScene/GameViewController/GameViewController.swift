@@ -83,7 +83,7 @@ class GameViewController: UIViewController {
 extension GameViewController: ShowAlertDelegate {
     
     func showTutorial(tutorials: [GameAlertType]) {
-        scene?.isPaused = true
+        self.scene?.pause()
         scene?.isUserInteractionEnabled = false
         gameManager?.backgroundTimer.stopTimer()
         var tutorial = TutorialView()
@@ -130,7 +130,8 @@ extension GameViewController: ShowAlertDelegate {
     
     
     func showAlert(alertType: GameAlertType) {
-        scene?.isUserInteractionEnabled = false
+        
+        scene?.pause()
         switch alertType {
         case .success:
             gameAlertView = GameAlertView(frame: .zero, alertType: .success)
@@ -200,7 +201,7 @@ extension GameViewController: TutorialFinishDelegate {
         
         if endedType == 1 {
             gameManager?.backgroundTimer.restartTimer()
-            gameManager?.scene?.isPaused = false
+            self.scene?.restart()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }
@@ -208,7 +209,9 @@ extension GameViewController: TutorialFinishDelegate {
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }
-        else {
+        else if endedType == 3 {
+            print("@SEO")
+            tutorialView.removeFromSuperview()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesEnd = (touches, scene!)
         }

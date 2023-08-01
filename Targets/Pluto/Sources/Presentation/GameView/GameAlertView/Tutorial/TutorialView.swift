@@ -134,7 +134,9 @@ class TutorialView: UIView {
         return imageView
     }()
     
-    
+    func cute(_ x: Int) {
+        print("@SEO \(x)")
+    }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -183,6 +185,7 @@ class TutorialView: UIView {
                 startCurrentTutorial()
             }
             else if activates[currentIndex].isEmpty && !isFinished {
+                cute(1)
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 1)
                 isFinished = true
                 lastPoint = touchPoint
@@ -198,12 +201,12 @@ class TutorialView: UIView {
         for touch in touches {
             
             let touchPoint = touch.location(in: self)
-    
+            
             if counterColockWiseButton.isTouch(in: touchPoint) && counterColockWiseButton.isTouch(in: lastPoint) {
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 3)
                 removeFromSuperview()
             }
-            if changeGreenButton.isTouch(in: touchPoint) && changeGreenButton.isTouch(in: lastPoint) {
+            else if changeGreenButton.isTouch(in: touchPoint) && changeGreenButton.isTouch(in: lastPoint) {
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 3)
                 removeFromSuperview()
             }
