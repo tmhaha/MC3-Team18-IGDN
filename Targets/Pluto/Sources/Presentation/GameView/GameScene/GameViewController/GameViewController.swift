@@ -200,17 +200,20 @@ extension GameViewController: TutorialFinishDelegate {
     func finish(_ touches: Set<UITouch>, with event: UIEvent?, endedType: Int) {
         
         if endedType == 1 {
+            print("@SEO 1")
             gameManager?.backgroundTimer.restartTimer()
             self.scene?.restart()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }
         else if endedType == 2 {
+            print("@SEO 2")
+            tutorialView.removeFromSuperview()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }
         else if endedType == 3 {
-            print("@SEO")
+            print("@SEO 3")
             tutorialView.removeFromSuperview()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesEnd = (touches, scene!)
