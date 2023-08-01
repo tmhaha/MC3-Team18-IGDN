@@ -85,6 +85,7 @@ class GameManager: ObservableObject {
         for item in map {
             let currentData = item
             let planet = currentData.makePlanetNode()
+            planet.zPosition = -1
             planet.delegate = self
             scene?.addChild(planet)
             planet.startDirectionNodesRotation()
@@ -468,7 +469,7 @@ extension GameManager {
                 let node = Node(time: time,
                                 duration: constants.backgroundSecondLayerDuration)
                 
-                node.zPosition = -1
+                node.zPosition = -10
                 let sizeNTexture = makeLayer2Random()
                 node.texture = sizeNTexture.0
                 node.size = sizeNTexture.1
@@ -481,7 +482,7 @@ extension GameManager {
                 let node = Node(time: time,
                                 duration: constants.backgroundThirdLayerDuration)
                 
-                node.zPosition = -1
+                node.zPosition = -10
                 let sizeNTexture = makeLayer3Random()
                 node.texture = sizeNTexture.0
                 node.size = sizeNTexture.1
