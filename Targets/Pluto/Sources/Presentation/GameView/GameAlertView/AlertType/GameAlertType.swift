@@ -119,7 +119,7 @@ let page0 = [
     GameAlertType.tutorial(activate: [], bottomString: "우선 주인공이 벽에 부딪치면 게임이 종료되니 주의해줘.", topString: "우선 주인공이 벽에 부딪치면 게임이 종료되니 주의해줘.", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "벽에 부딪치지 않고 목적지에 도달하려면 여러 소행성의 궤도를 타면서 앞으로 나아가야 해.", topString: "벽에 부딪치지 않고 목적지에 도달하려면 여러 소행성의 궤도를 타면서 앞으로 나아가야 해.", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "소행성의 궤도에 올라타려면 주인공의 색이 소행성의 색과 같아야 해.", topString: "소행성의 궤도에 올라타려면 주인공의 색이 소행성의 색과 같아야 해.", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "이 버튼을 누르면 주인공의 색을 초록색으로 바꿀 수 있어!", topString: "이 버튼을 누르면 주인공의 색을 빨간색으로 바꿀 수 있어!", imageName: "", isLast: false),
+    GameAlertType.tutorial(activate: [.changeGreen, .changeRed], bottomString: "이 버튼을 누르면 주인공의 색을 초록색으로 바꿀 수 있어!", topString: "이 버튼을 누르면 주인공의 색을 빨간색으로 바꿀 수 있어!", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "그런데 노란색 소행성이 나오면 어떻게 해야 할까?", topString: "그런데 노란색 소행성이 나오면 어떻게 해야 할까?", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "두 사람이 협동해서 같이 버튼을 누르면 주인공은 노란색이 될거야", topString: "두 사람이 같이 버튼을 누르게 되면 주인공은 노란색이 될거야", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [TutorialView.Activate.turnClockWise, TutorialView.Activate.turnCounterClockWise], bottomString: "왼쪽에 있는 이 버튼은 thrust 버튼이야.", topString: "왼쪽에 있는 이 버튼은 thrust 버튼이야.", imageName: "", isLast: false),
@@ -127,10 +127,11 @@ let page0 = [
     GameAlertType.tutorial(activate: [], bottomString: "이 thrust 버튼은 연료가 닳기 때문에 아껴 써야해~", topString: "이 thrust 버튼은 연료가 닳기 때문에 아껴 써야해~", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "버튼에 있는 게이지를 보면 연료가 얼마나 남았는지 확인할 수 있어.", topString: "버튼에 있는 게이지를 보면 연료가 얼마나 남았는지 확인할 수 있어.", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "대신 소행성에 탑승한 동안에는 연료가 충전되니까 참고해!", topString: "대신 소행성에 탑승한 동안에는 연료가 충전되니까 참고해!", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [.pauseButton], bottomString: "게임을 잠깐 중단하고 싶은 경우에는", topString: "게임을 잠깐 중단하고 싶은 경우에는", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [.pauseButton], bottomString: "이 버튼을 누르면 일시정지 할 수 있어.", topString: "이 버튼을 누르면 일시정지 할 수 있어.", imageName: "", isLast: true),
-//    GameAlertType.tutorial(activate: [], bottomString: "흰색인 상태로 소행성 궤도에 닿으면 어떻게 되는지 볼까?", topString: "흰색인 상태로 소행성 궤도에 닿으면 어떻게 되는지 볼까?", imageName: "circle_70_white", isLast: true)
+    GameAlertType.tutorial(activate: [], bottomString: "게임을 잠깐 중단하고 싶은 경우에는", topString: "게임을 잠깐 중단하고 싶은 경우에는", imageName: "", isLast: false),
+    GameAlertType.tutorial(activate: [.pauseButton], bottomString: "이 버튼을 누르면 일시정지 할 수 있어.", topString: "이 버튼을 누르면 일시정지 할 수 있어.", imageName: "", isLast: false),
+    GameAlertType.tutorial(activate: [], bottomString: "흰색인 상태로 소행성 궤도에 닿으면 어떻게 되는지 볼까?", topString: "흰색인 상태로 소행성 궤도에 닿으면 어떻게 되는지 볼까?", imageName: "circle_70_white", isLast: true)
 ]
+
 
 // 주인공이 흰색 소행성에 올라탐
 
