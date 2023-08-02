@@ -1,23 +1,30 @@
-
+//
+//  StoryView.swift
+//  Pluto
+//
+//  Created by 고혜지 on 2023/07/27.
+//  Copyright © 2023 tuist.io. All rights reserved.
+//
 
 import SwiftUI
 
 struct StoryView: View {
     @EnvironmentObject var router: Router<Path>
     @State var isDone: Int = 0
+    @State var idx: Int = 0
     
     var body: some View {
         ZStack {
-            StoryImageView()
+            StoryImageView(idx: $idx)
             
             VStack {
-                StoryTextView(player: 2, isDone: $isDone)
+                StoryTextView(player: 2, idx: $idx, isDone: $isDone)
                 
                 Spacer()
                 
                 SkipButtonView()
 
-                StoryTextView(player: 1, isDone: $isDone)
+                StoryTextView(player: 1, idx: $idx, isDone: $isDone)
             }
             .padding(.vertical)
         }
@@ -33,18 +40,86 @@ struct StoryView: View {
 }
 
 struct StoryImageView: View {
+    @Binding var idx: Int
+    let images: [String] = stages[GameData.shared.selectedStage].startStory.image
+    let effects: [ImageEffect] = stages[GameData.shared.selectedStage].startStory.imageEffect
+    
     var body: some View {
-        Image("StorySampleImage")
-            .resizable()
-            .ignoresSafeArea()
+        switch effects[idx] {
+        case .cut:
+            Image(images[idx])
+                .resizable()
+                .ignoresSafeArea()
+        case .fadeIn:
+            FadeInImage(image: images[idx])
+        case .fadeOut:
+            FadeOutImage(image: images[idx])
+        case .blink:
+            BlinkImage()
+        }
     }
 }
 
+struct FadeInImage: View {
+    @State var isAnimating: Bool = false
+    let image: String
+    
+    var body: some View {
+        return Image(image)
+            .resizable()
+            .ignoresSafeArea()
+            .opacity(isAnimating ? 1.0 : 0.0)
+            .animation(.easeIn(duration: 2), value: isAnimating)
+            .onAppear {
+                isAnimating = true
+            }
+            .background(.black)
+    }
+}
+
+struct FadeOutImage: View {
+    @State var isAnimating: Bool = false
+    let image: String
+    
+    var body: some View {
+        return Image(image)
+            .resizable()
+            .ignoresSafeArea()
+            .opacity(isAnimating ? 0.0 : 1.0)
+            .animation(.easeIn(duration: 2), value: isAnimating)
+            .onAppear {
+                isAnimating = true
+            }
+            .background(.black)
+    }
+}
+
+struct BlinkImage: View {
+    @State var isAnimating: Bool = false
+    
+    var body: some View {
+        ZStack {
+            Image("1_3")
+                .resizable()
+                .ignoresSafeArea()
+            Image("1_4")
+                .resizable()
+                .ignoresSafeArea()
+                .opacity(isAnimating ? 1.0 : 0.0)
+                .animation(.easeIn(duration: 0.12).repeatCount(3), value: isAnimating)
+                .onAppear {
+                    isAnimating = true
+                }
+        }
+    }
+}
+
+
 struct StoryTextView: View {
-    let story = stages[GameData.shared.selectedStage].startStory?.text ?? []
+    let story = stages[GameData.shared.selectedStage].startStory.text
     var player: Int
-    @State var idx: Int = 0
     @State var buttonOn: Bool = false
+    @Binding var idx: Int
     @Binding var isDone: Int
     
     var body: some View {
@@ -62,7 +137,7 @@ struct StoryTextView: View {
     
     private var textLayer: some View {
         VStack {
-            Text(stages[GameData.shared.selectedStage].startStory?.character[idx] ?? "")
+            Text(stages[GameData.shared.selectedStage].startStory.character[idx])
                 .frame(width: 345, height: 20, alignment: .leading)
                 .font(.custom(tasaExplorerBold, size: 18))
                 .opacity(0.7)
@@ -70,7 +145,7 @@ struct StoryTextView: View {
             TypingEffectTextView(messages: story, index: idx, buttonOn: $buttonOn, isDone: $isDone)
                 .frame(width: 345, alignment: .leading)
                 .multilineTextAlignment(.leading)
-                .font(.custom(notoSansMedium, size: 12))
+                .font(.custom(notoSansMedium, size: 18))
             Spacer()
         }
         .rotationEffect(Angle(degrees: player == 1 ? 0 : 180))
@@ -161,8 +236,13 @@ struct TypingEffectTextView: View {
 }
 
 private func StartGame() {
-    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[GameData.shared.selectedStage])
-    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[GameData.shared.selectedStage])
+//    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[GameData.shared.selectedStage])
+//    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[GameData.shared.selectedStage])
+
+    // TODO: 챕터별 음악이랑 앰비언스 아직 없어서 일단 이렇게 둠
+    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[0])
+    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[0])
+    
     AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
 }
 
