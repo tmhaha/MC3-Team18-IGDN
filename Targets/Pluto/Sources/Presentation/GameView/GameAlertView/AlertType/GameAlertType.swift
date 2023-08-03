@@ -112,7 +112,7 @@ enum GameAlertType {
     }
 }
 
-let tutorialPages = [page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12, page13, page14, page15, page16, page17]
+let tutorialPages = [page0, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10, page11, page12]
 
 let page0 = [
     GameAlertType.tutorial(activate: [], bottomString: "지금부터 우주여행의 규칙을 설명해줄게.", topString: "지금부터 우주여행의 규칙을 설명해줄게.", imageName: "", isLast: false),
@@ -189,16 +189,15 @@ let page8 = [
 // 흰색 소행성에 올라탐
 
 let page9 = [
-    GameAlertType.tutorial(activate: [], bottomString: "", topString: "최고야!", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "이번엔 둘이 힘을 합쳐야만 해.", topString: "이번엔 둘이 힘을 합쳐야만 해.", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "잘 할 수 있지?", topString: "잘 할 수 있지?", imageName: "", isLast: true)
+    GameAlertType.tutorial(activate: [], bottomString: "", topString: "최고야!", imageName: "", isLast: true)
 ]
 
 // 노란색 소행성이 다가옴
 
 let page10 = [
     GameAlertType.tutorial(activate: [], bottomString: "이번엔 노란색 소행성이 나타났어!", topString: "이번엔 노란색 소행성이 나타났어!", imageName: "circle_70_yellow", isLast: false),
-    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen, TutorialView.Activate.changeRed], bottomString: "이럴 때는 둘이 동시에 빨강, 초록 버튼을 눌러봐.", topString: "이럴 때는 둘이 동시에 빨강, 초록 버튼을 눌러봐.", imageName: "circle_70_yellow", isLast: true)
+    GameAlertType.tutorial(activate: [], bottomString: "이번엔 둘이 힘을 합쳐야만 해.", topString: "이번엔 둘이 힘을 합쳐야만 해.", imageName: "", isLast: false),
+    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen, TutorialView.Activate.changeRed], bottomString: "둘이 동시에 버튼을 눌러서 주인공을 노란색으로 만들어봐.", topString: "둘이 동시에 버튼을 눌러서 주인공을 노란색으로 만들어봐.", imageName: "circle_70_yellow", isLast: true)
 ]
 
 // 노란색 소행성에 올라탐
@@ -210,7 +209,8 @@ let page11 = [
 // 흰색 소행성이 다가옴
 
 let page12 = [
-    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen, TutorialView.Activate.changeRed], bottomString: "이번에는 흰색 소행성이 나타났어. 지금 둘 다 색을 빼서 주인공을 흰색으로 만들어볼까?", topString: "이번에는 흰색 소행성이 나타났어. 지금 둘 다 색을 빼서 주인공을 흰색으로 만들어볼까?", imageName: "circle_70_white", isLast: true),
+    GameAlertType.tutorial(activate: [], bottomString: "이제 마지막 목적지를 향해 나아가볼까?", topString: "이제 마지막 목적지를 향해 나아가볼까?", imageName: "circle_70_white", isLast: false),
+    GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen, TutorialView.Activate.changeRed], bottomString: "둘 다 색을 빼서 주인공을 흰색으로 만들어보자!", topString: "둘 다 색을 빼서 주인공을 흰색으로 만들어보자!", imageName: "circle_70_white", isLast: true),
 ]
 
 let page13 = [
@@ -226,33 +226,4 @@ let page13 = [
 let page14 = [
     GameAlertType.tutorial(activate: [], bottomString: "우리가 목표하는 행성에 곧 도착하려고해!", topString: "우리가 목표하는 행성에 곧 도착하려고해!", imageName: "", isLast: false),
     GameAlertType.tutorial(activate: [], bottomString: "행성이 보이면 궤도를 이탈해서 목표 행성에 도달해보자!", topString: "행성이 보이면 궤도를 이탈해서 목표 행성에 도달해보자", imageName: "", isLast: true),
-]
-
-// 흰색 소행성에 올라탐
-
-let page15 = [
-    GameAlertType.tutorial(activate: [], bottomString: "정말 잘했어!", topString: "", imageName: "", isLast: true)
-]
-
-// 빨간 소행성이 다가옴
-
-let page16 = [
-    GameAlertType.tutorial(activate: [], bottomString: "", topString: "이번에는 빨간색 소행성이 나타났어!", imageName: "circle_70_red", isLast: false),
-    GameAlertType.tutorial(activate: [TutorialView.Activate.changeRed], bottomString: "", topString: "빨강 버튼을 눌러서 궤도를 타보자.", imageName: "circle_70_red", isLast: true)
-]
-
-// 일부러 약간 각도가 틀어지는 타이밍에 지시한다.
-
-let page17 = [
-    GameAlertType.tutorial(activate: [], bottomString: "", topString: "어? 이번에도 방향이 살짝 틀어졌네.", imageName: "circle_70_red", isLast: false),
-    GameAlertType.tutorial(activate: [TutorialView.Activate.turnCounterClockWise], bottomString: "", topString: "thrust 버튼을 눌러서 각도를 살짝 조정해보자.", imageName: "OBS_circle_70_red", isLast: true)
-]
-
-// 빨간 소행성에 올라탐
-
-let page18 = [
-    GameAlertType.tutorial(activate: [], bottomString: "", topString: "좋았어!", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [/*progressBar*/], bottomString: "게임의 진행도를 확인하고 싶다면, 색 버튼 위에 있는 파란색 바를 확인하면 돼!", topString: "게임의 진행도를 확인하고 싶다면, 색 버튼 위에 있는 파란색 바를 확인하면 돼!", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "이제 우주여행을 할 준비가 모두 완료된 것 같군!", topString: "이제 우주여행을 할 준비가 모두 완료된 것 같군!", imageName: "", isLast: false),
-    GameAlertType.tutorial(activate: [], bottomString: "게임을 시작해보자!", topString: "게임을 시작해보자!", imageName: "", isLast: true)
 ]
