@@ -213,41 +213,17 @@ let page12 = [
     GameAlertType.tutorial(activate: [TutorialView.Activate.changeGreen, TutorialView.Activate.changeRed], bottomString: "둘 다 색을 빼서 주인공을 흰색으로 만들어보자!", topString: "둘 다 색을 빼서 주인공을 흰색으로 만들어보자!", imageName: "circle_70_white", isLast: true),
 ]
 
-//// 일부러 약간 각도가 틀어지는 타이밍에 지시한다.
-//
-//let page13 = [
-//    GameAlertType.tutorial(activate: [], bottomString: "이 방향으로 가면 소행성에 닿을 수 없을 것 같은데?", topString: "이 방향으로 가면 소행성에 닿을 수 없을 것 같은데?", imageName: "diamond_70_white", isLast: false),
-//    GameAlertType.tutorial(activate: [], bottomString: "이럴 때는 어떻게 해야할까?", topString: "이럴 때는 어떻게 해야할까?", imageName: "diamond_70_white", isLast: false),
-//    GameAlertType.tutorial(activate: [TutorialView.Activate.turnClockWise, TutorialView.Activate.turnCounterClockWise], bottomString: "여기 thrust 라는 기능이 있어.", topString: "여기 thrust 라는 기능이 있어.", imageName: "diamond_70_white", isLast: false),
-//    GameAlertType.tutorial(activate: [TutorialView.Activate.turnClockWise, TutorialView.Activate.turnCounterClockWise], bottomString: "이걸 누르면 진행 방향을 바꿀 수 있어.", topString: "이걸 누르면 진행 방향을 바꿀 수 있어.", imageName: "diamond_70_white", isLast: false),
-//    GameAlertType.tutorial(activate: [TutorialView.Activate.turnClockWise], bottomString: "지금 thrust 버튼을 눌러서 소행성 쪽으로 이동해볼까?", topString: "", imageName: "diamond_70_white", isLast: true)
-//]
-//
-//// 흰색 소행성에 올라탐
-//
-//let page14 = [
-//    GameAlertType.tutorial(activate: [], bottomString: "정말 잘했어!", topString: "", imageName: "", isLast: true)
-//]
-//
-//// 빨간 소행성이 다가옴
-//
-//let page15 = [
-//    GameAlertType.tutorial(activate: [], bottomString: "", topString: "이번에는 빨간색 소행성이 나타났어!", imageName: "circle_70_red", isLast: false),
-//    GameAlertType.tutorial(activate: [TutorialView.Activate.changeRed], bottomString: "", topString: "빨강 버튼을 눌러서 궤도를 타보자.", imageName: "circle_70_red", isLast: true)
-//]
-//
-//// 일부러 약간 각도가 틀어지는 타이밍에 지시한다.
-//
-//let page16 = [
-//    GameAlertType.tutorial(activate: [], bottomString: "", topString: "어? 이번에도 방향이 살짝 틀어졌네.", imageName: "circle_70_red", isLast: false),
-//    GameAlertType.tutorial(activate: [TutorialView.Activate.turnCounterClockWise], bottomString: "", topString: "thrust 버튼을 눌러서 각도를 살짝 조정해보자.", imageName: "OBS_circle_70_red", isLast: true)
-//]
-//
-//// 빨간 소행성에 올라탐
-//
-//let page17 = [
-//    GameAlertType.tutorial(activate: [], bottomString: "", topString: "좋았어!", imageName: "", isLast: false),
-//    GameAlertType.tutorial(activate: [/*progressBar*/], bottomString: "게임의 진행도를 확인하고 싶다면, 색 버튼 위에 있는 파란색 바를 확인하면 돼!", topString: "게임의 진행도를 확인하고 싶다면, 색 버튼 위에 있는 파란색 바를 확인하면 돼!", imageName: "", isLast: false),
-//    GameAlertType.tutorial(activate: [], bottomString: "이제 우주여행을 할 준비가 모두 완료된 것 같군!", topString: "이제 우주여행을 할 준비가 모두 완료된 것 같군!", imageName: "", isLast: false),
-//    GameAlertType.tutorial(activate: [], bottomString: "게임을 시작해보자!", topString: "게임을 시작해보자!", imageName: "", isLast: true)
-//]
+let page13 = [
+        GameAlertType.tutorial(activate: [], bottomString: "이 방향으로 가면 소행성에 닿을 수 없을 것 같은데?", topString: "이 방향으로 가면 소행성에 닿을 수 없을 것 같은데?", imageName: "circle_70_white", isLast: false),
+        GameAlertType.tutorial(activate: [], bottomString: "이럴 때는 어떻게 해야할까?", topString: "이럴 때는 어떻게 해야할까?", imageName: "circle_70_white", isLast: false),
+        GameAlertType.tutorial(activate: [TutorialView.Activate.turnClockWise, TutorialView.Activate.turnCounterClockWise], bottomString: "여기 thrust 라는 기능이 있어.", topString: "여기 thrust 라는 기능이 있어.", imageName: "circle_70_white", isLast: false),
+        GameAlertType.tutorial(activate: [], bottomString: "이걸 누르면 진행 방향을 바꿀 수 있어.", topString: "이걸 누르면 진행 방향을 바꿀 수 있어.", imageName: "circle_70_white", isLast: false),
+        GameAlertType.tutorial(activate: [], bottomString: "지금 thrust 버튼을 눌러서 소행성 쪽으로 이동해볼까?", topString: "", imageName: "circle_70_white", isLast: true)
+]
+
+// 일부러 약간 각도가 틀어지는 타이밍에 지시한다.
+
+let page14 = [
+    GameAlertType.tutorial(activate: [], bottomString: "우리가 목표하는 행성에 곧 도착하려고해!", topString: "우리가 목표하는 행성에 곧 도착하려고해!", imageName: "", isLast: false),
+    GameAlertType.tutorial(activate: [], bottomString: "행성이 보이면 궤도를 이탈해서 목표 행성에 도달해보자!", topString: "행성이 보이면 궤도를 이탈해서 목표 행성에 도달해보자", imageName: "", isLast: true),
+]

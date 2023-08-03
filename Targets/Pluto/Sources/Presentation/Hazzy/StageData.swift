@@ -14,27 +14,32 @@ let stages:[Stage] = [
         Object(CGPoint(x: -5, y: 323), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
         Object(CGPoint(x: 100, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page1, false), //empty
         Object(CGPoint(x: 230, y: 230), CGSize(width: 105.0, height: 105.0), .one, 1, "circle_70_green", false),
-        Object(CGPoint(x: 235.5, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page2, false), //empty
-        Object(CGPoint(x: 330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page3, false), //empty
-        Object(CGPoint(x: 510.49999491373705, y: 391.5), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 540, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page4, false), //empty
-        
-        
-        Object(CGPoint(x: 670, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page5, false), //empty
-        Object(CGPoint(x: 770, y: 280), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
-        Object(CGPoint(x: 790, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page6, false), //empty
-        
-        Object(CGPoint(x: 850, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page7, false), //empty
-        Object(CGPoint(x: 1020, y: 430.1666564941406), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
-        Object(CGPoint(x: 1112, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page8, false), //empty
-        
-        Object(CGPoint(x: 1252, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page9, false), //empty
-        
-        Object(CGPoint(x: 1300, y: 300), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
-        Object(CGPoint(x: 1280, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page10, false), //empty
 
-        Object(CGPoint(x: 1350, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page11, false), //empty
-        Object(CGPoint(x: 1400, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page12, false), //empty
+        Object(CGPoint(x: 235.5, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page2, false), // tutorial
+        Object(CGPoint(x: 330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page3, false), // tutorial
+        Object(CGPoint(x: 510.5, y: 410), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 540, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page4, false), // tutorial
+      
+        Object(CGPoint(x: 670, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page5, false), // tutorial
+        Object(CGPoint(x: 770, y: 350), CGSize(width: 105.0, height: 105.0), .two, 1, "circle_70_red", false),
+        Object(CGPoint(x: 790, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page6, false), // tutorial
+      
+        Object(CGPoint(x: 910, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page7, false), // tutorial
+        Object(CGPoint(x: 1020, y: 300), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        Object(CGPoint(x: 1060, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page8, false), // tutorial
+      
+        Object(CGPoint(x: 1150, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page9, false), // tutorial
+      
+        Object(CGPoint(x: 1318, y: 300), CGSize(width: 105.0, height: 105.0), .combine, 1, "circle_70_yellow", false),
+        Object(CGPoint(x: 1330, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page10, false), // tutorial
+      
+        Object(CGPoint(x: 1440, y: 422), CGSize(width: 105.0, height: 105.0), .one, 1, "", false, page11, false), // tutorial
+
+        Object(CGPoint(x: 1570, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page12, false), // tutorial
+        Object(CGPoint(x: 1595, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page13, false), // tutorial
+        Object(CGPoint(x: 1620, y: 400), CGSize(width: 105.0, height: 105.0), .none, 1, "circle_70_white", false),
+        
+        Object(CGPoint(x: 1650, y: 422), CGSize(width: 105.0, height: 105.0), .none, 1, "", false, page14, false), // tutorial
     ]),
     Stage(level: 2, startStory: story2, endStory: nil, map: [
         Object(CGPoint(x: -28.833343505859375, y: 308.1666564941406), CGSize(width: 75.0, height: 75.0), .none, 0, "circle_50_white", false),
