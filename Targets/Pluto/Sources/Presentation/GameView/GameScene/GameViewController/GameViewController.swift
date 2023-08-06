@@ -204,10 +204,9 @@ extension GameViewController: TutorialFinishDelegate {
             gameManager?.backgroundTimer.restartTimer()
             self.scene?.restart()
             scene?.isUserInteractionEnabled = true
-            gameManager?.touchesBegin = (touches, scene!)
+            //gameManager?.touchesBegin = (touches, scene!)
         }
         else if endedType == 2 {
-            print("@SEO 2")
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }

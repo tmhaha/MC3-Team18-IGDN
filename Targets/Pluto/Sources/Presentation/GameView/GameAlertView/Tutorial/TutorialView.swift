@@ -82,7 +82,7 @@ class TutorialView: UIView {
     }()
     
     private var onePlayerCharacter: UIImageView = {
-        let image = UIImage(named: "FailImage")
+        let image = UIImage(named: "SystemBubble")
         let imageView = UIImageView(image: image!)
         
         return imageView
@@ -105,7 +105,7 @@ class TutorialView: UIView {
     }()
     
     private var twoPlayerCharacter: UIImageView = {
-        let image = UIImage(named: "FailImage")
+        let image = UIImage(named: "SystemBubble")
         let imageView = UIImageView(image: image!)
         
         return imageView
@@ -150,9 +150,10 @@ class TutorialView: UIView {
             if changeGreenButton.isTouch(in: touchPoint) {
                 changeGreenButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .changeGreen })
-                if isFinished {
-                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-                }
+                tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                if isFinished {
+//                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
+//                }
             }
             if clockWiseButton.isTouch(in: touchPoint) {
                 clockWiseButton.backgroundColor = bgColor
@@ -274,7 +275,7 @@ class TutorialView: UIView {
         onePlayerCharacter.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 14).isActive = true
         onePlayerCharacter.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -240).isActive = true
         onePlayerCharacter.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        onePlayerCharacter.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        onePlayerCharacter.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         // onePlayerMessageRetangle
         onePlayerMessageRetangle.translatesAutoresizingMaskIntoConstraints = false
@@ -303,7 +304,7 @@ class TutorialView: UIView {
         twoPlayerCharacter.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -14).isActive = true
         twoPlayerCharacter.topAnchor.constraint(equalTo: topAnchor, constant: 240).isActive = true
         twoPlayerCharacter.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        twoPlayerCharacter.heightAnchor.constraint(equalToConstant: 100).isActive = true
+        twoPlayerCharacter.heightAnchor.constraint(equalToConstant: 80).isActive = true
         
         twoPlayerCharacter.transform = CGAffineTransform(rotationAngle: rotationDegree)
         

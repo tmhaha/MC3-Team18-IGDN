@@ -26,6 +26,10 @@ class CreateModeViewController: UIViewController {
         super.init(nibName: nil, bundle: nil)
     }
     
+    deinit {
+        setKeyboardObserverRemove()
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -34,8 +38,9 @@ class CreateModeViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = SettingData().selectedTheme.creative.uiColor
         
-        setUpCollectionView();
+        setUpCollectionView()
         setUpTargets()
+        setKeyboardObserver()
         bind()
     }
     
@@ -94,7 +99,7 @@ class CreateModeViewController: UIViewController {
         contentView.backButton.addTarget(self, action: #selector(backButtonDidTap), for: .touchUpInside)
     }
     
-    @objc private func backButtonDidTap(){
+    @objc private func backButtonDidTap() {
         self.navigationController?.popViewController(animated: true)
     }
 
@@ -192,6 +197,7 @@ extension CreateModeViewController: UICollectionViewDataSource, UICollectionView
 }
 
 extension CreateModeViewController: UITextFieldDelegate {
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if textField.text?.count == 0 {
             return false
@@ -201,4 +207,50 @@ extension CreateModeViewController: UITextFieldDelegate {
         textField.resignFirstResponder()
         return true
     }
+    
+    @objc func keyboardWillShow(_ notification: Notification) {
+        // 키보드의 높이 가져오기
+        if let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
+            // 텍스트 필드가 가려지지 않도록 컬렉션 뷰의 컨텐츠 인셋 조정
+            let insets = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame.size.height, right: 0)
+            contentView.collectionView.contentInset = insets
+            contentView.collectionView.scrollIndicatorInsets = insets
+            
+            // 텍스트 필드가 위치한 위치로 스크롤
+            if let activeTextField = findActiveTextField() {
+                let rect = contentView.collectionView.convert(activeTextField.frame, from: activeTextField.superview)
+                contentView.collectionView.scrollRectToVisible(rect, animated: true)
+            }
+        }
+    }
+    
+    // 키보드가 사라질 때 호출되는 메서드
+    @objc private func keyboardWillHide(_ notification: Notification) {
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.contentView.collectionView.contentInset = .zero
+            self?.contentView.collectionView.scrollIndicatorInsets = .zero
+        }
+    }
+    
+    // 현재 활성화된 텍스트 필드를 찾는 메서드
+    func findActiveTextField() -> UITextField? {
+        for cell in contentView.collectionView.visibleCells {
+            if let textField = cell.subviews.first(where: { $0 is UITextField }) as? UITextField, textField.isFirstResponder {
+                return textField
+            }
+        }
+        return nil
+    }
+    
+    
+    func setKeyboardObserver() {
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func setKeyboardObserverRemove() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
 }
+

@@ -14,10 +14,10 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
         playBackgroundMusic(.Lobby)
     }
     
-    private var backgroundMusic: AVAudioPlayer? = nil
-    private var ambienceSound: AVAudioPlayer? = nil
-    private var soundEffects: [AVAudioPlayer] = []
-    private var thrustSound: AVAudioPlayer? = nil
+    var backgroundMusic: AVAudioPlayer? = nil
+    var ambienceSound: AVAudioPlayer? = nil
+    var soundEffects: [AVAudioPlayer] = []
+    var thrustSound: AVAudioPlayer? = nil
 
     let chaterMusics: [Music] = [.Chapter1, .Chapter2, .Chapter3, .Chapter4, .Chapter5, .Chapter6]
     let allAmbienceCases: [Ambience] = Ambience.allCases
@@ -47,13 +47,17 @@ class SoundManager: NSObject, AVAudioPlayerDelegate {
         do {
             let audioPlayer = try AVAudioPlayer(contentsOf: soundURL)
             audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = Float(SettingData.shared.isAmbianceOn ? 0.1 : 0)
+            audioPlayer.volume = Float(SettingData.shared.isAmbianceOn ? 0.5 : 0)
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             ambienceSound = audioPlayer
         } catch let error {
             print("Error playing sound: \(error.localizedDescription)")
         }
+    }
+    
+    func stopAmbience() {
+        ambienceSound = nil
     }
     
     func playSoundEffect(_ effect: Effect) {
@@ -140,13 +144,13 @@ enum Music: String, CaseIterable {
     case Chapter5 = "chapter 5"
     case Chapter6 = "chapter 6"
     case Lobby = "main"
-    case Story1 = "Driving Wings"
+    case Story1 = "Story1" //"Driving Wings"
     case Story2 = "everything ends eventually"
     case Story3 = "main-green to blue"
 }
 
 enum Ambience: String, CaseIterable {
-    case Chapter1 = "chap1 neptune_1"
+    case Chapter1 = "chap1 neptune"
     case Chapter2 = "chap2 uranus"
     case Chapter3 = "chap3 saturn"
     case Chapter4 = "chap4 jupiter"

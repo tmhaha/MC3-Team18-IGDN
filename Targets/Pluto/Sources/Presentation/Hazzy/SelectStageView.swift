@@ -26,6 +26,12 @@ struct SelectStageView: View {
         }
         .padding(.top, 30)
         .foregroundColor(SettingData.shared.selectedTheme.main)
+        .onAppear {
+            if (SoundManager.shared.ambienceSound != nil) { // MARK: 게임이 종료되고 다시 스테이지 선택 뷰로 넘어온 경우
+                SoundManager.shared.stopAmbience()
+                SoundManager.shared.playBackgroundMusic(.Lobby)
+            }
+        }
     }
 
     var stageImage: some View {
@@ -74,17 +80,7 @@ struct PlayButton: View {
     var body: some View {
         Button {
             if (currentStage >= selectedStage) {
-                if stages[selectedStage].startStory != nil {
-                    router.push(.Story)
-                    GameData.shared.selectedStage = selectedStage
-                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
-                } else {
-                    // MARK: 여기서 게임 진입! (스토리X)
-                    SoundManager.shared.playBackgroundMusic(SoundManager.shared.chaterMusics[selectedStage])
-                    SoundManager.shared.playAmbience(SoundManager.shared.allAmbienceCases[selectedStage])
-                    GameData.shared.selectedStage = selectedStage
-                    AppDelegate.vc?.pushViewController(GameViewController(gameConstants: GameConstants(), map: stages[GameData.shared.selectedStage].map), animated: false)
-                }
+                PlayStory()
             } else {
                 isAnimating.toggle()
                 hapticFeedback(style: .soft, duration: 0.5, interval: 0.1)
@@ -120,6 +116,13 @@ struct PlayButton: View {
             .frame(width: 200, height: 45)
         }
         .foregroundColor(selectedStage > currentStage ? SettingData.shared.selectedTheme.lockedMain : SettingData.shared.selectedTheme.main)
+    }
+    
+    func PlayStory() {
+        router.push(.Story)
+        SoundManager.shared.playBackgroundMusic(stages[selectedStage].startStory.music)
+        SoundManager.shared.stopAmbience()
+        GameData.shared.selectedStage = selectedStage
     }
 }
         
