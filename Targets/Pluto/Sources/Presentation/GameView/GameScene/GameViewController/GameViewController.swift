@@ -208,7 +208,6 @@ extension GameViewController: TutorialFinishDelegate {
         }
         else if endedType == 2 {
             print("@SEO 2")
-            tutorialView.removeFromSuperview()
             scene?.isUserInteractionEnabled = true
             gameManager?.touchesBegin = (touches, scene!)
         }
