@@ -133,16 +133,12 @@ class TutorialView: UIView {
         
         return imageView
     }()
-    
-    func cute(_ x: Int) {
-        print("@SEO \(x)")
-    }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             
             let touchPoint = touch.location(in: self)
-            print("@SEO TOUCHE")
+         
             if counterColockWiseButton.isTouch(in: touchPoint) {
                 counterColockWiseButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .turnCounterClockWise })
@@ -151,9 +147,6 @@ class TutorialView: UIView {
                 changeGreenButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .changeGreen })
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-//                if isFinished {
-//                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-//                }
             }
             if clockWiseButton.isTouch(in: touchPoint) {
                 clockWiseButton.backgroundColor = bgColor
@@ -163,16 +156,11 @@ class TutorialView: UIView {
                 changeRedButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .changeRed })
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-//                if isFinished {
-//                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-//                }
             }
             if pauseButton.isTouch(in: touchPoint) {
                 pauseButton.backgroundColor = bgColor
                 activates[currentIndex].removeAll(where: { $0 == .pauseButton })
-                if isFinished {
-                    tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
-                }
+                tutorialFinishDelegate?.finish(touches, with: event, endedType: 2)
             }
             if throatGagueOneButton.isTouch(in: touchPoint) {
                 throatGagueOneButton.backgroundColor = bgColor
