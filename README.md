@@ -50,8 +50,8 @@
 |![splash](https://velog.velcdn.com/images/pccommen/post/8a0dc2f0-0e8b-4350-ab0c-08e5c38f56f5/image.gif)|![stage](https://velog.velcdn.com/images/pccommen/post/adb050be-f6d4-4314-87f0-5812671537b0/image.gif)|![](https://velog.velcdn.com/images/pccommen/post/d9c7345e-853f-4290-b113-becdd5a130cd/image.gif)|
 
 |<div style="width: 100px;"><h3>In Game</h3></div>|<div style="width: 150px;"><h3>Creative Map</h3></div>| <div style="width: 100px;"><h3>Setting</h3></div> |
-| :-: | :-: | :-:|
-|![ingame](https://velog.velcdn.com/images/pccommen/post/9ba68627-6ad3-4d47-acc4-b1b0945110bf/image.gif)|![mapMaking](https://velog.velcdn.com/images/pccommen/post/45f9f0ef-18ba-482d-a5fa-4b7943b199e6/image.gif)|![setting](https://velog.velcdn.com/images/pccommen/post/366358ca-09a5-4a05-a346-b3a8781b5122/image.gif)|
+| :-: | :-: | :-: |
+|![ingame](https://velog.velcdn.com/images/pccommen/post/ac9bf39c-7a68-4d98-b0af-2f45cc8cdaac/image.gif)|![mapMaking](https://velog.velcdn.com/images/pccommen/post/45f9f0ef-18ba-482d-a5fa-4b7943b199e6/image.gif)|![setting](https://velog.velcdn.com/images/pccommen/post/366358ca-09a5-4a05-a346-b3a8781b5122/image.gif)|
 
 <br>
 
