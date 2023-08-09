@@ -175,7 +175,6 @@ class TutorialView: UIView {
                 startCurrentTutorial()
             }
             else if activates[currentIndex].isEmpty && !isFinished {
-                cute(1)
                 tutorialFinishDelegate?.finish(touches, with: event, endedType: 1)
                 isFinished = true
                 lastPoint = touchPoint
