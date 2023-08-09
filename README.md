@@ -18,7 +18,7 @@
 | :--------: | :--------: | :--------: | :--------: | :--------: |
 |<img src="https://velog.velcdn.com/images/pccommen/post/9b28f7ff-883e-415b-bfc9-06d9240aad9a/image.png" width = 100>|<img src="https://velog.velcdn.com/images/pccommen/post/aa38be68-d91a-4663-915f-505bf073862f/image.jpeg" width=100>|<img src="https://velog.velcdn.com/images/pccommen/post/cdbe40df-879b-4c3f-8c94-c131e66afd1b/image.png" width=100>|<img src="https://velog.velcdn.com/images/pccommen/post/87ad7524-9c38-4f55-8162-aa29319dedd4/image.png" width=100>|<img src="https://cdn-icons-png.flaticon.com/512/4336/4336202.png" width=100>|
 |서창교<br>[@UIMAPH](https://github.com/UIMAPH)|홍승완<br>[@hsw1920](https://github.com/hsw1920)|고혜지<br> [@Ko-HyeJi](https://github.com/Ko-HyeJi)|하태민<br> [@rodifish](rodifish@gmail.com)|손유진<br> [@Mango]()|
-|SpriteKit을 통한 게임 로직 및 인 게임 UI|맵 데이터 객체화 및 맵 메이커 UI|총괄 UI 담당|디자인 시스템 설계 및 아트디렉팅|프로젝트 매니징|
+|SpriteKit을 통한 게임 로직 및 <br> 인게임 UI|맵 데이터 객체화 및 <br> 맵 메이커 UI|총괄 UI 담당|디자인 시스템 설계 및<br> 아트디렉팅|프로젝트 매니징|
 <br>
 
 
